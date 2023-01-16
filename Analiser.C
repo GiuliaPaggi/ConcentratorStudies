@@ -26,7 +26,7 @@ void MakeClusters(Cluster clustersArray[5][4][12], TriggerPrimitive TPS[], int s
 
 void Analiser::Loop()
 {
-   TFile *file =new TFile("DTDPGNtuple_12_4_SingleMu_20-100pT_Eta1p25.root");     //"DTDPGNtuple_12_4_SingleMu_20-100pT_Eta1p25.root"
+   TFile *file =new TFile("VtxSmeared/DTDPGNtuple_12_4_SingleMu_20-100pT_Eta1p25_VtxSmeared.root");     //"DTDPGNtuple_12_4_SingleMu_20-100pT_Eta1p25.root"
    
    TH1D *t0_AllQuality = new TH1D ("t0_AllQuality", "t0_AllQuality", 100, -9800, -9200);
    TH1D *t0_HighQuality = new TH1D ("t0_HighQuality", "t0_HighQuality", 100, -9800, -9200);       //3+3 4+4 3+4
@@ -132,6 +132,14 @@ void Analiser::Loop()
    TH1I *Q_Best = new TH1I("Q_Best", "Q_Best", 10, 0, 10);
    TH1I *Q_Ghost = new TH1I("Q_Ghost", "Q_Ghost", 10, 0, 10);
 
+   TH2I N_Cluster_style("N_Cluster_style","N_Cluster_style", 14, 0, 13, 7, -3.5, 3.5);
+   TH2I *N_Cluster[4];
+   for (int st = 1; st < 5; ++st) {
+      N_Cluster[st-1] = new TH2I(N_Cluster_style);
+      N_Cluster[st-1]->SetName(Form("N_Cluster_st%d", st));
+   }
+
+
 //   In a ROOT session, you can do:
 //      root> .L Analiser.C
 //      root> Analiser t
@@ -229,7 +237,7 @@ void Analiser::Loop()
                         Q_Ghost->Fill(ITQual[index]);
                      }
 
-
+                     N_Cluster[st-1]->Fill(sec, wheel);
                   }
                }
             }
@@ -277,6 +285,7 @@ void Analiser::Loop()
    cout << " Ratio LQ/matched with phi=  " << LowQ_more1HQ_Phi->GetEntries() << "/ " << t0_LowQuality->GetEntries()  << " = "<<  LowQ_more1HQ_Phi->GetEntries()/t0_LowQuality->GetEntries() << endl;
    cout << " Fraction of events with ghost (" << ClusterCount << ") on total (" << AllEvents << ") = " << Ghostfraction << endl;
    cout << " HQ out of time events: " << OoTHQCount << endl;
+
    TCanvas *canvas2 = new TCanvas ("canvas2", "canvas2", 500, 500, 500, 500);
    gPad->SetLogy();
    t0_LowQuality->SetLineColor(kBlue);
@@ -443,8 +452,13 @@ void Analiser::Loop()
    ClusterBXCanvas->cd(4);
    Q_ITGhosts->Draw();
 
+   TCanvas *StatCanvas = new TCanvas("StatCanvas", "StatCanvas", 500, 500, 500, 500);
+   StatCanvas->Divide(2, 2);
 
-
+   for (int i = 1; i<5; ++i){
+      StatCanvas->cd(i);
+      N_Cluster[i-1]->Draw("COLZ");
+   }
 
    //scanvas_residui->SaveAs("residui.png");
 
