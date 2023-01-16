@@ -95,15 +95,17 @@ void Analiser::Loop()
    TEfficiency *MatchAndCut_vs_Phi = new TEfficiency("MatchAndCut_vs_Phi", "MatchPhi_vs_Phi", 20, 0, 3.5);
    TEfficiency *MatchAndCut_vs_Pt = new TEfficiency("MatchAndCut_vs_Pt", "MatchPhi_vs_Pt", 40, 20, 100);
 
-   
-   TH1D OoTGhosts_style("OoTGhosts","OoTGhosts_style", 10, 0, 10);
+   // GHOST HISTOS
+   /*TH1D OoTGhosts_style("OoTGhosts","OoTGhosts_style", 10, 0, 10);
    TH1D *OoTGhosts[5][4][12];
 
    TH1D ITGhosts_style("ITGhosts", "ITGhosts_style", 10, 0, 10);
-   TH1D *ITGhosts[5][4][12];
+   TH1D *ITGhosts[5][4][12];*/
+   TH1D *OoTGhosts = new TH1D("OoTGhosts", "OoTGhosts", 20, 0, 20);
+   TH1D *ITGhosts = new TH1D("ITGhosts", "ITGhosts", 20, 0, 20);
 
-   TH1D *BX_ITGhosts = new TH1D("BX_ITGhosts", "BX_ITGhosts", 24 , -392, -368);
-   TH1D *BX_OoTGhosts = new TH1D("BX_OoTGhosts", "BX_OoTGhosts", 24 , -392, -368);
+   TH1I *BX_ITGhosts = new TH1I("BX_ITGhosts", "BX_ITGhosts", 24 , -392, -368);
+   TH1I *BX_OoTGhosts = new TH1I("BX_OoTGhosts", "BX_OoTGhosts", 24 , -392, -368);
    TH1D *Res_ITGhosts = new TH1D("Res_ITGhosts", "Res_ITGhosts", 110, -5.5, 5.5);
    TH1D *Res_OoTGhosts = new TH1D("Res_OoTGhosts", "Res_OoTGhosts", 110, -5.5, 5.5);
 
@@ -114,7 +116,7 @@ void Analiser::Loop()
    Q_ITGhosts->GetXaxis()->SetTitle("High Quality");
    Q_ITGhosts->GetYaxis()->SetTitle("In time Quality");
 
-   for(int st=1; st < 5; st++) {
+   /*for(int st=1; st < 5; st++) {
       for (int wheel = -2 ; wheel < 3; ++wheel){
          for (int sector = 1 ; sector < 13; ++sector) {
             OoTGhosts[wheel+2][st-1][sector-1]= new TH1D(OoTGhosts_style);
@@ -124,7 +126,11 @@ void Analiser::Loop()
             ITGhosts[wheel+2][st-1][sector-1]->SetName(Form("ITGhosts_%d_%d_%d", wheel, st, sector));
          }
       }
-   }
+   }*/
+
+   TH1I *N_Ghost = new TH1I("N_Ghost", "N_Ghost", 20, 0, 20);
+   TH1I *Q_Best = new TH1I("Q_Best", "Q_Best", 10, 0, 10);
+   TH1I *Q_Ghost = new TH1I("Q_Ghost", "Q_Ghost", 10, 0, 10);
 
 //   In a ROOT session, you can do:
 //      root> .L Analiser.C
@@ -144,6 +150,9 @@ void Analiser::Loop()
    const double TimeCut = 12.5;
    const double RealBX = 380; 
    const double xcut = 5.0; 
+   double ClusterCount = 0;
+   double OoTHQCount = 0;
+   double AllEvents = 0;
 
    if (fChain == 0) return;
 
@@ -176,19 +185,25 @@ void Analiser::Loop()
                }
             }
             
-            //FIND CLUSTER WITH CLASS (12-01-23)
+            //Find clusters
             Cluster Clusters[5][4][12];
             MakeClusters(Clusters, TPs, ph2TpgPhiEmuAm_nTrigs, xcut);
 
-            for (int wheel = -2; wheel < 3; ++wheel) {
+
+
+            for (int wheel = -2; wheel < 3; ++wheel) {    
                for (int st = 1; st <5; ++st){
                   for (int sec = 1; sec < 13; ++sec){
-
+                     AllEvents +=1;
+                     if (Clusters[wheel+2][st-1][sec-1].OoTHQ == true ) OoTHQCount+=1;
+                     if (Clusters[wheel+2][st-1][sec-1].Empty == true ) continue;
+                     ClusterCount +=1;
                      int OoTSize = Clusters[wheel+2][st-1][sec-1].GetOoTSize();
                      int ITSize = Clusters[wheel+2][st-1][sec-1].GetITSize();
 
-                     OoTGhosts[wheel+2][st-1][sec-1]->Fill(OoTSize);
-                     ITGhosts[wheel+2][st-1][sec-1]->Fill(ITSize);
+                     OoTGhosts->Fill(OoTSize);
+                     ITGhosts->Fill(ITSize);
+                     N_Ghost->Fill(OoTSize+ITSize);
 
                      vector<double> OoTBxs = Clusters[wheel+2][st-1][sec-1].GetOoTBX();
                      vector<double> ITBxs = Clusters[wheel+2][st-1][sec-1].GetITBX();
@@ -199,16 +214,19 @@ void Analiser::Loop()
                      vector<int> OoTQual = Clusters[wheel+2][st-1][sec-1].GetOoTQualities();
                      vector<int> ITQual = Clusters[wheel+2][st-1][sec-1].GetITQualities();
                      int HQ = Clusters[wheel+2][st-1][sec-1].GetBestQuality();
+                     Q_Best->Fill(HQ);
 
                      for (int index = 0; index < OoTSize; ++index){
                         BX_OoTGhosts->Fill( OoTBxs[index] );
                         Res_OoTGhosts->Fill( OoTRes[index] );
                         Q_OoTGhosts->Fill( HQ, OoTQual[index] );
+                        Q_Ghost->Fill(OoTQual[index]);
                      }
                      for (int index = 0; index < ITSize; ++index) {
                         BX_ITGhosts->Fill( ITBxs[index] );
                         Res_ITGhosts->Fill( ITRes[index] );
                         Q_ITGhosts->Fill( HQ, ITQual[index] );
+                        Q_Ghost->Fill(ITQual[index]);
                      }
 
 
@@ -253,10 +271,12 @@ void Analiser::Loop()
                }
             } 
    }
+   double Ghostfraction = ClusterCount/AllEvents;
 
    cout << " Ratio LQ/selected with phi=  " << LowQ_matched->GetEntries() << "/ " << t0_LowQuality->GetEntries()  << " = "<<  LowQ_matched->GetEntries()/t0_LowQuality->GetEntries() << endl;
    cout << " Ratio LQ/matched with phi=  " << LowQ_more1HQ_Phi->GetEntries() << "/ " << t0_LowQuality->GetEntries()  << " = "<<  LowQ_more1HQ_Phi->GetEntries()/t0_LowQuality->GetEntries() << endl;
-
+   cout << " Fraction of events with ghost (" << ClusterCount << ") on total (" << AllEvents << ") = " << Ghostfraction << endl;
+   cout << " HQ out of time events: " << OoTHQCount << endl;
    TCanvas *canvas2 = new TCanvas ("canvas2", "canvas2", 500, 500, 500, 500);
    gPad->SetLogy();
    t0_LowQuality->SetLineColor(kBlue);
@@ -384,28 +404,25 @@ void Analiser::Loop()
    MatchAndCut_vs_Pt->Draw("same");
 
    TCanvas *ClusterProvaCanvas = new TCanvas("ClusterProvaCanvas", "ClusterProvaCanvas", 500, 500, 500, 500);
-   ClusterProvaCanvas->Divide(1, 2);
+   ClusterProvaCanvas->Divide(2, 2);
    ClusterProvaCanvas->cd(1);
-   OoTGhosts[0][0][0]->Draw();
-   for (int wh = -2; wh < 3 ; ++wh) {
-      for (int st = 1 ; st <5; ++st) {
-         for (int sec = 1; sec < 13 ; ++sec) {
-            if (wh == -2 && st == 1&& sec == 1) continue;
-            OoTGhosts[wh+2][st-1][sec-1]->Draw("same");
-         }
-      }
-   }
+   OoTGhosts->Draw();
+
    ClusterProvaCanvas->cd(2);
-   ITGhosts[0][0][0]->Draw();
-   for (int wh = -2; wh < 3 ; ++wh) {
-      for (int st = 1 ; st <5; ++st) {
-         for (int sec = 1; sec < 13 ; ++sec) {
-            if (wh == -2 && st == 1 && sec == 1) continue;
-            ITGhosts[wh+2][st-1][sec-1]->Draw("same");
-         }
-      }
-   }
-   
+   ITGhosts->Draw();
+
+   ClusterProvaCanvas->cd(3);
+   N_Ghost->Draw();
+
+   ClusterProvaCanvas->cd(4);
+   Q_Ghost->SetLineColor(kOrange+7);
+   Q_Ghost->Draw();
+   Q_Best->Draw("same");
+   auto *q_legend = new TLegend (0.1, 0.7, 0.35, 0.9);
+   q_legend->AddEntry(Q_Ghost, "Ghost Quality");
+   q_legend->AddEntry(Q_Best, "Best one Quality");
+   q_legend->Draw("same");
+
    TCanvas *ClusterBXCanvas = new TCanvas("ClusterBXCanvas", "ClusterBXCanvas", 500, 500, 500, 500);
    ClusterBXCanvas->Divide(2, 2);
 
@@ -425,6 +442,7 @@ void Analiser::Loop()
 
    ClusterBXCanvas->cd(4);
    Q_ITGhosts->Draw();
+
 
 
 

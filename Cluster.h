@@ -13,9 +13,14 @@ class Cluster{
     int sector = -1;
 
     public: 
+    
     Cluster(){};
     Cluster(TriggerPrimitive Tps[], vector<int> ClusterIndex);
     Cluster(TriggerPrimitive Tps[], int size, double xcut, int st, int wh, int sec);
+
+    bool Empty = true;
+    bool OoTHQ = false;
+
     int GetOoTSize();
     int GetITSize();
     int GetBestQualityIndex();

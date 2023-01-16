@@ -20,14 +20,18 @@ Cluster::Cluster(TriggerPrimitive Tps[], int size, double xcut, int st, int wh, 
     wheel = wh;
     station = st;
     sector = sec;
-    //find best quality in wh st
+    //find best quality in wh st sec
     int maxQ = 0;
     for (int i = 0; i < size; ++i ) {
         TriggerPrimitive element = Tps[i];
         if (element.wheel != wh) continue;
         if (element.station != st) continue;
         if (element.sector != sec) continue;
-        if (abs(element.BX - RightBX) > 1 ) continue;
+        if (abs(element.BX - RightBX) > 1 ) {
+            //if (element.quality > 5) cout << "HQ at wrong BX" << endl;
+            OoTHQ = true;
+            continue;
+        }
         if (element.quality > maxQ) {
             maxQ = element.quality;
             _BestQuality = element;
@@ -42,10 +46,14 @@ Cluster::Cluster(TriggerPrimitive Tps[], int size, double xcut, int st, int wh, 
         if (element.station != st) continue;
         if (element.sector != sector) continue;
         DeltaxLoc = abs(element.xLoc - _BestQuality.xLoc);
-    // cout << DeltaxLoc << "      " << element.wheel << "     " << element.station << "       "<< wh << "     " <<st  << endl;
         if (DeltaxLoc < xcut) {
-            if ( abs(element.BX - RightBX) > 1) _OutofTimeGhosts.push_back(element);
-            else _InTimeGhosts.push_back(element);
+            Empty = false;
+            if ( abs(element.BX - RightBX) >= 1) {
+                _OutofTimeGhosts.push_back(element);
+                }
+            else if ( abs(element.BX - RightBX) < 1) {
+                _InTimeGhosts.push_back(element);
+            }
         }
     }
     
