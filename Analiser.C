@@ -26,7 +26,7 @@ void MakeClusters(Cluster clustersArray[5][4][12], TriggerPrimitive TPS[], int s
 
 void Analiser::Loop()
 {
-   TFile *file =new TFile("VtxSmeared/DTDPGNtuple_12_4_SingleMu_20-100pT_Eta1p25_VtxSmeared.root");     //"DTDPGNtuple_12_4_SingleMu_20-100pT_Eta1p25.root"
+   TFile *file =new TFile("DTDPGNtuple_12_4_SingleMu_20-100pT_Eta1p25.root");     //"VtxSmeared/DTDPGNtuple_12_4_SingleMu_20-100pT_Eta1p25_VtxSmeared.root"
    
    TH1D *t0_AllQuality = new TH1D ("t0_AllQuality", "t0_AllQuality", 100, -9800, -9200);
    TH1D *t0_HighQuality = new TH1D ("t0_HighQuality", "t0_HighQuality", 100, -9800, -9200);       //3+3 4+4 3+4
@@ -132,11 +132,18 @@ void Analiser::Loop()
    TH1I *Q_Best = new TH1I("Q_Best", "Q_Best", 10, 0, 10);
    TH1I *Q_Ghost = new TH1I("Q_Ghost", "Q_Ghost", 10, 0, 10);
 
-   TH2I N_Cluster_style("N_Cluster_style","N_Cluster_style", 14, 0, 13, 7, -3.5, 3.5);
+   TEfficiency Ghost_eff_style("Ghost_eff_st", "Ghost_eff_st", 14, 0, 13, 7, -3.5, 3.5);
+   TEfficiency *Ghost_eff[4];
+
+   TH2I N_Cluster_style("N_Cluster_st","N_Cluster_st", 14, 0, 13, 7, -3.5, 3.5);    //nel secondo metto titolo;titolo assex;titolo asse y
    TH2I *N_Cluster[4];
+
    for (int st = 1; st < 5; ++st) {
       N_Cluster[st-1] = new TH2I(N_Cluster_style);
       N_Cluster[st-1]->SetName(Form("N_Cluster_st%d", st));
+      Ghost_eff[st-1] = new TEfficiency(Form("Ghost_eff_st%d", st), Form("Ghost_eff_st%d", st), 14, 0, 13, 7, -3.5, 3.5);
+      //Ghost_eff[st-1]->SetName(Form("Ghost_eff_st%d", st));
+
    }
 
 
@@ -197,14 +204,13 @@ void Analiser::Loop()
             Cluster Clusters[5][4][12];
             MakeClusters(Clusters, TPs, ph2TpgPhiEmuAm_nTrigs, xcut);
 
-
-
             for (int wheel = -2; wheel < 3; ++wheel) {    
                for (int st = 1; st <5; ++st){
                   for (int sec = 1; sec < 13; ++sec){
                      AllEvents +=1;
+                     Ghost_eff[st-1]->Fill(!Clusters[wheel+2][st-1][sec-1].Isolated, sec, wheel);
                      if (Clusters[wheel+2][st-1][sec-1].OoTHQ == true ) OoTHQCount+=1;
-                     if (Clusters[wheel+2][st-1][sec-1].Empty == true ) continue;
+                     if (Clusters[wheel+2][st-1][sec-1].Isolated == true ) continue;
                      ClusterCount +=1;
                      int OoTSize = Clusters[wheel+2][st-1][sec-1].GetOoTSize();
                      int ITSize = Clusters[wheel+2][st-1][sec-1].GetITSize();
@@ -222,7 +228,9 @@ void Analiser::Loop()
                      vector<int> OoTQual = Clusters[wheel+2][st-1][sec-1].GetOoTQualities();
                      vector<int> ITQual = Clusters[wheel+2][st-1][sec-1].GetITQualities();
                      int HQ = Clusters[wheel+2][st-1][sec-1].GetBestQuality();
+                     cout << Clusters[wheel+2][st-1][sec-1]._BestQuality.BX << endl;
                      Q_Best->Fill(HQ);
+
 
                      for (int index = 0; index < OoTSize; ++index){
                         BX_OoTGhosts->Fill( OoTBxs[index] );
@@ -458,6 +466,13 @@ void Analiser::Loop()
    for (int i = 1; i<5; ++i){
       StatCanvas->cd(i);
       N_Cluster[i-1]->Draw("COLZ");
+   }
+
+   TCanvas *GhostEffCanvas = new TCanvas("GhostEffCanvas", "GhostEffCanvas", 500, 500, 500, 500);
+   GhostEffCanvas->Divide(2, 2);
+   for (int i = 1; i<5; ++i){
+      GhostEffCanvas->cd(i);
+      Ghost_eff[i-1]->Draw("COLZ");
    }
 
    //scanvas_residui->SaveAs("residui.png");

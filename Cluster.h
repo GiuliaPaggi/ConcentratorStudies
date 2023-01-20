@@ -7,18 +7,20 @@ class Cluster{
     private:
     vector <TriggerPrimitive> _OutofTimeGhosts;
     vector <TriggerPrimitive> _InTimeGhosts;
+
+
+
+    public: 
     TriggerPrimitive _BestQuality;
     int wheel = -5;
     int station = -1;
     int sector = -1;
-
-    public: 
     
     Cluster(){};
     Cluster(TriggerPrimitive Tps[], vector<int> ClusterIndex);
     Cluster(TriggerPrimitive Tps[], int size, double xcut, int st, int wh, int sec);
 
-    bool Empty = true;
+    bool Isolated = true;
     bool OoTHQ = false;
 
     int GetOoTSize();
