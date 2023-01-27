@@ -1,39 +1,46 @@
 #ifndef Cluster_h
 #define Cluster_h
 
+#include <vector>
+
 #include "TriggerPrimitive.h"
 
-class Cluster{
-    private:
-    vector <TriggerPrimitive> _OutofTimeGhosts;
-    vector <TriggerPrimitive> _InTimeGhosts;
-    TriggerPrimitive _BestQuality;
-    int wheel = -5;
-    int station = -1;
-    int sector = -1;
+class Cluster {
+ public:
+  int wheel{-5};
+  int station{-1};
+  int sector{-1};
 
-    public: 
-    
-    Cluster(){};
-    Cluster(TriggerPrimitive Tps[], vector<int> ClusterIndex);
-    Cluster(TriggerPrimitive Tps[], int size, double xcut, int st, int wh, int sec);
+ private:
+  TriggerPrimitive _bestTP{};
 
-    bool Empty = true;
-    bool OoTHQ = false;
+  std::vector<TriggerPrimitive> _ootGhosts;
+  std::vector<TriggerPrimitive> _itGhosts;
 
-    int GetOoTSize();
-    int GetITSize();
-    int GetBestQualityIndex();
-    vector<double> GetOoTBX();
-    vector<double> GetITBX();
-    vector<double> GetOoTResidual();
-    vector<double> GetITResidual();
-    vector<int> GetOoTQualities();
-    vector<int> GetITQualities();
-    int GetBestQuality();
+ public:
+  Cluster(){};
+  Cluster(std::vector<TriggerPrimitive> const& tps, std::vector<int> const& indexes);
+  Cluster(std::vector<TriggerPrimitive> const& tps, double x_cut, int st, int wh, int sec);
 
-    //void MakeClusters(vector <Cluster> Clusters, TriggerPrimitive TPS[], int sz, double xCut);
 
+  int itSize() const;
+  int ootSize() const;
+
+  bool empty() const{ return bestTPQuality() < 0 && !hasGhosts(); };
+  bool hasGhosts() const { return itSize() || ootSize(); };
+
+  const std::vector<TriggerPrimitive>& itGhosts() const;
+  const std::vector<TriggerPrimitive>& ootGhosts() const;
+
+  int itCountIf(std::function<bool(TriggerPrimitive const&)> f) const;
+  int ootCountIf(std::function<bool(TriggerPrimitive const&)>  f) const;
+
+  int bestTPIndex() const;
+  int bestTPQuality() const;
+  const TriggerPrimitive& bestTP() const;
+
+  // void MakeClusters(vector <Cluster> Clusters, TriggerPrimitive TPS[], int
+  // sz, double xCut);
 };
 
 #endif
