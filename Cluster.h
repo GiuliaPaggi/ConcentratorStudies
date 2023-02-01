@@ -4,35 +4,37 @@
 #include "TriggerPrimitive.h"
 
 class Cluster{
-    private:
-    vector <TriggerPrimitive> _OutofTimeGhosts;
-    vector <TriggerPrimitive> _InTimeGhosts;
+public:
+  int wheel{-5};
+  int station{-1};
+  int sector{-1};
+
+ private:
+  TriggerPrimitive _bestTP{};
+
+  std::vector<TriggerPrimitive> _ootGhosts;
+  std::vector<TriggerPrimitive> _itGhosts;
+
+ public:
+  Cluster(){};
+  Cluster(std::vector<TriggerPrimitive> const& tps, double x_cut, int st, int wh, int sec);
 
 
+  int itSize() const;
+  int ootSize() const;
 
-    public: 
-    TriggerPrimitive _BestQuality;
-    int wheel = -5;
-    int station = -1;
-    int sector = -1;
-    
-    Cluster(){};
-    Cluster(TriggerPrimitive Tps[], vector<int> ClusterIndex);
-    Cluster(TriggerPrimitive Tps[], int size, double xcut, int st, int wh, int sec);
+  bool isolated() const{ return bestTPQuality() < 0 && !hasGhosts(); };
+  bool hasGhosts() const { return itSize() || ootSize(); };
 
-    bool Isolated = true;
-    bool OoTHQ = false;
+  const std::vector<TriggerPrimitive>& itGhosts() const;
+  const std::vector<TriggerPrimitive>& ootGhosts() const;
 
-    int GetOoTSize();
-    int GetITSize();
-    int GetBestQualityIndex();
-    vector<double> GetOoTBX();
-    vector<double> GetITBX();
-    vector<double> GetOoTResidual();
-    vector<double> GetITResidual();
-    vector<int> GetOoTQualities();
-    vector<int> GetITQualities();
-    int GetBestQuality();
+  int itCountIf(std::function<bool(TriggerPrimitive const&)> f) const;
+  int ootCountIf(std::function<bool(TriggerPrimitive const&)>  f) const;
+
+  int bestTPIndex() const;
+  int bestTPQuality() const;
+  const TriggerPrimitive& bestTP() const;
 
     //void MakeClusters(vector <Cluster> Clusters, TriggerPrimitive TPS[], int sz, double xCut);
 
