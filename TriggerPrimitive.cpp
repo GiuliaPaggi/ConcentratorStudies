@@ -26,35 +26,35 @@ TriggerPrimitive::TriggerPrimitive(std::size_t i, int tpg_wheel, int tpg_sector,
 
 void TriggerPrimitive::ComputeExpectedPhi() {
   const double MB[4] = {402.2, 490.5, 597.5, 700.0};
-
   for (int stat = 1; stat < 5; ++stat) {
-    if (station == stat)
-      phiExpected[stat] = phi;
+    if (station == stat){
+      phiExpected[stat-1] = phi;
+    }
     else {
       double ExpPhi = psi - TMath::ASin(TMath::Sin(phiB) * MB[station - 1] / MB[stat - 1]);
-      phiExpected[stat] = ExpPhi;
-    }
+      phiExpected[stat-1] = ExpPhi; 
+      }
   }
   computedPhi = true;
 };
 
 bool TriggerPrimitive::Match(TriggerPrimitive &TP, double phicut, double timecut) {
   if (TP.index == index) return false;
-
   if (!computedPhi) ComputeExpectedPhi();
 
   double DeltaPhiExp = 0;
-  abs(phiExpected[TP.station] - TP.phi) < TMath::Pi()
-      ? DeltaPhiExp = abs(phiExpected[TP.station] - TP.phi)
-      : DeltaPhiExp = abs(2 * TMath::Pi() - abs(phiExpected[TP.station] - TP.phi));
+  std::abs(phiExpected[TP.station] - TP.phi) < TMath::Pi()
+      ? DeltaPhiExp = std::abs(phiExpected[TP.station] - TP.phi)
+      : DeltaPhiExp = std::abs(2 * TMath::Pi() - std::abs(phiExpected[TP.station] - TP.phi));
 
-  double Deltat0 = abs(t0 - TP.t0);
+  double Deltat0 = std::abs(t0 - TP.t0);
 
   if (DeltaPhiExp < phicut) {
+
     TP.Matches.push_back(index);  // NELLE QUALITà BASSE METTO L'INDICE DI QUELLA ALTA
     Matches.push_back(TP.index);  // NELLE QUALITà ALTE METTO L'INDICE DI QUELLE CHE MATCHANO
 
-    if (wheel == 0 && abs(TP.wheel) < 3) {
+    if (wheel == 0 && std::abs(TP.wheel) < 3) {
       if (TP.quality == 1 && Deltat0 < timecut) {
         TP.hasMatched = true;
         hasMatched = true;
@@ -104,7 +104,7 @@ vector<int> TriggerPrimitive::MakeCluster(TriggerPrimitive listOfPrimitives[], i
 
   for (int i = 0; i < size; ++i) {
     TriggerPrimitive element = listOfPrimitives[i];
-    double DeltaxLoc = abs(element.xLoc - xLoc);
+    double DeltaxLoc = std::abs(element.xLoc - xLoc);
 
     if (element.station == station && element.wheel == wheel && DeltaxLoc < xcut) {
       if (element.index != index) {
@@ -138,7 +138,7 @@ void TriggerPrimitive::FindHigherQuality(TriggerPrimitive listOfPrimitives[],
 
 
 void TriggerPrimitive::CheckBX() {
-  if (abs(BX + 380) < 1)
+  if (std::abs(BX + 380) < 1)
     hasRIGHT_BX = true;
   else
     isGhostOutOfTime = true;

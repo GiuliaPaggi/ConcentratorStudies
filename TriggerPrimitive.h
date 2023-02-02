@@ -23,7 +23,7 @@ class TriggerPrimitive {
   double psi{-1000.0};   // in rad
 
   std::array<double, 4> phiExpected;
-  vector<int> Matches;
+  std::vector<int> Matches;
 
   bool computedPhi{false};
   bool hasMatched{false};
