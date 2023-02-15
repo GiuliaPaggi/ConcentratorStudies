@@ -9,16 +9,21 @@ public:
   int station{-1};
   int sector{-1};
 
+  bool MuMatched = false;
+
  private:
   TriggerPrimitive _bestTP{};
 
   std::vector<TriggerPrimitive> _ootGhosts;
   std::vector<TriggerPrimitive> _itGhosts;
 
+  std::array<int, 2> MuMatchedIndex;
+
  public:
   Cluster(){};
   Cluster(std::vector<TriggerPrimitive> const& tps, double x_cut, int st, int wh, int sec);
 
+  void MatchSegment( int MuWh, int MuStat, int MuSec,  double MuXedge, double MuYedge, double MuX, int MuIndex, int nMu ) ;
 
   int itSize() const;
   int ootSize() const;
@@ -36,7 +41,6 @@ public:
   int bestTPQuality() const;
   const TriggerPrimitive& bestTP() const;
 
-    //void MakeClusters(vector <Cluster> Clusters, TriggerPrimitive TPS[], int sz, double xCut);
 
 };
 

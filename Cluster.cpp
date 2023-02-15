@@ -31,7 +31,6 @@ Cluster::Cluster(std::vector<TriggerPrimitive> const& tps, double x_cut, int wh,
     auto compareQuality = [](auto& tp1 , auto& tp2) { return tp1.quality < tp2.quality; } ; 
     auto best_tp = ( std::max_element(tps_in_chamber.begin(), tps_in_chamber.end(), compareQuality));
     _bestTP = *best_tp;
-    //std::cout << _bestTP.quality << std::endl;
   }
   // se ne ho solo una me la tengo buona in _bestTp
   else if (tps_in_chamber.size() == 1) _bestTP = tps_in_chamber[0];
@@ -43,12 +42,6 @@ Cluster::Cluster(std::vector<TriggerPrimitive> const& tps, double x_cut, int wh,
   }
 
   _itGhosts = std::move(tps_in_chamber);
-
-
-  // if (n_tps_in_chamber != 0) {
-  //   std::cout << n_tps_in_chamber << '\t' << bestTPQuality() << ' ' << itSize() << ' '
-  //             << ootSize() << '\n';
-  // }
 
 }
 
@@ -69,4 +62,16 @@ int Cluster::itCountIf(std::function<bool(TriggerPrimitive const&)> f) const {
 
 int Cluster::ootCountIf(std::function<bool(TriggerPrimitive const&)> f) const {
   return std::count_if(_ootGhosts.begin(), _ootGhosts.end(), f);
+}
+
+void Cluster::MatchSegment( int MuWh, int MuStat, int MuSec,  double MuXedge, double MuYedge, double MuX, int MuIndex, int nMu ) {
+  if (MuWh == wheel && MuStat == station && MuSec == sector && MuXedge < -5  && MuYedge < -5){
+  // if the extrapolated segment is within 5 cm from the HQ it matches
+    if (  std::abs( _bestTP.xLoc - MuX ) < 5 ){
+        MuMatchedIndex[0] = nMu;
+        MuMatchedIndex[1] = MuIndex;
+        MuMatched = true;
+        //std::cout << " matched" << std::endl;
+    }
+  }
 }

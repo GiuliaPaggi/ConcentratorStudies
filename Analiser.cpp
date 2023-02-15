@@ -37,6 +37,12 @@ std::vector<Cluster> buildClusters(std::vector<TriggerPrimitive> tps, double x_c
   return clusters;
 };
 
+template<typename T> T getXY(TClonesArray * arr, int x, int y) 
+{ 
+  return static_cast<T>((*((TVectorT<float> *)(arr->At(x))))[y]); 
+};
+
+
 void Analiser::Loop() {
   const std::array<double, 4> MB{402.2, 490.5, 597.5, 700.0};
   const int LOW_QUAL_CUT{0};
@@ -160,7 +166,18 @@ void Analiser::Loop() {
     N_Cluster[st - 1] = new TH2I(Form("N_Cluster_st%d", st), Form("N_Cluster_st%d", st), 14, 0, 13, 7, -3.5, 3.5);
     //N_Cluster[st - 1]->SetName(Form("N_Cluster_st%d", st));
   }
+  TH1D *x_LowBestQ = new TH1D("x_LowBestQ", "x_LowBestQ", 100, -220, 220);
 
+
+  TH1D *Res_MuMatched = new TH1D("Res_MuMatched", "Res_MuMatched; BestQ-MuMatched", 100, -6, 6);
+  TH2I *N_MuMatch[4];
+  TEfficiency *Eff_MuMatch[4];
+  for (const auto st : STATIONS) {
+    N_MuMatch[st - 1] = new TH2I(Form("N_MuMatch_st%d", st), Form("N_MuMatch_st%d; sector ; wheel", st), 14, 0, 13, 7, -3.5, 3.5);
+    Eff_MuMatch[st-1] = new TEfficiency(Form("Eff_MuMatch_st%d", st), Form("Eff_MuMatch_st%d; sector; wheel", st), 14, 0, 13, 7, -3.5, 3.5);
+  }
+
+   
   //   In a ROOT session, you can do:
   //      root> .L Analiser.C
   //      root> Analiser t
@@ -204,7 +221,8 @@ void Analiser::Loop() {
 
     auto clusters = buildClusters(tps, X_CUT);
 
-    for (auto const &cluster : clusters) {
+    //for (auto const &cluster : clusters) {
+    for (auto &cluster : clusters) {
       auto wh{cluster.wheel};
       auto sec{cluster.sector};
       auto st{cluster.station};
@@ -221,7 +239,31 @@ void Analiser::Loop() {
       OoTGhosts->Fill(ootSize);
       N_Ghost->Fill(ootSize + itSize);
 
-      //std::cout << "it ghost: " << itSize << "    oot ghost:  " << ootSize << std::endl;
+      if (bestQ == 1) x_LowBestQ->Fill(cluster.bestTP().xLoc);
+
+      // try to match clusters with segment
+      for (int iMu = 0; iMu < mu_nMuons; ++iMu){
+        for (int i = 0; i < mu_nMatches->at(iMu); ++i){
+          int muTrkWheel = getXY<float>(mu_matches_wheel, iMu, i);
+          int muTrkStation = getXY<float>(mu_matches_station, iMu, i);
+          int muTrkSector = getXY<float>(mu_matches_sector, iMu, i);
+          if (muTrkSector == 13 ) muTrkSector = 4;
+          if (muTrkSector == 14 ) muTrkSector = 10; 
+          double muTrkX = getXY<float>(mu_matches_x, iMu, i);
+          double edgeX = getXY<float>(mu_matches_edgeX, iMu, i);
+          double edgeY = getXY<float>(mu_matches_edgeY, iMu, i);
+
+          cluster.MatchSegment(muTrkWheel, muTrkStation, muTrkSector, edgeX, edgeY, muTrkX, i, iMu);
+          Eff_MuMatch[st-1]->Fill(cluster.MuMatched, sec, wh);
+          if (cluster.MuMatched) {
+            Res_MuMatched->Fill(cluster.bestTP().xLoc - muTrkX);
+            N_MuMatch[st-1]->Fill(sec, wh);
+          }
+        }
+      }
+      
+
+
 
       N_Cluster[st - 1]->Fill(sec, wh);
 
@@ -242,7 +284,12 @@ void Analiser::Loop() {
         Q_ITGhosts->Fill(bestQ, ghost.quality);
         Q_Ghost->Fill(ghost.quality);
       }
+
+
     }
+
+    
+
 
     for (TriggerPrimitive &tp : tps) {
       //continue; //CB commented out as it crashes
@@ -464,5 +511,25 @@ void Analiser::Loop() {
     StatCanvas->cd(i);
     N_Cluster[i - 1]->Draw("COLZ");
   }
+
+  TCanvas *MuMatchCanvas = new TCanvas("MuMatchCanvas", "MuMatchCanvas", 500, 500, 500, 500);
+  Res_MuMatched->Draw();
+
+  TCanvas *MuMatch2dCanvas = new TCanvas("MuMatch2dCanvas", "MuMatch2dCanvas", 500, 500, 500, 500);
+  MuMatch2dCanvas->Divide(2,2);
+  for (int i = 1; i < 5; ++i) {
+    MuMatch2dCanvas->cd(i);
+    N_MuMatch[i - 1]->Draw("COLZ");
+  }
+
+  TCanvas *EffMuMatchCanvas = new TCanvas("EffMuMatchCanvas", "EffMuMatchCanvas", 500, 500, 500, 500);
+  EffMuMatchCanvas->Divide(2,2);
+  for (int i = 1; i < 5; ++i) {
+    EffMuMatchCanvas->cd(i);
+    Eff_MuMatch[i - 1]->Draw("COLZ");
+  }
+
+  TCanvas *LowQBestDistributionCanvas = new TCanvas("LowQBestDistributionCanvas", "LowQBestDistributionCanvas", 500, 500, 500, 500);
+  x_LowBestQ->Draw();
 
 }
