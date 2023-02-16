@@ -10,6 +10,7 @@ public:
   int sector{-1};
 
   bool MuMatched = false;
+  std::array<int, 2> MuMatchedIndex;
 
  private:
   TriggerPrimitive _bestTP{};
@@ -17,7 +18,7 @@ public:
   std::vector<TriggerPrimitive> _ootGhosts;
   std::vector<TriggerPrimitive> _itGhosts;
 
-  std::array<int, 2> MuMatchedIndex;
+
 
  public:
   Cluster(){};
