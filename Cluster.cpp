@@ -67,7 +67,7 @@ int Cluster::ootCountIf(std::function<bool(TriggerPrimitive const&)> f) const {
 void Cluster::MatchSegment( int MuWh, int MuStat, int MuSec,  double MuXedge, double MuYedge, double MuX, int MuIndex, int nMu ) {
   if (MuWh == wheel && MuStat == station && MuSec == sector && MuXedge < -5  && MuYedge < -5){
   // if the extrapolated segment is within 5 cm from the HQ it matches
-    if (  std::abs( _bestTP.xLoc - MuX ) < 5 ){
+    if (  std::abs( _bestTP.xLoc - MuX ) < 10 ){
         MuMatchedIndex[0] = nMu;
         MuMatchedIndex[1] = MuIndex;
         MuMatched = true;
