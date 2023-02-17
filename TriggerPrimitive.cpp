@@ -126,14 +126,14 @@ void TriggerPrimitive::FindHigherQuality(TriggerPrimitive listOfPrimitives[],
   int maxQ = quality;
   int maxQindex = index;
   for (auto element : clusterIndex) {
-    if (hasHigherQuality) return;
+    if (hasHighestQuality) return;
     if (listOfPrimitives[element].quality > maxQ) {
       maxQ = listOfPrimitives[element].quality;
       maxQindex = element;
     }
   }
 
-  listOfPrimitives[maxQindex].hasHigherQuality = true;
+  listOfPrimitives[maxQindex].hasHighestQuality = true;
 };
 
 

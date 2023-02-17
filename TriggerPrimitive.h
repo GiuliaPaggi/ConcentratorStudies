@@ -14,7 +14,7 @@ class TriggerPrimitive {
   int quality{-1};
 
   int BX{-1000};
-  int t0{-100000};
+  int t0{-100000}; // in ns
 
   float xLoc{-1000.0};  // in cm
 
@@ -31,11 +31,9 @@ class TriggerPrimitive {
   bool hasRIGHT_BX{false};
   bool isGhostOutOfTime{false};
 
-  // ADD LIKE ISONTIMEHHOST ISOFFTIMEGHOST
-
   // Cluster info
   bool inCluster{false};
-  bool hasHigherQuality{false};
+  bool hasHighestQuality{false};
 
   TriggerPrimitive(){};
   TriggerPrimitive(std::size_t i, int tpg_wheel, int tpg_sector, int tpg_station,

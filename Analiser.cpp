@@ -8,6 +8,8 @@
 #include <TLegend.h>
 #include <TMath.h>
 #include <TStyle.h>
+#include <TClonesArray.h>
+#include <TVector.h>
 
 #include <iostream>
 #include <vector>
@@ -15,7 +17,7 @@
 #include "Cluster.h"
 #include "TriggerPrimitive.h"
 
-// CB not optimal, but readable ...
+// CB not optimal, but readable
 const std::vector<int> WHEELS{-2, -1, 0, 1, 2};
 const std::vector<int> SECTORS{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
 const std::vector<int> STATIONS{1, 2, 3, 4};
@@ -66,7 +68,7 @@ void Analiser::Loop() {
       new TH1D("t0_HighQuality", "t0_HighQuality", 100, T_MIN, T_MAX);  // 3+3 4+4 3+4
   TH1D *t0_IntermediateQuality =
       new TH1D("t0_IntermediateQuality", "t0_IntermediateQuality", 100, T_MIN,
-               T_MAX);  // 3+3 4+4 3+4 4+2 3+2   PER ORA NON CI SONO
+               T_MAX);  // 4+2 3+2 qualities, not there if we use slice-test configuration for emulator
   TH1D *t0_LowQuality = new TH1D("t0_LowQuality", "t0_LowQuality", 100, T_MIN, T_MAX);
   TH1D *t0_Selected = new TH1D("t0_Selected", "t0_Selected", 100, T_MIN, T_MAX);
 
@@ -79,7 +81,6 @@ void Analiser::Loop() {
   TH1D *BX_LowQ_more1HQ =
       new TH1D("BX_LowQ_more1HQ", "BX_LowQ_more1HQ,BX;Entries", 24, BX_MIN, BX_MAX);
 
-  // CB ?
   TH1D *t0_Selected_Psi = new TH1D("t0_Selected_Psi", "t0_Selected_Psi", 100, T_MIN, T_MAX);
   TH1D *LowQ_matched_Psi = new TH1D("LowQ_matched_Psi", "LowQ_matched_Psi", 100, T_MIN, T_MAX);
   TH1D *HighQ_matched_Psi = new TH1D("HighQ_matched_Psi", "HighQ_matched_Psi", 100, T_MIN, T_MAX);
@@ -100,7 +101,6 @@ void Analiser::Loop() {
   TH2D *PhiRes_st3_4 = new TH2D("PhiRes_st3_4", "PhiRes_st3_4;p_{T} (GeV);Computed Phi -Phi (rad)",
                                 100, 15, 105, 100, -1, 1);
 
-  // CB legends?
   TH2D *PhiRes_vs_posizione =
       new TH2D("PhiRes_vs_posizione",
                "PhiRes_vs_posizione;Vertex distance from IP (cm);Computed Phi -Phi (rad)", 100, 0,
@@ -168,7 +168,6 @@ void Analiser::Loop() {
   }
   TH1D *x_LowBestQ[4];
 
-
   TH1D *Res_MuMatched = new TH1D("Res_MuMatched", "Res_MuMatched; BestQ-MuMatched", 100, -6, 6);
   TH2I *N_MuMatch[4];
   TH1D *Phi_MuMatch[4];
@@ -181,9 +180,6 @@ void Analiser::Loop() {
     NMuMatch_vs_phi[st-1] = new TH2D(Form("NMuMatch_vs_phi_st%d", st), Form("NMuMatch_vs_phi_st%d ; Muon_Phi; N_MuMatch", st), 50, -TMath::Pi(), TMath::Pi(), 6, 1, 7 );
     Phi_MuMatch[st-1] = new TH1D(Form("Phi_MuMatch_st%d", st), Form("Phi_MuMatch_st%d; Muon_phi; Entries", st), 50,-TMath::Pi(), TMath::Pi() );
   }
-
-
-
    
   //   In a ROOT session, you can do:
   //      root> .L Analiser.C
@@ -215,7 +211,7 @@ void Analiser::Loop() {
     if (std::abs(gen_pdgId->at(0)) != 13 || std::abs(gen_eta->at(0)) > 0.8) continue;
     // cout << "---------------------------------------" << endl;
 
-    // ########## LOOP ON TRIGGERS PRIMITIVES #############
+    // ########## CREATE TPs std::vector #############
     std::vector<TriggerPrimitive> tps;
 
     for (std::size_t j = 0; j < ph2TpgPhiEmuAm_nTrigs; ++j) {
@@ -226,9 +222,10 @@ void Analiser::Loop() {
                                         ph2TpgPhiEmuAm_t0->at(j), ph2TpgPhiEmuAm_posLoc_x->at(j)});
     }
 
+    // ########## BUILD clusters std::vector #############
     auto clusters = buildClusters(tps, X_CUT);
 
-    // try to match clusters with segment
+    // ########## ATTEMPT cluster - muon extrapolation matching #############
     for (auto &cluster: clusters){
       for (int iMu = 0; iMu < mu_nMuons; ++iMu){
 
@@ -247,6 +244,7 @@ void Analiser::Loop() {
       }
     }
 
+    // ########## RUN SOME ANALYSIS #############
     for (auto const &cluster : clusters) {
       auto wh{cluster.wheel};
       auto sec{cluster.sector};
@@ -266,9 +264,9 @@ void Analiser::Loop() {
 
       if (bestQ == 1) x_LowBestQ[st-1]->Fill(cluster.bestTP().xLoc);
 
-      Eff_MuMatch[st-1]->Fill(cluster.MuMatched, sec, wh);
-        if (cluster.MuMatched) {
-          Res_MuMatched->Fill(cluster.bestTP().xLoc - getXY<float>(mu_matches_x, cluster.MuMatchedIndex[0], cluster.MuMatchedIndex[1]));
+      Eff_MuMatch[st-1]->Fill(cluster.muMatched, sec, wh);
+        if (cluster.muMatched) {
+          Res_MuMatched->Fill(cluster.bestTP().xLoc - getXY<float>(mu_matches_x, cluster.muMatchedIndex[0], cluster.muMatchedIndex[1]));
           N_MuMatch[st-1]->Fill(sec, wh);
       }
       
@@ -293,20 +291,15 @@ void Analiser::Loop() {
 
     }
 
-    
-
-
     for (TriggerPrimitive &tp : tps) {
-      //continue; //CB commented out as it crashes
       if (tp.quality == 1) {
         t0_LowQuality->Fill(tps.back().t0);
         BX_LowQuality->Fill(tps.back().BX);
       }
       if (tp.quality > HIGH_QUAL_CUT && !tp.hasMatched) {
-        // prendo quelle HQ che non ho ancora matchato a niente 
+        // select HQ TPs which are not matched 
         t0_Selected->Fill(tp.t0);
         for (TriggerPrimitive &other_tp : tps) {
-          //se non sto guardando la stessa provo il match 
           if (tp.index != other_tp.index && tp.Match(other_tp, PHI_CUT, T0_CUT)) {    
             if (other_tp.quality == 1) {
               t0_Selected->Fill(other_tp.t0);
