@@ -2,6 +2,7 @@
 #define Cluster_h
 
 #include "TriggerPrimitive.h"
+#include "Segment.h"
 
 class Cluster{
 public:
@@ -12,7 +13,11 @@ public:
   bool muMatched = false;
   std::array<int, 2> muMatchedIndex;
 
+  bool segMatched = false;
+
  private:
+  Segment _bestSeg{};
+  Segment _matchedSeg{};
   TriggerPrimitive _bestTP{};
 
   std::vector<TriggerPrimitive> _ootGhosts;
@@ -22,9 +27,10 @@ public:
 
  public:
   Cluster(){};
-  Cluster(std::vector<TriggerPrimitive> const& tps, double x_cut, int st, int wh, int sec);
+  Cluster(std::vector<TriggerPrimitive> const& tps, std::vector<Segment> const& seg, double xCut, int wh, int sec, int st);
 
-  void MatchSegment( int muWh, int muStat, int muSec,  double muXedge, double muYedge, double muX, int muIndex, int nmu ) ;
+  void MatchMu( int muWh, int muStat, int muSec,  double muXedge, double muYedge, double muX, int muIndex, int nmu ) ;
+  void MatchSegment(Segment segment, double xCut);
 
   int itSize() const;
   int ootSize() const;
@@ -42,7 +48,11 @@ public:
   int bestTPQuality() const;
   const TriggerPrimitive& bestTP() const;
 
+  int matchedSegIndex() const;
+  int matchedSegPhiHits() const;
+  const Segment& matchedSeg() const;
 
+  int bestSegPhiHits() const;
 };
 
 #endif

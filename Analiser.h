@@ -655,11 +655,11 @@ Analiser::Analiser(TTree *tree) : fChain(0)
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
    if (tree == 0) {
-      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("./VtxSmeared/DTDPGNtuple_12_4_SingleMu_20-100pT_Eta1p25_VtxSmeared.root");
+      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("./DTDPGNtuple_12_4_SingleMu_20-100pT_Eta1p25.root");
       if (!f || !f->IsOpen()) {
-         f = new TFile("./VtxSmeared/DTDPGNtuple_12_4_SingleMu_20-100pT_Eta1p25_VtxSmeared.root");
+         f = new TFile("./DTDPGNtuple_12_4_SingleMu_20-100pT_Eta1p25.root");
       }
-      TDirectory * dir = (TDirectory*)f->Get("./VtxSmeared/DTDPGNtuple_12_4_SingleMu_20-100pT_Eta1p25_VtxSmeared.root:/dtNtupleProducer");
+      TDirectory * dir = (TDirectory*)f->Get("./DTDPGNtuple_12_4_SingleMu_20-100pT_Eta1p25.root:/dtNtupleProducer");
       dir->GetObject("DTTREE",tree);
 
    }
