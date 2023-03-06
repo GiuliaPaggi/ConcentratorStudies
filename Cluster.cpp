@@ -106,7 +106,7 @@ void Cluster::MatchMu( int muWh, int muStat, int muSec,  double muXedge, double 
       muMatchedIndex[1] = muIndex;
       muMatched = true;
     }
-    if ( !segMatched && std::abs( _bestTP.xLoc - muX ) < 10 ){
+    else if ( !segMatched && std::abs( _bestTP.xLoc - muX ) < 10 ){
       muMatchedIndex[0] = iMu;
       muMatchedIndex[1] = muIndex;
       muMatched = true;
