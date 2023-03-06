@@ -14,6 +14,8 @@ public:
   std::array<int, 2> muMatchedIndex;
 
   bool segMatched = false;
+  bool foundSeg = false;
+  bool foundTP = false;
 
  private:
   Segment _bestSeg{};
@@ -53,6 +55,7 @@ public:
   const Segment& matchedSeg() const;
 
   int bestSegPhiHits() const;
+  const Segment& bestSeg() const;
 };
 
 #endif

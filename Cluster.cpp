@@ -31,7 +31,6 @@ Cluster::Cluster(std::vector<TriggerPrimitive> const& tps, std::vector<Segment> 
   tps_in_chamber.erase(first_oot, tps_in_chamber.end());
 
   // If I have more than one in-time TP -> look for the highest quality and assign to _bestTP
-  bool foundTP = false;
   if (tps_in_chamber.size() > 1){
     auto compareQuality = [](auto& tp1 , auto& tp2) { return tp1.quality < tp2.quality; } ; 
     auto best_tp = ( std::max_element(tps_in_chamber.begin(), tps_in_chamber.end(), compareQuality));
@@ -53,7 +52,7 @@ Cluster::Cluster(std::vector<TriggerPrimitive> const& tps, std::vector<Segment> 
   _itGhosts = std::move(tps_in_chamber);
 
   // segments in same chamber
-  bool foundSeg = false;
+
   std::vector<Segment> segments_in_chamber;  
   std::copy_if(seg.begin(), seg.end(), std::back_inserter(segments_in_chamber),
                [=](auto& segm) { return segm.wheel == wh && segm.station == st && segm.sector == sec; });
@@ -72,7 +71,7 @@ Cluster::Cluster(std::vector<TriggerPrimitive> const& tps, std::vector<Segment> 
   }
 
   // match bestSeg e bestTP
-  if (foundTP && foundSeg && ( std::abs(_bestSeg.xLoc - _bestTP.xLoc ) < xCut ) ){
+  if (foundTP && foundSeg && ( std::abs( _bestSeg.xLoc - _bestTP.xLoc ) < xCut ) ){
     segMatched = true;
     _matchedSeg = _bestSeg;
   }
@@ -102,10 +101,15 @@ int Cluster::ootCountIf(std::function<bool(TriggerPrimitive const&)> f) const {
 void Cluster::MatchMu( int muWh, int muStat, int muSec,  double muXedge, double muYedge, double muX, int muIndex, int iMu ) {
   if (muWh == wheel && muStat == station && muSec == sector && muXedge < -5  && muYedge < -5){
     // if the extrapolated segment is within 10 cm from _bestTP
-    if (  std::abs( _bestTP.xLoc - muX ) < 10 ){
-        muMatchedIndex[0] = iMu;
-        muMatchedIndex[1] = muIndex;
-        muMatched = true;
+    if (segMatched && std::abs( _bestSeg.xLoc - muX ) < 10) {
+      muMatchedIndex[0] = iMu;
+      muMatchedIndex[1] = muIndex;
+      muMatched = true;
+    }
+    if ( !segMatched && std::abs( _bestTP.xLoc - muX ) < 10 ){
+      muMatchedIndex[0] = iMu;
+      muMatchedIndex[1] = muIndex;
+      muMatched = true;
     }
   }
 }
@@ -115,6 +119,7 @@ int Cluster::matchedSegPhiHits() const {return _matchedSeg.nPhiHits; };
 const Segment& Cluster::matchedSeg() const {return _matchedSeg; };
 
 int Cluster::bestSegPhiHits() const {return _bestSeg.nPhiHits; };
+const Segment& Cluster::bestSeg() const {return _bestSeg; };
 
 /*void Cluster::MatchSegment(Segment segment, double xCut){
   if (segment.wheel == wheel && segment.station == station && segment.sector == sector){

@@ -62,7 +62,10 @@ void Analiser::Loop() {
   double BX_MIN{-392};
   double BX_MAX{-368};
 
-  int counter = 0;
+  /*int counter = 0;
+  int counter_bad = 0;
+  int counter_good = 0;
+  */
 
   TFile *file = new TFile("./DTDPGNtuple_12_4_SingleMu_20-100pT_Eta1p25.root");   //  ./VtxSmeared/DTDPGNtuple_12_4_SingleMu_20-100pT_Eta1p25_VtxSmeared.root
 //./DTDPGNtuple_12_4_SingleMu_20-100pT_Eta1p25.root
@@ -143,21 +146,7 @@ void Analiser::Loop() {
 
   TH2D *Q_OoTGhosts = new TH2D("Q_OoTGhosts", "Q_OoTGhosts;High Quality;Out of time Ghost Quality",
                                10, 0, 10, 10, 0, 10);
-  TH2D *Q_ITGhosts =
-      new TH2D("Q_ITGhosts", "Q_ITGhosts;High Quality;In time Ghost Quality", 10, 0, 10, 10, 0, 10);
-
-  /*for(int st=1; st < 5; st++) {
-     for (int wheel = -2 ; wheel < 3; ++wheel){
-        for (int sector = 1 ; sector < 13; ++sector) {
-           OoTGhosts[wheel+2][st-1][sector-1]= new TH1D(OoTGhosts_style);
-           OoTGhosts[wheel+2][st-1][sector-1]->SetName(Form("OoTGhosts_%d_%d_%d", wheel, st,
-  sector));
-
-           ITGhosts[wheel+2][st-1][sector-1]= new TH1D(ITGhosts_style);
-           ITGhosts[wheel+2][st-1][sector-1]->SetName(Form("ITGhosts_%d_%d_%d", wheel, st, sector));
-        }
-     }
-  }*/
+  TH2D *Q_ITGhosts = new TH2D("Q_ITGhosts", "Q_ITGhosts;High Quality;In time Ghost Quality", 10, 0, 10, 10, 0, 10);
 
   TH1I *N_Ghost = new TH1I("N_Ghost", "N_Ghost", 20, 0, 20);
   TH1I *Q_Best = new TH1I("Q_Best", "Q_Best", 10, 0, 10);
@@ -186,7 +175,6 @@ void Analiser::Loop() {
     x_LowBestQ[st-1] = new TH1D(Form("x_LowBestQ_st%d", st), Form("x_LowBestQ_st%d; xLoc; Entries",st ), 100, -220, 220);
     NMuMatch_vs_phi[st-1] = new TH2D(Form("NMuMatch_vs_phi_st%d", st), Form("NMuMatch_vs_phi_st%d ; Muon_Phi; N_MuMatch", st), 50, -TMath::Pi(), TMath::Pi(), 6, 1, 7 );
     Phi_MuMatch[st-1] = new TH1D(Form("Phi_MuMatch_st%d", st), Form("Phi_MuMatch_st%d; Muon_phi; Entries", st), 50,-TMath::Pi(), TMath::Pi() );
-
     Eff_SegMatch[st-1] = new TEfficiency(Form("Eff_SegMatch_st%d", st), Form("Eff_SegMatch_st%d; sector; wheel", st), 14, -0.5, 13.5, 7, -3.5, 3.5);
   }
 
@@ -263,14 +251,6 @@ void Analiser::Loop() {
       }
     }
 
-    // ########## ATTEMPT cluster - segment extrapolation matching #############
-/*
-    for (auto &cluster : clusters){
-      for (auto &segment : segments) {
-        cluster.MatchSegment(segment, X_CUT);
-      }
-    }
-*/
     // ########## RUN SOME ANALYSIS #############
     for (auto const &cluster : clusters) {
       auto wh{cluster.wheel};
@@ -316,11 +296,21 @@ void Analiser::Loop() {
         Q_Ghost->Fill(ghost.quality);
       }
 
-      Eff_SegMatch[st-1]->Fill(cluster.segMatched, sec, wh);
-      if (sec == 7 && wh == 2) counter += 1;
-      if (cluster.segMatched){
+      if (cluster.foundTP && cluster.foundTP){
+        Eff_SegMatch[st-1]->Fill(cluster.segMatched, sec, wh);
         Res_SegMatched->Fill( cluster.bestTP().xLoc - cluster.matchedSeg().xLoc );
+
+        /*if (sec == 7 && wh == 2 && st == 2) {
+          counter += 1;
+          if (cluster.segMatched) counter_good+= 1;
+          if (!cluster.segMatched) {
+            counter_bad +=1;
+            std::cout << "\n" <<cluster.bestTP().xLoc - cluster.matchedSeg().xLoc << " TPfound: " << cluster.foundTP << " SegFound: " << cluster.foundTP << std::endl;
+          }
+        }*/
+
       }
+
 
     }
 
@@ -373,7 +363,7 @@ void Analiser::Loop() {
        << ") = " << ghostFraction << endl;
   cout << " HQ out of time clusters: " << ooTHQCount << endl;
 
-  cout << "Low eff bin content: " << counter << endl;
+  //cout << "Low eff bin content: " << counter <<  " di cui non matchati " << counter_bad << " e matchati " << counter_good << endl;
 
   TCanvas *canvas2 = new TCanvas("canvas2", "canvas2", 500, 500, 500, 500);
   gPad->SetLogy();
