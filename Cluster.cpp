@@ -103,7 +103,7 @@ void Cluster::MatchMu( int muWh, int muStat, int muSec,  double muXedge, double 
     // if the extrapolated segment is within 10 cm from _bestTP
     if (segMatched && std::abs( _bestSeg.xLoc - muX ) < 10) {
       muMatchedIndex[0] = iMu;
-      muMatchedIndex[1] = muIndex;
+      muMatchedIndex[1] = muIndex;  
       muMatched = true;
     }
     else if ( !segMatched && std::abs( _bestTP.xLoc - muX ) < 10 ){
@@ -121,20 +121,19 @@ const Segment& Cluster::matchedSeg() const {return _matchedSeg; };
 int Cluster::bestSegPhiHits() const {return _bestSeg.nPhiHits; };
 const Segment& Cluster::bestSeg() const {return _bestSeg; };
 
-/*void Cluster::MatchSegment(Segment segment, double xCut){
-  if (segment.wheel == wheel && segment.station == station && segment.sector == sector){
-    if (segMatched == false){
-      if ( std::abs(segment.xLoc - _bestTP.xLoc ) < xCut ){
-        segMatched = true;
-        segIndex = segment.index;
-        segHits = segment.nPhiHits;
+void Cluster::MatchDigi(std::vector<Digi> const& digis, double xCut){
+  Segment seg = _bestSeg;
+
+  for (auto const &digi: digis) {
+    if (digi.sector != seg.sector && digi.wheel != seg.wheel && digi.station!= seg.station) continue;
+    for (int i = 0; i < seg.nPhiHits; ++i){
+      if (std::abs(seg.xLoc - digi.xLoc ) < xCut ) {
+        digiMatched = true;
+        _matchedDigis.emplace_back(digi);
       }
     }
-    else {
-      if ( std::abs(segment.xLoc - _bestTP.xLoc ) < xCut && segment.nPhiHits > segHits) {
-        segIndex = segment.index;
-        segHits = segment.nPhiHits;
-      } 
-    }
   }
-}*/
+};
+
+const std::vector<Digi> Cluster::matchedDigi() const{ return _matchedDigis; };
+

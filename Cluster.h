@@ -16,8 +16,9 @@ public:
   bool segMatched = false;
   bool foundSeg = false;
   bool foundTP = false;
+  bool digiMatched = false;
 
- private:
+private:
   Segment _bestSeg{};
   Segment _matchedSeg{};
   TriggerPrimitive _bestTP{};
@@ -25,6 +26,7 @@ public:
   std::vector<TriggerPrimitive> _ootGhosts;
   std::vector<TriggerPrimitive> _itGhosts;
 
+  std::vector<Digi> _matchedDigis;
 
 
  public:
@@ -56,6 +58,10 @@ public:
 
   int bestSegPhiHits() const;
   const Segment& bestSeg() const;
+
+  void MatchDigi(std::vector<Digi> const& digis, double xCut);
+  const std::vector<Digi> matchedDigi() const;
+
 };
 
 #endif

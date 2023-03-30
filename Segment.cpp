@@ -11,6 +11,7 @@ Segment::Segment(int i, int st, int wh, int sec, int nHits, double x) /*: statio
     xLoc = x;
 }
 
+
 /*bool Segment::MatchCluster(Cluster cluster, double xCut){
     if ( std::abs(cluster.bestTP().xLoc - xLoc) < xCut) return true;
     else return false;

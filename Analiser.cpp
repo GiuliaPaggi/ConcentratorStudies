@@ -17,6 +17,7 @@
 #include "Cluster.h"
 #include "TriggerPrimitive.h"
 #include "Segment.h"
+#include "Digi.h"
 
 // CB not optimal, but readable
 const std::vector<int> WHEELS{-2, -1, 0, 1, 2};
@@ -47,6 +48,8 @@ template<typename T> T getXY(TClonesArray * arr, int x, int y)
 
 
 void Analiser::Loop() {
+
+
   const std::array<double, 4> MB{402.2, 490.5, 597.5, 700.0};
   const int LOW_QUAL_CUT{0};
   const int HIGH_QUAL_CUT{5};
@@ -55,6 +58,7 @@ void Analiser::Loop() {
   const double PHI_CUT_2{0.01};
   const double T0_CUT{12.5};
   const double X_CUT{5.0};
+  const double DIGI_CUT{10.0};
   const int CORRECT_BX{380};
 
   double T_MIN{-9800};
@@ -129,13 +133,6 @@ void Analiser::Loop() {
   TEfficiency *MatchAndCut_vs_Pt =
       new TEfficiency("MatchAndCut_vs_Pt", "MatchPhi_vs_Pt", 40, 20, 100);
 
-  // GHOST HISTOS
-  // TH1D OoTGhosts_style("OoTGhosts","OoTGhosts_style", 10, 0, 10);
-  // TH1D *OoTGhosts[5][4][12];
-
-  // TH1D ITGhosts_style("ITGhosts", "ITGhosts_style", 10, 0, 10);
-  // TH1D *ITGhosts[5][4][12];
-
   TH1D *OoTGhosts = new TH1D("OoTGhosts", "OoTGhosts", 20, 0, 20);
   TH1D *ITGhosts = new TH1D("ITGhosts", "ITGhosts", 20, 0, 20);
 
@@ -168,6 +165,10 @@ void Analiser::Loop() {
   TH2D *NMuMatch_vs_phi[4];
 
   TEfficiency *Eff_SegMatch[4];
+  TEfficiency *Eff_DigiMatch[4];
+  TH1D *Digi_residual[5][4];
+
+  
 
   for (const auto st : STATIONS) {
     N_MuMatch[st - 1] = new TH2I(Form("N_MuMatch_st%d", st), Form("N_MuMatch_st%d; sector ; wheel", st), 14, -0.5, 13.5, 7, -3.5, 3.5);
@@ -176,7 +177,13 @@ void Analiser::Loop() {
     NMuMatch_vs_phi[st-1] = new TH2D(Form("NMuMatch_vs_phi_st%d", st), Form("NMuMatch_vs_phi_st%d ; Muon_Phi; N_MuMatch", st), 50, -TMath::Pi(), TMath::Pi(), 6, 1, 7 );
     Phi_MuMatch[st-1] = new TH1D(Form("Phi_MuMatch_st%d", st), Form("Phi_MuMatch_st%d; Muon_phi; Entries", st), 50,-TMath::Pi(), TMath::Pi() );
     Eff_SegMatch[st-1] = new TEfficiency(Form("Eff_SegMatch_st%d", st), Form("Eff_SegMatch_st%d; sector; wheel", st), 14, -0.5, 13.5, 7, -3.5, 3.5);
-  }
+    Eff_DigiMatch[st-1] = new TEfficiency(Form("Eff_DigiMatch_st%d", st), Form("Eff_DigiMatch_st%d; sector; wheel", st), 14, -0.5, 13.5, 7, -3.5, 3.5);
+    //Digi_residual[st-1] = new TH1D( Form("Digi_residual_st%d", st), Form("Digi_residual_st%d; digi.xLoc-seg.wirePos; entries", st), 100, -20, 20 );
+    for (const auto wh : WHEELS){
+      Digi_residual[wh+2][st-1] = new TH1D( Form("Digi_residual_st%d_wh%d", st, wh), Form("Digi_residual_st%d_wh%d; cluster.bestSeg.xLoc - digi.xLoc; entries", st, wh), 50, -10, 10 );
+    }
+   }
+
 
 
    
@@ -220,13 +227,21 @@ void Analiser::Loop() {
                                         ph2TpgPhiEmuAm_phiB->at(j), ph2TpgPhiEmuAm_BX->at(j),
                                         ph2TpgPhiEmuAm_t0->at(j), ph2TpgPhiEmuAm_posLoc_x->at(j)});
     }
-
+    // ########## CREATE Digis std::vector #############
+    std::vector<Digi> digis;
+    for (std::size_t i = 0; i < digi_nDigis; ++i ){
+      digis.emplace_back(Digi(i, digi_wheel->at(i), digi_sector->at(i), 
+                              digi_station->at(i), digi_superLayer->at(i), 
+                              digi_layer->at(i), digi_wire->at(i), 
+                              digi_time->at(i)));
+    }
     //########## BUILD segments std::vector #############
     std::vector<Segment> segments;
     for (std::size_t j = 0; j < seg_nSegments; ++j) {
-      segments.emplace_back(Segment(j, seg_station->at(j), seg_wheel->at(j), seg_sector->at(j), seg_phi_nHits->at(j), seg_posLoc_x->at(j)));
+      segments.emplace_back(Segment(j, seg_station->at(j), seg_wheel->at(j), 
+                                    seg_sector->at(j), seg_phi_nHits->at(j), 
+                                    seg_posLoc_x->at(j)));
     }
-
 
     // ########## BUILD clusters std::vector #############
     auto clusters = buildClusters(tps, segments, X_CUT);
@@ -247,14 +262,18 @@ void Analiser::Loop() {
           double edgeY = getXY<float>(mu_matches_edgeY, iMu, i);
 
           cluster.MatchMu(muTrkWheel, muTrkStation, muTrkSector, edgeX, edgeY, muTrkX, i, iMu);
+          cluster.MatchDigi(digis, DIGI_CUT);
         }
       }
     }
+
 
     // ########## RUN SOME ANALYSIS #############
     for (auto const &cluster : clusters) {
       auto wh{cluster.wheel};
       auto sec{cluster.sector};
+      if (sec == 13 ) sec = 4;
+      if (sec == 14 ) sec = 10;
       auto st{cluster.station};
 
       ++nClusters;
@@ -296,23 +315,21 @@ void Analiser::Loop() {
         Q_Ghost->Fill(ghost.quality);
       }
 
+      Eff_SegMatch[st-1]->Fill(cluster.segMatched, sec, wh);
       if (cluster.foundTP && cluster.foundTP){
-        Eff_SegMatch[st-1]->Fill(cluster.segMatched, sec, wh);
         Res_SegMatched->Fill( cluster.bestTP().xLoc - cluster.matchedSeg().xLoc );
+      }
+      
 
-        /*if (sec == 7 && wh == 2 && st == 2) {
-          counter += 1;
-          if (cluster.segMatched) counter_good+= 1;
-          if (!cluster.segMatched) {
-            counter_bad +=1;
-            std::cout << "\n" <<cluster.bestTP().xLoc - cluster.matchedSeg().xLoc << " TPfound: " << cluster.foundTP << " SegFound: " << cluster.foundTP << std::endl;
-          }
-        }*/
-
+      Eff_DigiMatch[st-1]->Fill(cluster.digiMatched, sec, wh);
+      if (cluster.digiMatched){
+        for (auto &digi : cluster.matchedDigi()){
+          Digi_residual[wh+2][st-1] ->Fill( cluster.bestSeg().xLoc - digi.xLoc );
+        }
+      }
+     
       }
 
-
-    }
 
     for (TriggerPrimitive &tp : tps) {
       if (tp.quality == 1) {
@@ -363,8 +380,14 @@ void Analiser::Loop() {
        << ") = " << ghostFraction << endl;
   cout << " HQ out of time clusters: " << ooTHQCount << endl;
 
+  TFile outputFile("outputFile.root","RECREATE");
+  outputFile.Write();
+  outputFile.Close();
+
+
   //cout << "Low eff bin content: " << counter <<  " di cui non matchati " << counter_bad << " e matchati " << counter_good << endl;
 
+  /*
   TCanvas *canvas2 = new TCanvas("canvas2", "canvas2", 500, 500, 500, 500);
   gPad->SetLogy();
   t0_LowQuality->SetLineColor(kBlue);
@@ -569,6 +592,23 @@ void Analiser::Loop() {
     SegMatchCanvas->cd(i);
     Eff_SegMatch[i - 1]->Draw("COLZ");
   }
+  */
 
+  TCanvas *DigiMatch = new TCanvas("DigiMatch", "DigiMatch", 500, 500, 500, 500);
+  DigiMatch->Divide(2, 2);
+  for (int i = 1; i <5; ++i){
+    DigiMatch->cd(i);
+    Eff_DigiMatch[i-1]->Draw("COLZ");
+  }
 
+  TCanvas *DigiRes =  new TCanvas("DigiRes", "DigiRes", 500, 500, 500, 500);
+  DigiRes->Divide(5,4);
+  int cd = 1;
+  for (int i = 1; i <5; ++i){
+    for (int j = 0; j< 5; ++j){
+      DigiRes->cd(cd);
+      Digi_residual[j][i-1]->Draw("COLZ");
+      cd+=1;
+    }
+  }
 }
