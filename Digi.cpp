@@ -44,5 +44,24 @@ Digi::Digi(int i, int wh, int sec, int stat, int SL, int L, int w, double t) :  
     xLoc = xFirstWire + (wire - firstWire) *cell;
 }
 
+std::vector<Digi> Digi::FindCluster(std::vector<Digi> digisToCluster, double cut){
+    std::vector<Digi> DigiCluster;
 
-// dovrebbero essere uguali (1, 2, 3, 5, 6, 7, 8, 12) (9, 11) (13, 4) (10, 14)
+    // find digis close to the one that calls the function
+    std::copy_if( digisToCluster.begin(), digisToCluster.end(), std::back_inserter(DigiCluster),
+                    [=](auto& d) {return std::abs(xLoc -d.xLoc) < cut;});
+    
+    // if there are more digis in the chamber-> find mean value of xLoc in the cluster we have for now and use that to look for close digis
+    if (digisToCluster.size() > DigiCluster.size()){
+        double mean_xLoc = xLoc;
+        for (auto d : digisToCluster) mean_xLoc+=d.xLoc;
+        mean_xLoc = mean_xLoc/DigiCluster.size();
+        //clear cluster to fill it again with new center
+        DigiCluster.clear();
+        std::copy_if( digisToCluster.begin(), digisToCluster.end(), std::back_inserter(DigiCluster),
+                    [=](auto& d) {return std::abs(mean_xLoc -d.xLoc) < cut;});
+    }
+
+    return DigiCluster;
+
+}

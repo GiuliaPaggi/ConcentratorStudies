@@ -6,7 +6,7 @@
 
 constexpr int RIGHT_BX{-380};
 
-Cluster::Cluster(std::vector<TriggerPrimitive> const& tps, std::vector<Segment> const& seg, double xCut, int wh, int sec, int st)
+Cluster::Cluster(std::vector<TriggerPrimitive> const& tps, std::vector<Segment> const& seg, std::vector<Digi> const& digis, double xCut, double digiCut, int wh, int sec, int st)
     : wheel{wh}, sector{sec}, station{st} {
   // in a given wheel-station-sector finds the in-time highest-quality TP
   // and looks for other TP in a |xCut| interval 
@@ -57,6 +57,7 @@ Cluster::Cluster(std::vector<TriggerPrimitive> const& tps, std::vector<Segment> 
   std::copy_if(seg.begin(), seg.end(), std::back_inserter(segments_in_chamber),
                [=](auto& segm) { return segm.wheel == wh && segm.station == st && segm.sector == sec; });
   
+  // find best quality for segment -> higher n of hits
   if (segments_in_chamber.size() > 0) {
     foundSeg = true;
     if (segments_in_chamber.size() == 1){
@@ -75,8 +76,40 @@ Cluster::Cluster(std::vector<TriggerPrimitive> const& tps, std::vector<Segment> 
     segMatched = true;
     _matchedSeg = _bestSeg;
   }
- 
+  
 
+  // digi in same chamber
+  std::vector<Digi> digis_in_chamber_sl1;
+  std::vector<Digi> digis_in_chamber_sl3;
+
+  std::copy_if(digis.begin(), digis.end(), std::back_inserter(digis_in_chamber_sl1),
+              [=](auto& dig) {return dig.wheel == wh && dig.station == st && dig.sector == sec && dig.superlayer == 1 ;});
+  
+  std::copy_if(digis.begin(), digis.end(), std::back_inserter(digis_in_chamber_sl3),
+              [=](auto& dig) {return dig.wheel == wh && dig.station == st && dig.sector == sec && dig.superlayer == 3 ;});
+  
+
+  // at least 10 digi per superlayer to build a digi cluster
+
+  if (digis_in_chamber_sl1.size() > 10 || digis_in_chamber_sl3.size() > 10){
+    std::vector<Digi> DigiClusterSl1 = digis_in_chamber_sl1[0].FindCluster(digis_in_chamber_sl1, digiCut);
+    std::vector<Digi> DigiClusterSl3 = digis_in_chamber_sl3[0].FindCluster(digis_in_chamber_sl3, digiCut);
+
+    if (DigiClusterSl1.size() > 10 ){
+      _DigiCluster = DigiClusterSl1;
+      foundDigi = true;
+      SL1Cluster = true;
+    }
+    if (DigiClusterSl3.size() > 10 ){
+      
+      if (foundDigi == false) {
+        _DigiCluster = DigiClusterSl3;
+        foundDigi = true;
+      }
+      else _DigiCluster.insert(_DigiCluster.end(), DigiClusterSl3.begin(), DigiClusterSl3.end());
+      SL3Cluster = true;
+    }
+  }
 }
 
 int Cluster::ootSize() const { return _ootGhosts.size(); };
@@ -136,4 +169,13 @@ void Cluster::MatchDigi(std::vector<Digi> const& digis, double xCut){
 };
 
 const std::vector<Digi> Cluster::matchedDigi() const{ return _matchedDigis; };
+
+const int Cluster::GetNDigi() const {return _matchedDigis.size(); };
+
+const int Cluster::WhichSL() const{
+  if (SL1Cluster && SL3Cluster) return 5;
+  else if (SL1Cluster && !SL3Cluster) return 1;
+  else if (!SL1Cluster && SL3Cluster) return 3;
+  else return 0;
+};
 

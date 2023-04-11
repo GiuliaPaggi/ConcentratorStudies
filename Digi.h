@@ -6,6 +6,8 @@ class Digi{
     Digi(){};
     Digi(int i, int wh, int sec, int stat, int SL, int L, int w, double t);
 
+    std::vector<Digi> FindCluster(std::vector<Digi> digisToCluster, double cut);
+
 
     std::size_t index{9999};
     int wheel{-1};
@@ -16,7 +18,6 @@ class Digi{
     int wire{-1};
     double time{-1.0};
     double xLoc{-1.0};
-    //private:
 
 };
 

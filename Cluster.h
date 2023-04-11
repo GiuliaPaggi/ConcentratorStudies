@@ -13,9 +13,10 @@ public:
   bool muMatched = false;
   std::array<int, 2> muMatchedIndex;
 
-  bool segMatched = false;
-  bool foundSeg = false;
   bool foundTP = false;
+  bool foundSeg = false;
+  bool foundDigi = false;
+  bool segMatched = false;
   bool digiMatched = false;
 
 private:
@@ -26,12 +27,16 @@ private:
   std::vector<TriggerPrimitive> _ootGhosts;
   std::vector<TriggerPrimitive> _itGhosts;
 
+  std::vector<Digi> _DigiCluster;
   std::vector<Digi> _matchedDigis;
+
+  bool SL1Cluster = false;
+  bool SL3Cluster = false;
 
 
  public:
   Cluster(){};
-  Cluster(std::vector<TriggerPrimitive> const& tps, std::vector<Segment> const& seg, double xCut, int wh, int sec, int st);
+  Cluster(std::vector<TriggerPrimitive> const& tps, std::vector<Segment> const& seg, std::vector<Digi> const& digis, double xCut, double digiCut, int wh, int sec, int st);
 
   void MatchMu( int muWh, int muStat, int muSec,  double muXedge, double muYedge, double muX, int muIndex, int nmu ) ;
   void MatchSegment(Segment segment, double xCut);
@@ -61,6 +66,10 @@ private:
 
   void MatchDigi(std::vector<Digi> const& digis, double xCut);
   const std::vector<Digi> matchedDigi() const;
+
+  const int GetNDigi() const;
+
+  const int WhichSL() const; // return 1 - 3 or 5 for both
 
 };
 

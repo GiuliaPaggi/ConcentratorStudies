@@ -24,14 +24,14 @@ const std::vector<int> WHEELS{-2, -1, 0, 1, 2};
 const std::vector<int> SECTORS{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
 const std::vector<int> STATIONS{1, 2, 3, 4};
 
-std::vector<Cluster> buildClusters(std::vector<TriggerPrimitive> tps, std::vector<Segment> seg, double x_cut) {
+std::vector<Cluster> buildClusters(std::vector<TriggerPrimitive> tps, std::vector<Segment> seg, std::vector<Digi> d, double x_cut, double digi_cut) {
   std::vector<Cluster> clusters;
 
   for (const auto wh : WHEELS) {
     for (const auto sec : SECTORS) {
       for (const auto st : STATIONS) {
-        Cluster cluster{tps, seg, x_cut, wh, sec, st};   // aggiungi al costruttore il segmento se c'è -> match direttamente nel costruttore
-        if (cluster.bestTPQuality() > -1 || cluster.bestSegPhiHits() > -1 ) {
+        Cluster cluster{tps, seg, d, x_cut, digi_cut, wh, sec, st};   
+        if (cluster.bestTPQuality() > -1 || cluster.bestSegPhiHits() > -1 || cluster.WhichSL()) {
           clusters.push_back(cluster);  // CB can be improved 
         }
       }
@@ -66,10 +66,6 @@ void Analiser::Loop() {
   double BX_MIN{-392};
   double BX_MAX{-368};
 
-  /*int counter = 0;
-  int counter_bad = 0;
-  int counter_good = 0;
-  */
 
   TFile *file = new TFile("./DTDPGNtuple_12_4_SingleMu_20-100pT_Eta1p25.root");   //  ./VtxSmeared/DTDPGNtuple_12_4_SingleMu_20-100pT_Eta1p25_VtxSmeared.root
 //./DTDPGNtuple_12_4_SingleMu_20-100pT_Eta1p25.root
@@ -151,10 +147,12 @@ void Analiser::Loop() {
 
   TH2I N_Cluster_style("N_Cluster_style", "N_Cluster_style", 14, -0.5, 13.5, 7, -3.5, 3.5);
   TH2I *N_Cluster[4];
+  TH2I *N_Digi[4];
   for (const auto st : STATIONS) {
     N_Cluster[st - 1] = new TH2I(Form("N_Cluster_st%d", st), Form("N_Cluster_st%d", st), 14, -0.5, 13.5, 7, -3.5, 3.5);
-    //N_Cluster[st - 1]->SetName(Form("N_Cluster_st%d", st));
+    N_Digi[st - 1] = new TH2I(Form("N_Digi_st%d", st), Form("N_Digi_st%d", st), 14, -0.5, 13.5, 7, -3.5, 3.5);
   }
+
   TH1D *x_LowBestQ[4];
 
   TH1D *Res_MuMatched = new TH1D("Res_MuMatched", "Res_MuMatched; Entries", 100, -6, 6);
@@ -165,8 +163,11 @@ void Analiser::Loop() {
   TH2D *NMuMatch_vs_phi[4];
 
   TEfficiency *Eff_SegMatch[4];
+
   TEfficiency *Eff_DigiMatch[4];
   TH1D *Digi_residual[5][4];
+  TH1D *N_DigiPerCluster = new TH1D("N_DigiPerCluster", "N_DigiPerCluster", 40, 0, 40); 
+  TH1D *DigiSL = new TH1D("DigiSL", "DigiSL", 6, -0.5, 5.5); 
 
   
 
@@ -184,17 +185,6 @@ void Analiser::Loop() {
     }
    }
 
-
-
-   
-  //   In a ROOT session, you can do:
-  //      root> .L Analiser.C
-  //      root> Analiser t
-  //      root> t.GetEntry(12); // Fill t data members with entry number 12
-  //      root> t.Show();       // Show values of entry 12
-  //      root> t.Show(16);     // Read and show values of entry 16
-  //      root> t.Loop();       // Loop on all entries
-  //
 
   double nClustersGhosts{};
   double ooTHQCount{};
@@ -244,7 +234,7 @@ void Analiser::Loop() {
     }
 
     // ########## BUILD clusters std::vector #############
-    auto clusters = buildClusters(tps, segments, X_CUT);
+    auto clusters = buildClusters(tps, segments, digis, X_CUT, DIGI_CUT);
 
 
     // ########## ATTEMPT cluster - muon extrapolation matching #############
@@ -276,6 +266,7 @@ void Analiser::Loop() {
       if (sec == 14 ) sec = 10;
       auto st{cluster.station};
 
+      // ########## Study TP ghost distribution #############
       ++nClusters;
       ooTHQCount += cluster.ootCountIf([=](TriggerPrimitive const & tp) { return tp.quality > HIGH_QUAL_CUT; });
 
@@ -297,7 +288,7 @@ void Analiser::Loop() {
       }
       
       N_Cluster[st - 1]->Fill(sec, wh);
-
+      
       if (!cluster.hasGhosts()) continue;
       ++nClustersGhosts;
 
@@ -315,12 +306,13 @@ void Analiser::Loop() {
         Q_Ghost->Fill(ghost.quality);
       }
 
+      // ########## Study segment matching #############
       Eff_SegMatch[st-1]->Fill(cluster.segMatched, sec, wh);
       if (cluster.foundTP && cluster.foundTP){
         Res_SegMatched->Fill( cluster.bestTP().xLoc - cluster.matchedSeg().xLoc );
       }
       
-
+      // ########## Study digi clusters #############
       Eff_DigiMatch[st-1]->Fill(cluster.digiMatched, sec, wh);
       if (cluster.digiMatched){
         for (auto &digi : cluster.matchedDigi()){
@@ -328,6 +320,11 @@ void Analiser::Loop() {
         }
       }
      
+      N_DigiPerCluster->Fill(cluster.GetNDigi());
+      DigiSL->Fill(cluster.WhichSL());
+
+      if (cluster.foundDigi) N_Digi[st - 1]->Fill(sec, wh);
+
       }
 
 
@@ -384,9 +381,7 @@ void Analiser::Loop() {
   outputFile.Write();
   outputFile.Close();
 
-
-  //cout << "Low eff bin content: " << counter <<  " di cui non matchati " << counter_bad << " e matchati " << counter_good << endl;
-
+// ########## DRAW THE ANALYSIS HISTOS  #############
   /*
   TCanvas *canvas2 = new TCanvas("canvas2", "canvas2", 500, 500, 500, 500);
   gPad->SetLogy();
@@ -610,5 +605,19 @@ void Analiser::Loop() {
       Digi_residual[j][i-1]->Draw("COLZ");
       cd+=1;
     }
+  }
+
+  TCanvas *DigiCluster = new TCanvas("DigiCluster", "DigiCluster", 500, 500, 500, 500);
+  DigiCluster->Divide(1, 2);
+  DigiCluster->cd(1);
+  N_DigiPerCluster->Draw();
+  DigiCluster->cd(2);
+  DigiSL->Draw();
+  
+  TCanvas *DigiCanvas = new TCanvas("DigiCanvas", "DigiCanvas", 500, 500, 500, 500);
+  DigiCanvas->Divide(2, 2);
+  for (int i = 1; i <5; ++i){
+    DigiCanvas->cd(i);
+    N_Digi[i-1]->Draw("COLZ");
   }
 }
