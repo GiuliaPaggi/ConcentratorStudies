@@ -51,7 +51,7 @@ To run the analiser, once in ROOT use:
 
 ## Output
 
-At the end of the analysis, the most useful information is plotted and shown on screen but also written to a .root file.
+At the end of the analysis, the most useful information is plotted and shown on screen but also saved as a .png in a hard-coded directory and written to a .root file.
 
 ## Dependencies
 The project is being developed usign :
