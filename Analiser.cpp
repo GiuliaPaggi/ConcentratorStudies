@@ -30,7 +30,7 @@ std::vector<Cluster> buildClusters(std::vector<TriggerPrimitive> &tps, std::vect
   for (const auto wh : WHEELS) {
     for (const auto sec : SECTORS) {
       for (const auto st : STATIONS) {
-          while (true){
+          while (true){   
           Cluster cluster{tps, seg, d, x_cut, digi_cut, wh, sec, st};   
           if (cluster.bestTPQuality() > -1 || cluster.bestSegPhiHits() > -1 || cluster.WhichSL()) {
             clusters.push_back(cluster);  // CB can be improved 
@@ -360,8 +360,9 @@ void Analiser::Loop() {
 
 
 // ########## DRAW THE ANALYSIS HISTOS  #############
+  int canvas_size = 1000;
 
-  TCanvas *canvas2 = new TCanvas("canvas2", "canvas2", 500, 500, 500, 500);
+  TCanvas *canvas2 = new TCanvas("canvas2", "canvas2", canvas_size, canvas_size, canvas_size, canvas_size);
   gPad->SetLogy();
   t0_LowQuality->SetLineColor(kBlue);
   t0_LowQuality->GetXaxis()->SetTitle(" t0 (ns)");
@@ -383,7 +384,7 @@ void Analiser::Loop() {
   leg->AddEntry(LowQ_more1HQ_Phi, "Q1 - #phi cut, no time cut");
   leg->Draw("same");
 
-  TCanvas *canvas = new TCanvas("canvas", "canvas", 500, 500, 500, 500);
+  TCanvas *canvas = new TCanvas("canvas", "canvas", canvas_size, canvas_size, canvas_size, canvas_size);
   canvas->Divide(2, 2);
 
   canvas->cd(1);
@@ -451,7 +452,7 @@ void Analiser::Loop() {
   leg4->AddEntry(t0_Selected, "All primitives");
   leg4->Draw("same");
 
-  TCanvas *BXCanvas = new TCanvas("BXCanvas", "BXCanvas", 500, 500, 500, 500);
+  TCanvas *BXCanvas = new TCanvas("BXCanvas", "BXCanvas", canvas_size, canvas_size, canvas_size, canvas_size);
   BX_LowQuality->Draw();
   BX_LowQ_matched->SetLineColor(kRed);
   BX_LowQ_matched->Draw("same");
@@ -464,7 +465,7 @@ void Analiser::Loop() {
   legend->AddEntry(BX_LowQ_more1HQ, "Q1 selected #phi match ");
   legend->Draw("same");
 
-  TCanvas *EffCutCanvas = new TCanvas("EffCutCanvas", "EffCutCanvas", 500, 500, 500, 500);
+  TCanvas *EffCutCanvas = new TCanvas("EffCutCanvas", "EffCutCanvas", canvas_size, canvas_size, canvas_size, canvas_size);
   EffCutCanvas->Divide(2, 2);
 
   EffCutCanvas->cd(1);
@@ -483,7 +484,7 @@ void Analiser::Loop() {
   MatchAndCut_vs_Pt->Draw("same");
 
   TCanvas *ClusterProvaCanvas =
-      new TCanvas("ClusterProvaCanvas", "ClusterProvaCanvas", 500, 500, 500, 500);
+      new TCanvas("ClusterProvaCanvas", "ClusterProvaCanvas", canvas_size, canvas_size, canvas_size, canvas_size);
   ClusterProvaCanvas->Divide(2, 2);
   ClusterProvaCanvas->cd(1);
   OoTGhosts->Draw();
@@ -503,7 +504,9 @@ void Analiser::Loop() {
   q_legend->AddEntry(Q_Best, "Best one Quality");
   q_legend->Draw("same");
 
-  TCanvas *ClusterBXCanvas = new TCanvas("ClusterBXCanvas", "ClusterBXCanvas", 500, 500, 500, 500);
+  ClusterProvaCanvas->SaveAs("prompt/N_TPinCluster.png");
+
+  TCanvas *ClusterBXCanvas = new TCanvas("ClusterBXCanvas", "ClusterBXCanvas", canvas_size, canvas_size, canvas_size, canvas_size);
   ClusterBXCanvas->Divide(2, 2);
 
   ClusterBXCanvas->cd(1);
@@ -522,44 +525,49 @@ void Analiser::Loop() {
 
   ClusterBXCanvas->cd(4);
   Q_ITGhosts->Draw("box");
+  ClusterBXCanvas->SaveAs("prompt/BX_residui_qualità2d.png");
 
-  TCanvas *StatCanvas = new TCanvas("StatCanvas", "StatCanvas", 500, 500, 500, 500);
+
+  TCanvas *StatCanvas = new TCanvas("StatCanvas", "StatCanvas", canvas_size, canvas_size, canvas_size, canvas_size);
   StatCanvas->Divide(2, 2);
 
   for (int i = 1; i < 5; ++i) {
     StatCanvas->cd(i);
     N_Cluster[i - 1]->Draw("COLZ");
   }
+  StatCanvas->SaveAs("prompt/N_Cluster_per_stazione.png");
 
-  TCanvas *ResMatchCanvas = new TCanvas("ResMatchCanvas", "ResMatchCanvas", 500, 500, 500, 500);
+  TCanvas *ResMatchCanvas = new TCanvas("ResMatchCanvas", "ResMatchCanvas", canvas_size, canvas_size, canvas_size, canvas_size);
   ResMatchCanvas->Divide(1,2);
   ResMatchCanvas->cd(1);
   Res_MuMatched->Draw();
   ResMatchCanvas->cd(2);
   Res_SegMatched->Draw();
 
-  TCanvas *MuMatch2dCanvas = new TCanvas("MuMatch2dCanvas", "MuMatch2dCanvas", 500, 500, 500, 500);
+  TCanvas *MuMatch2dCanvas = new TCanvas("MuMatch2dCanvas", "MuMatch2dCanvas", canvas_size, canvas_size, canvas_size, canvas_size);
   MuMatch2dCanvas->Divide(2,2);
   for (int i = 1; i < 5; ++i) {
     MuMatch2dCanvas->cd(i);
     N_MuMatch[i - 1]->Draw("COLZ");
   }
 
-  TCanvas *EffMuMatchCanvas = new TCanvas("EffMuMatchCanvas", "EffMuMatchCanvas", 500, 500, 500, 500);
+  TCanvas *EffMuMatchCanvas = new TCanvas("EffMuMatchCanvas", "EffMuMatchCanvas", canvas_size, canvas_size, canvas_size, canvas_size);
   EffMuMatchCanvas->Divide(2,2);
   for (int i = 1; i < 5; ++i) {
     EffMuMatchCanvas->cd(i);
     Eff_MuMatch[i - 1]->Draw("COLZ");
   }
+  EffMuMatchCanvas->SaveAs("prompt/MuMatchEfficiency.png");
 
-  TCanvas *LowQBestDistributionCanvas = new TCanvas("LowQBestDistributionCanvas", "LowQBestDistributionCanvas", 500, 500, 500, 500);
+  TCanvas *LowQBestDistributionCanvas = new TCanvas("LowQBestDistributionCanvas", "LowQBestDistributionCanvas", canvas_size, canvas_size, canvas_size, canvas_size);
   LowQBestDistributionCanvas->Divide(2,2);
   for(int i = 1; i< 5; ++i ){
     LowQBestDistributionCanvas->cd(i);
     x_LowBestQ[i-1]->Draw();
   }
+  LowQBestDistributionCanvas->SaveAs("prompt/Q1BestTp_xloc.png");
 
-  TCanvas *SegMatchCanvas = new TCanvas("SegMatchCanvas", "SegMatchCanvas", 500, 500, 500, 500);
+  TCanvas *SegMatchCanvas = new TCanvas("SegMatchCanvas", "SegMatchCanvas", canvas_size, canvas_size, canvas_size, canvas_size);
   SegMatchCanvas->Divide(2, 2);
   for (int i = 1; i < 5; ++i) {
     SegMatchCanvas->cd(i);
@@ -567,14 +575,15 @@ void Analiser::Loop() {
   }
   
 
-  TCanvas *DigiMatch = new TCanvas("DigiMatch", "DigiMatch", 500, 500, 500, 500);
+  TCanvas *DigiMatch = new TCanvas("DigiMatch", "DigiMatch", canvas_size, canvas_size, canvas_size, canvas_size);
   DigiMatch->Divide(2, 2);
   for (int i = 1; i <5; ++i){
     DigiMatch->cd(i);
     Eff_DigiMatch[i-1]->Draw("COLZ");
   }
+  DigiMatch->SaveAs("prompt/DigiMatch.png");
 
-  TCanvas *DigiRes =  new TCanvas("DigiRes", "DigiRes", 500, 500, 500, 500);
+  TCanvas *DigiRes =  new TCanvas("DigiRes", "DigiRes", canvas_size, canvas_size, canvas_size, canvas_size);
   DigiRes->Divide(5,4);
   int cd = 1;
   for (int i = 1; i <5; ++i){
@@ -584,20 +593,23 @@ void Analiser::Loop() {
       cd+=1;
     }
   }
+  DigiRes->SaveAs("prompt/Digi_residual.png");
 
-  TCanvas *DigiCluster = new TCanvas("DigiCluster", "DigiCluster", 500, 500, 500, 500);
+  TCanvas *DigiCluster = new TCanvas("DigiCluster", "DigiCluster", canvas_size, canvas_size, canvas_size, canvas_size);
   DigiCluster->Divide(1, 2);
   DigiCluster->cd(1);
   N_DigiPerCluster->Draw();
   DigiCluster->cd(2);
   DigiSL->Draw();
+  DigiCluster->SaveAs("prompt/Digi_Npercluster_perSL.png");
   
-  TCanvas *DigiCanvas = new TCanvas("DigiCanvas", "DigiCanvas", 500, 500, 500, 500);
+  TCanvas *DigiCanvas = new TCanvas("DigiCanvas", "DigiCanvas", canvas_size, canvas_size, canvas_size, canvas_size);
   DigiCanvas->Divide(2, 2);
   for (int i = 1; i <5; ++i){
     DigiCanvas->cd(i);
     N_Digi[i-1]->Draw("COLZ");
   }
+  DigiCanvas->SaveAs("prompt/DigiClusters.png");
 
   TFile outputFile("outputFile.root","RECREATE");
   outputFile.Write();
