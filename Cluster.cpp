@@ -142,8 +142,16 @@ Cluster::Cluster(std::vector<TriggerPrimitive> & tps, std::vector<Segment> & seg
   std::vector<Digi> DigiClusterSl1;
   std::vector<Digi> DigiClusterSl3;
   
-  // if I found TP cluster-> look for digis around it
-  if (foundTP){
+  // if I found TP cluster-> look for digis around it -> se c'è pure segmento guardo intorno al segmento
+  if (foundSeg){
+    std::copy_if(digis.begin(), digis.end(), std::back_inserter(DigiClusterSl1),
+                [=](auto& dig) {return dig.wheel == wh && dig.station == st && dig.sector == sec && dig.superlayer == 1 && dig.inCluster == false && std::abs(dig.xLoc - _bestSeg.xLoc) < digiCut;});
+    
+    std::copy_if(digis.begin(), digis.end(), std::back_inserter(DigiClusterSl3),
+                [=](auto& dig) {return dig.wheel == wh && dig.station == st && dig.sector == sec && dig.superlayer == 3 && dig.inCluster == false && std::abs(dig.xLoc - _bestSeg.xLoc) < digiCut;});
+
+  }
+  else if (foundTP){
     std::copy_if(digis.begin(), digis.end(), std::back_inserter(DigiClusterSl1),
                 [=](auto& dig) {return dig.wheel == wh && dig.station == st && dig.sector == sec && dig.superlayer == 1 && dig.inCluster == false && std::abs(dig.xLoc - _bestTP.xLoc) < digiCut;});
     
