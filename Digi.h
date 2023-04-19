@@ -19,6 +19,8 @@ class Digi{
     double time{-1.0};
     double xLoc{-1.0};
 
+    bool inCluster{false};
+
 };
 
 #endif

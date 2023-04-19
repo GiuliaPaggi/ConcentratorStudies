@@ -27,6 +27,8 @@ private:
   std::vector<TriggerPrimitive> _ootGhosts;
   std::vector<TriggerPrimitive> _itGhosts;
 
+  std::vector<Segment> _SegmentCluster;
+
   std::vector<Digi> _DigiCluster;
   std::vector<Digi> _matchedDigis;
 
@@ -36,13 +38,14 @@ private:
 
  public:
   Cluster(){};
-  Cluster(std::vector<TriggerPrimitive> const& tps, std::vector<Segment> const& seg, std::vector<Digi> const& digis, double xCut, double digiCut, int wh, int sec, int st);
+  Cluster(std::vector<TriggerPrimitive> & tps, std::vector<Segment> & seg, std::vector<Digi> & digis, double xCut, double digiCut, int wh, int sec, int st);
 
   void MatchMu( int muWh, int muStat, int muSec,  double muXedge, double muYedge, double muX, int muIndex, int nmu ) ;
   void MatchSegment(Segment segment, double xCut);
 
   int itSize() const;
   int ootSize() const;
+  int tpClusterSize() const;
 
   bool isolated() const{ return bestTPQuality() < 0 && !hasGhosts(); };
   bool hasGhosts() const { return itSize() || ootSize(); };
@@ -60,6 +63,8 @@ private:
   int matchedSegIndex() const;
   int matchedSegPhiHits() const;
   const Segment& matchedSeg() const;
+  int segClusterSize() const;
+  const std::vector<Segment> segCluster() const;
 
   int bestSegPhiHits() const;
   const Segment& bestSeg() const;

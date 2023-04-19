@@ -17,6 +17,8 @@ class Segment{
     int station{-1};
     int nPhiHits{-1};
 
+    bool inCluster{false};
+
 };
 
 #endif  

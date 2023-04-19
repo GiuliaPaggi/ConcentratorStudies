@@ -95,7 +95,7 @@ bool TriggerPrimitive::Match(TriggerPrimitive &TP, double phicut, double timecut
   return false;
 };
 
-// Makes cluster from the TP that calls it, checking all the TP in list, returns
+/*/ Makes cluster from the TP that calls it, checking all the TP in list, returns
 // vector of index of the cluster
 
 vector<int> TriggerPrimitive::MakeCluster(TriggerPrimitive listOfPrimitives[], int size,
@@ -116,7 +116,7 @@ vector<int> TriggerPrimitive::MakeCluster(TriggerPrimitive listOfPrimitives[], i
   }
 
   return Cluster;
-};
+};*/
 
 void TriggerPrimitive::FindHigherQuality(TriggerPrimitive listOfPrimitives[],
                                          vector<int> clusterIndex) {

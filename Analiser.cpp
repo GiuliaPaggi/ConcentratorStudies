@@ -24,15 +24,18 @@ const std::vector<int> WHEELS{-2, -1, 0, 1, 2};
 const std::vector<int> SECTORS{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
 const std::vector<int> STATIONS{1, 2, 3, 4};
 
-std::vector<Cluster> buildClusters(std::vector<TriggerPrimitive> tps, std::vector<Segment> seg, std::vector<Digi> d, double x_cut, double digi_cut) {
+std::vector<Cluster> buildClusters(std::vector<TriggerPrimitive> &tps, std::vector<Segment> &seg, std::vector<Digi> &d, double x_cut, double digi_cut) {
   std::vector<Cluster> clusters;
 
   for (const auto wh : WHEELS) {
     for (const auto sec : SECTORS) {
       for (const auto st : STATIONS) {
-        Cluster cluster{tps, seg, d, x_cut, digi_cut, wh, sec, st};   
-        if (cluster.bestTPQuality() > -1 || cluster.bestSegPhiHits() > -1 || cluster.WhichSL()) {
-          clusters.push_back(cluster);  // CB can be improved 
+          while (true){
+          Cluster cluster{tps, seg, d, x_cut, digi_cut, wh, sec, st};   
+          if (cluster.bestTPQuality() > -1 || cluster.bestSegPhiHits() > -1 || cluster.WhichSL()) {
+            clusters.push_back(cluster);  // CB can be improved 
+          }
+          else break;
         }
       }
     }
@@ -94,30 +97,6 @@ void Analiser::Loop() {
   TH1D *LowQ_more1HQ = new TH1D("LowQ_more1HQ", "LowQ_more1HQ", 100, T_MIN, T_MAX);
   TH1D *LowQ_more1HQ_Phi = new TH1D("LowQ_more1HQ_Phi", "LowQ_more1HQ_Phi", 100, T_MIN, T_MAX);
 
-  TH2D *PhiRes_st1_2 = new TH2D("PhiRes_st1_2", "PhiRes_st1_2;p_{T} (GeV);Computed Phi -Phi (rad)",
-                                100, 15, 105, 100, -1, 1);
-  TH2D *PhiRes_st1_3 = new TH2D("PhiRes_st1_3", "PhiRes_st1_3;p_{T} (GeV);Computed Phi -Phi (rad)",
-                                100, 15, 105, 100, -1, 1);
-  TH2D *PhiRes_st1_4 = new TH2D("PhiRes_st1_4", "PhiRes_st1_4;p_{T} (GeV);Computed Phi -Phi (rad)",
-                                100, 15, 105, 100, -1, 1);
-  TH2D *PhiRes_st2_3 = new TH2D("PhiRes_st2_3", "PhiRes_st2_3;p_{T} (GeV);Computed Phi -Phi (rad)",
-                                100, 15, 105, 100, -1, 1);
-  TH2D *PhiRes_st2_4 = new TH2D("PhiRes_st2_4", "PhiRes_st2_4;p_{T} (GeV);Computed Phi -Phi (rad)",
-                                100, 15, 105, 100, -1, 1);
-  TH2D *PhiRes_st3_4 = new TH2D("PhiRes_st3_4", "PhiRes_st3_4;p_{T} (GeV);Computed Phi -Phi (rad)",
-                                100, 15, 105, 100, -1, 1);
-
-  TH2D *PhiRes_vs_posizione =
-      new TH2D("PhiRes_vs_posizione",
-               "PhiRes_vs_posizione;Vertex distance from IP (cm);Computed Phi -Phi (rad)", 100, 0,
-               60, 500, -.1, .1);
-  TH2D *PhiRes_vs_dxy = new TH2D(
-      "PhiRes_vs_dxy", "PhiRes_vs_dxy;Vertex distance from IP (cm);Computed Phi -Phi (rad)", 100, 0,
-      35, 500, -.1, .1);
-  TH2D *PhiRes_vs_dz =
-      new TH2D("PhiRes_vs_dz", "PhiRes_vs_dz;Vertex distance from IP (cm);Computed Phi -Phi (rad)",
-               100, -45, 45, 500, -.1, .1);
-
   TEfficiency *Match_vs_Eta = new TEfficiency("Match_vs_Eta", "Match_vs_Eta", 24, 0, 1);
   TEfficiency *Match_vs_Phi = new TEfficiency("Match_vs_Phi", "Match_vs_Phi", 20, -TMath::Pi(), TMath::Pi());
   TEfficiency *Match_vs_Pt = new TEfficiency("Match_vs_Pt", "Match_vs_Pt", 40, 20, 100);
@@ -155,8 +134,8 @@ void Analiser::Loop() {
 
   TH1D *x_LowBestQ[4];
 
-  TH1D *Res_MuMatched = new TH1D("Res_MuMatched", "Res_MuMatched; Entries", 100, -6, 6);
-  TH1D *Res_SegMatched = new TH1D("Res_SegMatched", "Res_SegMatched; Entries", 100, -6, 6);
+  TH1D *Res_MuMatched = new TH1D("Res_MuMatched", "Res_MuMatched; cluster.bestTP().xLoc - mu.xLoc; Entries", 101, -10, 10);
+  TH1D *Res_SegMatched = new TH1D("Res_SegMatched", "Res_SegMatched; cluster.bestTP().xLoc - seg.xLoc; Entries", 101, -10, 10);
   TH2I *N_MuMatch[4];
   TH1D *Phi_MuMatch[4];
   TEfficiency *Eff_MuMatch[4];
@@ -307,9 +286,11 @@ void Analiser::Loop() {
       }
 
       // ########## Study segment matching #############
+
       Eff_SegMatch[st-1]->Fill(cluster.segMatched, sec, wh);
-      if (cluster.foundTP && cluster.foundTP){
-        Res_SegMatched->Fill( cluster.bestTP().xLoc - cluster.matchedSeg().xLoc );
+      for (const auto s : segments)
+      if (cluster.foundTP && s.wheel == wh && s.sector == sec && s.station == st){
+        Res_SegMatched->Fill( cluster.bestTP().xLoc - s.xLoc );
       }
       
       // ########## Study digi clusters #############
@@ -377,12 +358,9 @@ void Analiser::Loop() {
        << ") = " << ghostFraction << endl;
   cout << " HQ out of time clusters: " << ooTHQCount << endl;
 
-  TFile outputFile("outputFile.root","RECREATE");
-  outputFile.Write();
-  outputFile.Close();
 
 // ########## DRAW THE ANALYSIS HISTOS  #############
-  /*
+
   TCanvas *canvas2 = new TCanvas("canvas2", "canvas2", 500, 500, 500, 500);
   gPad->SetLogy();
   t0_LowQuality->SetLineColor(kBlue);
@@ -587,7 +565,7 @@ void Analiser::Loop() {
     SegMatchCanvas->cd(i);
     Eff_SegMatch[i - 1]->Draw("COLZ");
   }
-  */
+  
 
   TCanvas *DigiMatch = new TCanvas("DigiMatch", "DigiMatch", 500, 500, 500, 500);
   DigiMatch->Divide(2, 2);
@@ -620,4 +598,9 @@ void Analiser::Loop() {
     DigiCanvas->cd(i);
     N_Digi[i-1]->Draw("COLZ");
   }
+
+  TFile outputFile("outputFile.root","RECREATE");
+  outputFile.Write();
+  outputFile.Close();
 }
+
