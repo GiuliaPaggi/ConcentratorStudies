@@ -71,6 +71,8 @@ void Analiser::Loop() {
 
 
   TFile *file = new TFile("./DTDPGNtuple_12_4_SingleMu_20-100pT_Eta1p25.root");   //  ./VtxSmeared/DTDPGNtuple_12_4_SingleMu_20-100pT_Eta1p25_VtxSmeared.root
+  TFile outputFile("outputFile.root","RECREATE");
+  outputFile.cd();
 //./DTDPGNtuple_12_4_SingleMu_20-100pT_Eta1p25.root
   TH1D *t0_AllQuality = new TH1D("t0_AllQuality", "t0_AllQuality", 100, T_MIN, T_MAX);
   TH1D *t0_HighQuality =
@@ -611,7 +613,7 @@ void Analiser::Loop() {
   }
   DigiCanvas->SaveAs("prompt/DigiClusters.png");
 
-  TFile outputFile("outputFile.root","RECREATE");
+
   outputFile.Write();
   outputFile.Close();
 }
