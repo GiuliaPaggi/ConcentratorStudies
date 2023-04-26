@@ -33,6 +33,7 @@ The project is divided into several files:
 * TriggerPrimitives.h and TriggerPrimitives.cpp, in which the trigger primitive class is defined. Each trigger primitive is defined by an index in the event, the object stores the position and allows to predict the track expected phi in the other stations;
 * Segment.h and Segment.cpp, in which the segment class is defined. It only has attributes defining the segment with index and position and the constructor;
 * Digi.h and Digi.cpp, in which the digi class is defined. To compute the digis position we make use of a geometry file *DTGeom.txt* that allows converting the information from the local coordinates that are in the NTuple to the global reference used for the segments and trigger primitives.
+* Cluster.h and Cluster.cpp, in which the cluster class is defined. The cluster constructor analyses all the TPs and segments to cluster whiting 10cm from one another,  while for digis the requirement to make a cluster is to have at least 10 in a layer in 20cm.
 * Analiser.h and Analiser.cpp, where the Ntuple content is analysed.
 
 ## Usage
