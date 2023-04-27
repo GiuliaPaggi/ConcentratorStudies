@@ -62,7 +62,7 @@ void Analiser::Loop() {
   const double T0_CUT{12.5};
   const double X_CUT{5.0};
   const double DIGI_CUT{10.0};
-  const int CORRECT_BX{380};
+  const int CORRECT_BX{-380};
 
   double T_MIN{-9800};
   double T_MAX{-9200};
@@ -71,7 +71,7 @@ void Analiser::Loop() {
 
 
   TFile *file = new TFile("./DTDPGNtuple_12_4_SingleMu_20-100pT_Eta1p25.root");   //  ./VtxSmeared/DTDPGNtuple_12_4_SingleMu_20-100pT_Eta1p25_VtxSmeared.root
-  TFile outputFile("outputFile.root","RECREATE");
+  TFile outputFile("prompt/outputFile.root","RECREATE");
   outputFile.cd();
 //./DTDPGNtuple_12_4_SingleMu_20-100pT_Eta1p25.root
   TH1D *t0_AllQuality = new TH1D("t0_AllQuality", "t0_AllQuality", 100, T_MIN, T_MAX);
@@ -150,7 +150,7 @@ void Analiser::Loop() {
   TH1D *N_DigiPerCluster = new TH1D("N_DigiPerCluster", "N_DigiPerCluster", 40, 0, 40); 
   TH1D *DigiSL = new TH1D("DigiSL", "DigiSL", 6, -0.5, 5.5); 
 
-  
+    TEfficiency *ClusterEfficiency[4];
 
   for (const auto st : STATIONS) {
     N_MuMatch[st - 1] = new TH2I(Form("N_MuMatch_st%d", st), Form("N_MuMatch_st%d; sector ; wheel", st), 14, -0.5, 13.5, 7, -3.5, 3.5);
@@ -161,10 +161,12 @@ void Analiser::Loop() {
     Eff_SegMatch[st-1] = new TEfficiency(Form("Eff_SegMatch_st%d", st), Form("Eff_SegMatch_st%d; sector; wheel", st), 14, -0.5, 13.5, 7, -3.5, 3.5);
     Eff_DigiMatch[st-1] = new TEfficiency(Form("Eff_DigiMatch_st%d", st), Form("Eff_DigiMatch_st%d; sector; wheel", st), 14, -0.5, 13.5, 7, -3.5, 3.5);
     //Digi_residual[st-1] = new TH1D( Form("Digi_residual_st%d", st), Form("Digi_residual_st%d; digi.xLoc-seg.wirePos; entries", st), 100, -20, 20 );
+    ClusterEfficiency[st-1] = new TEfficiency(Form("ClusterEfficiency_st%d", st), Form("ClusterEfficiency_st%d; sector; wheel", st), 14, -0.5, 13.5, 7, -3.5, 3.5);
     for (const auto wh : WHEELS){
       Digi_residual[wh+2][st-1] = new TH1D( Form("Digi_residual_st%d_wh%d", st, wh), Form("Digi_residual_st%d_wh%d; cluster.bestSeg.xLoc - digi.xLoc; entries", st, wh), 50, -10, 10 );
     }
    }
+
 
 
   double nClustersGhosts{};
@@ -270,21 +272,29 @@ void Analiser::Loop() {
       
       N_Cluster[st - 1]->Fill(sec, wh);
       
-      if (!cluster.hasGhosts()) continue;
-      ++nClustersGhosts;
+      if (cluster.hasGhosts()) {
+        ++nClustersGhosts;
 
-      for (const auto &ghost : cluster.ootGhosts()) {
-        BX_OoTGhosts->Fill(ghost.BX);
-        Res_OoTGhosts->Fill(ghost.xLoc - cluster.bestTP().xLoc);
-        Q_OoTGhosts->Fill(bestQ, ghost.quality);
-        Q_Ghost->Fill(ghost.quality);
+        for (const auto &ghost : cluster.ootGhosts()) {
+          BX_OoTGhosts->Fill(ghost.BX);
+          Res_OoTGhosts->Fill(ghost.xLoc - cluster.bestTP().xLoc);
+          Q_OoTGhosts->Fill(bestQ, ghost.quality);
+          Q_Ghost->Fill(ghost.quality);
+        }
+
+        for (const auto &ghost : cluster.itGhosts()) {
+          BX_ITGhosts->Fill(ghost.BX);
+          Res_ITGhosts->Fill(ghost.xLoc - cluster.bestTP().xLoc);
+          Q_ITGhosts->Fill(bestQ, ghost.quality);
+          Q_Ghost->Fill(ghost.quality);
+        }
       }
 
-      for (const auto &ghost : cluster.itGhosts()) {
-        BX_ITGhosts->Fill(ghost.BX);
-        Res_ITGhosts->Fill(ghost.xLoc - cluster.bestTP().xLoc);
-        Q_ITGhosts->Fill(bestQ, ghost.quality);
-        Q_Ghost->Fill(ghost.quality);
+      if (cluster.muMatched && cluster.bestSeg().nPhiHits >= 4 ) {
+
+        bool efficient = std::abs(cluster.bestTP().BX - CORRECT_BX) < 1;
+        //std::cout << cluster.bestTP().BX << std::endl;
+        ClusterEfficiency[st-1]->Fill(efficient , sec, wh);
       }
 
       // ########## Study segment matching #############
@@ -499,8 +509,9 @@ void Analiser::Loop() {
 
   ClusterProvaCanvas->cd(4);
   Q_Ghost->SetLineColor(kOrange + 7);
-  Q_Ghost->Draw();
-  Q_Best->Draw("same");
+  Q_Best->Draw();
+  Q_Ghost->Draw("same");
+  
   auto *q_legend = new TLegend(0.1, 0.7, 0.35, 0.9);
   q_legend->AddEntry(Q_Ghost, "Ghost Quality");
   q_legend->AddEntry(Q_Best, "Best one Quality");
@@ -545,6 +556,7 @@ void Analiser::Loop() {
   Res_MuMatched->Draw();
   ResMatchCanvas->cd(2);
   Res_SegMatched->Draw();
+  ResMatchCanvas->SaveAs("prompt/ResMatch.png");
 
   TCanvas *MuMatch2dCanvas = new TCanvas("MuMatch2dCanvas", "MuMatch2dCanvas", canvas_size, canvas_size, canvas_size, canvas_size);
   MuMatch2dCanvas->Divide(2,2);
@@ -613,6 +625,13 @@ void Analiser::Loop() {
   }
   DigiCanvas->SaveAs("prompt/DigiClusters.png");
 
+  TCanvas *ClsEff = new TCanvas("ClsEff","ClsEff", canvas_size, canvas_size, canvas_size, canvas_size);
+  ClsEff->Divide(2, 2);
+  for (int i = 1; i <5; ++i){
+    ClsEff->cd(i);
+   ClusterEfficiency[i-1]->Draw("COLZ");
+  }
+  ClsEff->SaveAs("prompt/ClsEff.png");
 
   outputFile.Write();
   outputFile.Close();
