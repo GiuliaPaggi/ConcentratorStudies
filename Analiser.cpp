@@ -26,12 +26,15 @@ const std::vector<int> STATIONS{1, 2, 3, 4};
 
 std::vector<Cluster> buildClusters(std::vector<TriggerPrimitive> &tps, std::vector<Segment> &seg, std::vector<Digi> &d, double x_cut, double digi_cut) {
   std::vector<Cluster> clusters;
+  std::vector<TriggerPrimitive> tpsToCluster = tps;
+  std::vector<Segment> segToCluster = seg;
+  std::vector<Digi> digiToCluster = d;
 
   for (const auto wh : WHEELS) {
     for (const auto sec : SECTORS) {
       for (const auto st : STATIONS) {
           while (true){   
-          Cluster cluster{tps, seg, d, x_cut, digi_cut, wh, sec, st};   
+          Cluster cluster{tpsToCluster, segToCluster, digiToCluster, x_cut, digi_cut, wh, sec, st};   
           if (cluster.bestTPQuality() > -1 || cluster.bestSegPhiHits() > -1 || cluster.WhichSL()) {
             clusters.push_back(cluster);  // CB can be improved 
           }
@@ -149,8 +152,10 @@ void Analiser::Loop() {
   TH1D *Digi_residual[5][4];
   TH1D *N_DigiPerCluster = new TH1D("N_DigiPerCluster", "N_DigiPerCluster", 40, 0, 40); 
   TH1D *DigiSL = new TH1D("DigiSL", "DigiSL", 6, -0.5, 5.5); 
+  TH1D *DigiTime[4];
 
-    TEfficiency *ClusterEfficiency[4];
+  TEfficiency *ClusterEfficiency[4];
+  TEfficiency *PhiMatchClusterEfficiency[4];
 
   for (const auto st : STATIONS) {
     N_MuMatch[st - 1] = new TH2I(Form("N_MuMatch_st%d", st), Form("N_MuMatch_st%d; sector ; wheel", st), 14, -0.5, 13.5, 7, -3.5, 3.5);
@@ -160,8 +165,9 @@ void Analiser::Loop() {
     Phi_MuMatch[st-1] = new TH1D(Form("Phi_MuMatch_st%d", st), Form("Phi_MuMatch_st%d; Muon_phi; Entries", st), 50,-TMath::Pi(), TMath::Pi() );
     Eff_SegMatch[st-1] = new TEfficiency(Form("Eff_SegMatch_st%d", st), Form("Eff_SegMatch_st%d; sector; wheel", st), 14, -0.5, 13.5, 7, -3.5, 3.5);
     Eff_DigiMatch[st-1] = new TEfficiency(Form("Eff_DigiMatch_st%d", st), Form("Eff_DigiMatch_st%d; sector; wheel", st), 14, -0.5, 13.5, 7, -3.5, 3.5);
-    //Digi_residual[st-1] = new TH1D( Form("Digi_residual_st%d", st), Form("Digi_residual_st%d; digi.xLoc-seg.wirePos; entries", st), 100, -20, 20 );
+    DigiTime[st-1] = new TH1D( Form("DigiTime_st%d", st), Form("DigiTime_st%d; mean digi cluster time (ns); entries", st), 300, 400, 1000 );
     ClusterEfficiency[st-1] = new TEfficiency(Form("ClusterEfficiency_st%d", st), Form("ClusterEfficiency_st%d; sector; wheel", st), 14, -0.5, 13.5, 7, -3.5, 3.5);
+    PhiMatchClusterEfficiency[st-1] = new TEfficiency(Form("PhiMatchClusterEfficiency_st%d", st), Form("PhiMatchClusterEfficiency_st%d; sector; wheel", st), 14, -0.5, 13.5, 7, -3.5, 3.5);
     for (const auto wh : WHEELS){
       Digi_residual[wh+2][st-1] = new TH1D( Form("Digi_residual_st%d_wh%d", st, wh), Form("Digi_residual_st%d_wh%d; cluster.bestSeg.xLoc - digi.xLoc; entries", st, wh), 50, -10, 10 );
     }
@@ -188,7 +194,6 @@ void Analiser::Loop() {
     if (jentry % 100 == 0) cout << "Processing event: " << jentry << '\r' << flush;
 
     if (std::abs(gen_pdgId->at(0)) != 13 || std::abs(gen_eta->at(0)) > 0.8) continue;
-    // cout << "---------------------------------------" << endl;
 
     // ########## CREATE TPs std::vector #############
     std::vector<TriggerPrimitive> tps;
@@ -200,6 +205,7 @@ void Analiser::Loop() {
                                         ph2TpgPhiEmuAm_phiB->at(j), ph2TpgPhiEmuAm_BX->at(j),
                                         ph2TpgPhiEmuAm_t0->at(j), ph2TpgPhiEmuAm_posLoc_x->at(j)});
     }
+
     // ########## CREATE Digis std::vector #############
     std::vector<Digi> digis;
     for (std::size_t i = 0; i < digi_nDigis; ++i ){
@@ -208,6 +214,7 @@ void Analiser::Loop() {
                               digi_layer->at(i), digi_wire->at(i), 
                               digi_time->at(i)));
     }
+
     //########## BUILD segments std::vector #############
     std::vector<Segment> segments;
     for (std::size_t j = 0; j < seg_nSegments; ++j) {
@@ -219,29 +226,66 @@ void Analiser::Loop() {
     // ########## BUILD clusters std::vector #############
     auto clusters = buildClusters(tps, segments, digis, X_CUT, DIGI_CUT);
 
+    // ########## BUILD cluster with phi matchin information #############
+    // tag TPs that match using the extrapolation on a straight line 
+        for (TriggerPrimitive &tp : tps) {
+      if (tp.quality == 1) {
+        t0_LowQuality->Fill(tps.back().t0);
+        BX_LowQuality->Fill(tps.back().BX);
+      }
 
-    // ########## ATTEMPT cluster - muon extrapolation matching #############
-    for (auto &cluster: clusters){
-      for (int iMu = 0; iMu < mu_nMuons; ++iMu){
-
-        for (int i = 0; i < mu_nMatches->at(iMu); ++i){
-          int muTrkWheel = getXY<float>(mu_matches_wheel, iMu, i);
-          int muTrkStation = getXY<float>(mu_matches_station, iMu, i);
-          int muTrkSector = getXY<float>(mu_matches_sector, iMu, i);
-          if (muTrkSector == 13 ) muTrkSector = 4;
-          if (muTrkSector == 14 ) muTrkSector = 10; 
-          double muTrkX = getXY<float>(mu_matches_x, iMu, i);
-          double edgeX = getXY<float>(mu_matches_edgeX, iMu, i);
-          double edgeY = getXY<float>(mu_matches_edgeY, iMu, i);
-
-          cluster.MatchMu(muTrkWheel, muTrkStation, muTrkSector, edgeX, edgeY, muTrkX, i, iMu);
-          cluster.MatchDigi(digis, DIGI_CUT);
+      // select HQ tp to try and match in previous/following station with the expected value of phi from straight line extrapolation
+      if (tp.quality > HIGH_QUAL_CUT && !tp.hasMatched) {
+        // select HQ TPs which are not matched 
+        t0_Selected->Fill(tp.t0);
+        for (TriggerPrimitive &other_tp : tps) {
+          if (tp.index != other_tp.index && tp.Match(other_tp, PHI_CUT, T0_CUT)) {    
+            if (other_tp.quality == 1) {
+              t0_Selected->Fill(other_tp.t0);
+              LowQ_matched->Fill(other_tp.t0);
+              BX_LowQ_matched->Fill(other_tp.BX);
+            } else {
+              t0_Selected->Fill(other_tp.t0);
+            }
+          }
         }
       }
     }
 
+      // repeat clustering with phi match information in tps
+    auto PostMatch_clusters = buildClusters(tps, segments, digis, X_CUT, DIGI_CUT);
+
+
+    // ########## ATTEMPT cluster - muon extrapolation matching #############
+    
+    for (int iMu = 0; iMu < mu_nMuons; ++iMu){
+      for (int i = 0; i < mu_nMatches->at(iMu); ++i){
+        int muTrkWheel = getXY<float>(mu_matches_wheel, iMu, i);
+        int muTrkStation = getXY<float>(mu_matches_station, iMu, i);
+        int muTrkSector = getXY<float>(mu_matches_sector, iMu, i);
+        if (muTrkSector == 13 ) muTrkSector = 4;
+        if (muTrkSector == 14 ) muTrkSector = 10; 
+        double muTrkX = getXY<float>(mu_matches_x, iMu, i);
+        double edgeX = getXY<float>(mu_matches_edgeX, iMu, i);
+        double edgeY = getXY<float>(mu_matches_edgeY, iMu, i);
+
+        for (auto &cluster: clusters){
+          cluster.MatchMu(muTrkWheel, muTrkStation, muTrkSector, edgeX, edgeY, muTrkX, i, iMu);
+          cluster.MatchDigi(digis, DIGI_CUT);
+        }
+
+        for (auto &PMcluster : PostMatch_clusters) {
+          PMcluster.MatchMu(muTrkWheel, muTrkStation, muTrkSector, edgeX, edgeY, muTrkX, i, iMu);
+          PMcluster.MatchDigi(digis, DIGI_CUT);
+        }
+      }
+    }
+
+    
+
 
     // ########## RUN SOME ANALYSIS #############
+    // ########## CLUSTER ANALYSIS #############
     for (auto const &cluster : clusters) {
       auto wh{cluster.wheel};
       auto sec{cluster.sector};
@@ -291,14 +335,11 @@ void Analiser::Loop() {
       }
 
       if (cluster.muMatched && cluster.bestSeg().nPhiHits >= 4 ) {
-
         bool efficient = std::abs(cluster.bestTP().BX - CORRECT_BX) < 1;
-        //std::cout << cluster.bestTP().BX << std::endl;
-        ClusterEfficiency[st-1]->Fill(efficient , sec, wh);
+        ClusterEfficiency[st-1]->Fill(efficient , sec, wh); 
       }
 
       // ########## Study segment matching #############
-
       Eff_SegMatch[st-1]->Fill(cluster.segMatched, sec, wh);
       for (const auto s : segments)
       if (cluster.foundTP && s.wheel == wh && s.sector == sec && s.station == st){
@@ -307,7 +348,9 @@ void Analiser::Loop() {
       
       // ########## Study digi clusters #############
       Eff_DigiMatch[st-1]->Fill(cluster.digiMatched, sec, wh);
+      
       if (cluster.digiMatched){
+        if (cluster.MeanDigiTime() > 0) DigiTime[st-1]->Fill(cluster.MeanDigiTime());
         for (auto &digi : cluster.matchedDigi()){
           Digi_residual[wh+2][st-1] ->Fill( cluster.bestSeg().xLoc - digi.xLoc );
         }
@@ -317,32 +360,9 @@ void Analiser::Loop() {
       DigiSL->Fill(cluster.WhichSL());
 
       if (cluster.foundDigi) N_Digi[st - 1]->Fill(sec, wh);
-
-      }
-
-
-    for (TriggerPrimitive &tp : tps) {
-      if (tp.quality == 1) {
-        t0_LowQuality->Fill(tps.back().t0);
-        BX_LowQuality->Fill(tps.back().BX);
-      }
-      if (tp.quality > HIGH_QUAL_CUT && !tp.hasMatched) {
-        // select HQ TPs which are not matched 
-        t0_Selected->Fill(tp.t0);
-        for (TriggerPrimitive &other_tp : tps) {
-          if (tp.index != other_tp.index && tp.Match(other_tp, PHI_CUT, T0_CUT)) {    
-            if (other_tp.quality == 1) {
-              t0_Selected->Fill(other_tp.t0);
-              LowQ_matched->Fill(other_tp.t0);
-              BX_LowQ_matched->Fill(other_tp.BX);
-            } else {
-              t0_Selected->Fill(other_tp.t0);
-            }
-          }
-        }
-      }
     }
 
+    // ########## PHI MATCHING TPs ANALYSIS #############
     for (TriggerPrimitive tp : tps) {
       if (tp.quality == 1) {
         MatchAndCut_vs_Eta->Fill(tp.hasMatched, std::abs(gen_eta->at(0)));
@@ -350,14 +370,34 @@ void Analiser::Loop() {
         MatchAndCut_vs_Pt->Fill(tp.hasMatched, std::abs(gen_pt->at(0)));
         Match_vs_Eta->Fill((tp.Matches.size() > 0), std::abs(gen_eta->at(0)));
         Match_vs_Phi->Fill((tp.Matches.size() > 0), std::abs(gen_phi->at(0)));
-        Match_vs_Pt->Fill((tp.Matches.size() > 0), std::abs(gen_pt->at(0)));
+        Match_vs_Pt->Fill((tp.Matches.size() > 0), std::abs(gen_pt->at(0)));  
       }
       if (tp.quality == 1 && tp.Matches.size() > 0) {
         LowQ_more1HQ_Phi->Fill(tp.t0);
         BX_LowQ_more1HQ->Fill(tp.BX);
       }
     }
+
+    // ########## PHI MATCHING INFO CLUSTER ANALYSIS #############
+    for (auto const &cluster : PostMatch_clusters){
+      auto wh{cluster.wheel};
+      auto sec{cluster.sector};
+      if (sec == 13 ) sec = 4;
+      if (sec == 14 ) sec = 10;
+      auto st{cluster.station};
+
+      if (cluster.muMatched && cluster.bestSeg().nPhiHits >= 4 ) {
+        bool efficient = (std::abs(cluster.bestTP().BX - CORRECT_BX) < 1 && cluster.bestTP().hasMatched );
+        PhiMatchClusterEfficiency[st-1]->Fill(efficient , sec, wh); 
+      }
+
+    }
+
   }
+
+
+
+
   double ghostFraction = nClustersGhosts / nClusters;
 
   cout << " Ratio LQ/selected with phi=  " << LowQ_matched->GetEntries() << "/ "
@@ -632,6 +672,22 @@ void Analiser::Loop() {
    ClusterEfficiency[i-1]->Draw("COLZ");
   }
   ClsEff->SaveAs("prompt/ClsEff.png");
+
+  TCanvas *DigiTimeCanvas = new TCanvas("DigiTimeCanvas","DigiTimeCanvas", canvas_size, canvas_size, canvas_size, canvas_size);
+  DigiTimeCanvas->Divide(2, 2);
+  for (int i = 1; i <5; ++i){
+    DigiTimeCanvas->cd(i);
+   DigiTime[i-1]->Draw("COLZ");
+  }
+  DigiTimeCanvas->SaveAs("prompt/DigiTime.png");
+
+  TCanvas *PhiMatchClsEff = new TCanvas("PhiMatchClsEff","PhiMatchClsEff", canvas_size, canvas_size, canvas_size, canvas_size);
+  PhiMatchClsEff->Divide(2, 2);
+  for (int i = 1; i <5; ++i){
+    PhiMatchClsEff->cd(i);
+    PhiMatchClusterEfficiency[i-1]->Draw("COLZ");
+  }
+  PhiMatchClsEff->SaveAs("prompt/PhiMatchClsEff.png");
 
   outputFile.Write();
   outputFile.Close();

@@ -71,11 +71,12 @@ private:
 
   void MatchDigi(std::vector<Digi> const& digis, double xCut);
   const std::vector<Digi> matchedDigi() const;
-
   const int GetNDigi() const;
-
   const int WhichSL() const; // return 1 - 3 or 5 for both
+  const double MeanDigiTime() const;
+  const double MeanDigixLoc() const;
 
+  const bool hasTP( TriggerPrimitive tp) const;
 };
 
 #endif

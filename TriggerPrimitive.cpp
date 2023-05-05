@@ -95,29 +95,6 @@ bool TriggerPrimitive::Match(TriggerPrimitive &TP, double phicut, double timecut
   return false;
 };
 
-/*/ Makes cluster from the TP that calls it, checking all the TP in list, returns
-// vector of index of the cluster
-
-vector<int> TriggerPrimitive::MakeCluster(TriggerPrimitive listOfPrimitives[], int size,
-                                          double xcut) {
-  vector<int> Cluster;
-
-  for (int i = 0; i < size; ++i) {
-    TriggerPrimitive element = listOfPrimitives[i];
-    double DeltaxLoc = std::abs(element.xLoc - xLoc);
-
-    if (element.station == station && element.wheel == wheel && DeltaxLoc < xcut) {
-      if (element.index != index) {
-        inCluster = true;
-        element.inCluster = true;
-        Cluster.push_back(element.index);
-      }
-    }
-  }
-
-  return Cluster;
-};*/
-
 void TriggerPrimitive::FindHigherQuality(TriggerPrimitive listOfPrimitives[],
                                          vector<int> clusterIndex) {
   if (!inCluster) return;

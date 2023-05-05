@@ -10,7 +10,6 @@ Cluster::Cluster(std::vector<TriggerPrimitive> & tps, std::vector<Segment> & seg
     : wheel{wh}, sector{sec}, station{st} {
   // in a given wheel-station-sector finds the in-time highest-quality TP
   // and looks for other TP in a |xCut| interval 
-  // CB TODO: actually xCut not used yet, making 1 cluster per chamber
   // it's cluster even if no TPs but there's a segment, or more than 10 digis in a SL
 
 
@@ -232,6 +231,11 @@ void Cluster::MatchMu( int muWh, int muStat, int muSec,  double muXedge, double 
       muMatchedIndex[1] = muIndex;
       muMatched = true;
     }
+    else if (std::abs( MeanDigixLoc() - muX) < 10){
+      muMatchedIndex[0] = iMu;
+      muMatchedIndex[1] = muIndex;
+      muMatched = true;
+    }
   }
 }
 
@@ -267,5 +271,34 @@ const int Cluster::WhichSL() const{
   else if (SL1Cluster && !SL3Cluster) return 1;
   else if (!SL1Cluster && SL3Cluster) return 3;
   else return 0;
+};
+
+const double Cluster::MeanDigiTime() const{
+  if (_DigiCluster.size()==0) return -1.;
+  double meantime{0};
+  for (auto digi : _DigiCluster) meantime+=digi.time;
+  meantime = meantime/_DigiCluster.size();
+  return meantime;
+};
+
+const double Cluster::MeanDigixLoc() const {
+  if (_DigiCluster.size()==0) return -1.;
+  double meanxLoc{0};
+  for (auto digi : _DigiCluster) meanxLoc+=digi.xLoc;
+  meanxLoc = meanxLoc/_DigiCluster.size();
+  return meanxLoc;
+};
+
+const bool Cluster::hasTP( TriggerPrimitive tp) const {
+  if (_bestTP == tp ) return true;
+  else {
+    for (auto CLtp : _itGhosts) {
+      if (CLtp == tp) return true;
+    }
+    for (auto CLtp : _ootGhosts){
+      if (CLtp == tp) return true;
+    }
+  }
+  return false;
 };
 
