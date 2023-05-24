@@ -24,7 +24,7 @@ TriggerPrimitive::TriggerPrimitive(std::size_t i, int tpg_wheel, int tpg_sector,
 
   phiB = tpg_phiB * 2. / 4096;
 
-  psi = phi + phiB;
+  psi = tpg_phi * .5 / 65536 + phiB;
 };
 
 void TriggerPrimitive::ComputeExpectedPhi() {
@@ -57,7 +57,7 @@ bool TriggerPrimitive::Match(TriggerPrimitive &TP, double phicut, double timecut
     TP.Matches.push_back(index);  // NELLE QUALITà BASSE METTO L'INDICE DI QUELLA ALTA
     Matches.push_back(TP.index);  // NELLE QUALITà ALTE METTO L'INDICE DI QUELLE CHE MATCHANO
 
-    if (wheel == 0 && std::abs(TP.wheel) < 3) {
+    if (wheel == 0 && std::abs(TP.wheel) < 2) {
       if (TP.quality == 1 && Deltat0 < timecut) {
         TP.hasMatched = true;
         hasMatched = true;

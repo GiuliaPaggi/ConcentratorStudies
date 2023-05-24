@@ -645,7 +645,21 @@ public :
    virtual void     Loop();
    virtual Bool_t   Notify();
    virtual void     Show(Long64_t entry = -1);
+
+   std::map<std::string, TH1*> m_plots;
+   std::map<std::string, TH2*> m_2Dplots;
+   std::map<std::string, TEfficiency*> m_effs;
+   std::vector<std::string> tags;
+
+   double nClustersGhosts{};
+   double ooTHQCount{};
+   double nClusters{};
+
+   void ClusterAnalisis(std::vector<Cluster> CLtoAnalize, string CLtype, std::vector<Segment> Segments);
+   void DefinePlot();
+
 };
+
 
 #endif
 
