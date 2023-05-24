@@ -41,7 +41,8 @@ void TriggerPrimitive::ComputeExpectedPhi() {
   computedPhi = true;
 };
 
-bool TriggerPrimitive::Match(TriggerPrimitive &TP, double phicut, double timecut) {
+bool TriggerPrimitive::MatchFromHQ(TriggerPrimitive &TP, double phicut, double timecut) {
+  if (quality == 1) return false; 
   if (TP.index == index) return false;
   if (!computedPhi) ComputeExpectedPhi();
 
@@ -97,6 +98,66 @@ bool TriggerPrimitive::Match(TriggerPrimitive &TP, double phicut, double timecut
   }
   return false;
 };
+
+bool TriggerPrimitive::MatchFromLQ(TriggerPrimitive &TP, double phicut, double timecut) {
+  if (quality > 1) return false;
+  if (TP.index == index) return false;
+  if (!computedPhi) ComputeExpectedPhi();
+
+  double DeltaPhiExp = 0;
+  std::abs(phiExpected[TP.station] - TP.phi) < TMath::Pi()
+      ? DeltaPhiExp = std::abs(phiExpected[TP.station] - TP.phi)
+      : DeltaPhiExp = std::abs(2 * TMath::Pi() - std::abs(phiExpected[TP.station] - TP.phi));
+
+  double Deltat0 = std::abs(t0 - TP.t0);
+
+  if (DeltaPhiExp < phicut) {
+
+    TP.Matches.push_back(index);  // NELLE QUALITà BASSE METTO L'INDICE DI QUELLA ALTA
+    Matches.push_back(TP.index);  // NELLE QUALITà ALTE METTO L'INDICE DI QUELLE CHE MATCHANO
+
+    if (wheel == 0 && std::abs(TP.wheel) < 2) {
+      if (TP.quality == 1 && Deltat0 < timecut) {
+        TP.hasMatched = true;
+        hasMatched = true;
+        return true;
+
+      } else if (TP.quality > 1) {
+        TP.hasMatched = true;
+        hasMatched = true;
+        return true;
+      }
+    }
+
+    if (wheel > 0 && TP.wheel >= wheel) {
+      if (TP.quality == 1 && Deltat0 < timecut) {
+        TP.hasMatched = true;
+        hasMatched = true;
+        return true;
+
+      } else if (TP.quality > 1) {
+        TP.hasMatched = true;
+        hasMatched = true;
+        return true;
+      }
+    }
+
+    if (wheel < 0 && TP.wheel <= wheel && TP.wheel != -5 && wheel != 5) {
+      if (TP.quality == 1 && Deltat0 < timecut) {
+        TP.hasMatched = true;
+        hasMatched = true;
+        return true;
+      } else if (TP.quality > 1) {
+        TP.hasMatched = true;
+        hasMatched = true;
+        return true;
+      }
+    }
+  }
+  return false;
+};
+
+
 
 void TriggerPrimitive::FindHigherQuality(TriggerPrimitive listOfPrimitives[],
                                          vector<int> clusterIndex) {

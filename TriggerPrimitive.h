@@ -43,7 +43,8 @@ class TriggerPrimitive {
   ~TriggerPrimitive(){};
 
   void ComputeExpectedPhi();
-  bool Match(TriggerPrimitive &TP, double PhiCut, double TimeCut);
+  bool MatchFromLQ(TriggerPrimitive &TP, double PhiCut, double TimeCut);
+  bool MatchFromHQ(TriggerPrimitive &TP, double PhiCut, double TimeCut);
   vector<int> MakeCluster(TriggerPrimitive listOfPrimitives[], int size,
                           double phicut);  // taglio in cm, valore ragionevole 5 cm
   void FindHigherQuality(TriggerPrimitive listOfPrimitives[], vector<int> clusterIndeces);

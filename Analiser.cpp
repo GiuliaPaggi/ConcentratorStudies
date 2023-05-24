@@ -212,7 +212,8 @@ void Analiser::Loop() {
   outputFile.cd();
 
   tags.push_back("PreFilter");
-  tags.push_back("PostFilter");
+  tags.push_back("LQFilter");
+  tags.push_back("HQFilter");
  
 // 4+2 3+2 qualities, not there if we use slice-test configuration for emulator
  
@@ -263,37 +264,79 @@ void Analiser::Loop() {
                                     seg_posLoc_x->at(j)));
     }
 
+    std::vector<Cluster> MatchFromLQ_clusters;
+    std::vector<Cluster> MatchFromHQ_clusters;
+
     // ########## BUILD clusters std::vector #############
     auto clusters = buildClusters(tps, segments, digis, X_CUT, DIGI_CUT);
 
+
     // ########## BUILD cluster with phi matchin information #############
     // tag TPs that match using the extrapolation on a straight line 
-        for (TriggerPrimitive &tp : tps) {
-      if (tp.quality == 1) {
-        m_plots["t0_LowQuality"]->Fill(tps.back().t0);
-        m_plots["BX_LowQuality"]->Fill(tps.back().BX);
-      }
+  
+    std::vector<TriggerPrimitive> MatchFromLQ_tps = tps;
+    std::vector<TriggerPrimitive> MatchFromHQ_tps = tps;
 
-      // select HQ tp to try and match in previous/following station with the expected value of phi from straight line extrapolation
-      if (tp.quality > HIGH_QUAL_CUT && !tp.hasMatched) {
+    //extrapolate from LQ TP
+    for (TriggerPrimitive &tp : MatchFromLQ_tps) {
+
+      if (!tp.hasMatched) {
         // select HQ TPs which are not matched 
-        m_plots["t0_Selected"]->Fill(tp.t0);
+        //m_plots["t0_Selected"]->Fill(tp.t0);
         for (TriggerPrimitive &other_tp : tps) {
-          if (tp.index != other_tp.index && tp.Match(other_tp, PHI_CUT, T0_CUT)) {    
+          if (tp.index != other_tp.index && tp.MatchFromLQ(other_tp, PHI_CUT, T0_CUT)) {    
+            /*if (tp.quality == 1 && tp.Matches.size() > 0) {
+              m_plots["LowQ_more1HQ_Phi"]->Fill(tp.t0);
+              m_plots["BX_LowQ_more1HQ"] ->Fill(tp.BX);
+            }
+
             if (other_tp.quality == 1) {
               m_plots["t0_Selected"]->Fill(other_tp.t0);
               m_plots["LowQ_matched"]->Fill(other_tp.t0);
               m_plots["BX_LowQ_matched"]->Fill(other_tp.BX);
             } else {
               m_plots["t0_Selected"]->Fill(other_tp.t0);
+            }*/
+          }
+        }
+        // If after the loop it did not match any HQ i remove it from the sample
+        //if (!tp.hasMatched) MatchFromLQ_tps.erase(std::remove(MatchFromLQ_tps.begin(), MatchFromLQ_tps.end(), tp), MatchFromLQ_tps.end());
+          
+      }
+    }
+    MatchFromLQ_tps.erase(std::remove_if(MatchFromLQ_tps.begin(), MatchFromLQ_tps.end(), [](auto &tp){ return !tp.hasMatched&& tp.quality == 1;}), MatchFromLQ_tps.end());
+    // repeat clustering after filtering
+    MatchFromLQ_clusters = buildClusters(MatchFromLQ_tps, segments, digis, X_CUT, DIGI_CUT);
+
+
+
+    //extrapolate from HQ TP
+    for (TriggerPrimitive &tp : MatchFromHQ_tps) {
+      if (!tp.hasMatched) {
+        // select HQ TPs which are not matched 
+        //m_plots["t0_Selected"]->Fill(tp.t0);
+        for (TriggerPrimitive &other_tp : tps) {
+          
+          if (tp.index != other_tp.index && tp.MatchFromHQ(other_tp, PHI_CUT, T0_CUT)) {    
+          /*if (tp.quality == 1 && tp.Matches.size() > 0) {
+              m_plots["LowQ_more1HQ_Phi"]->Fill(tp.t0);
+              m_plots["BX_LowQ_more1HQ"] ->Fill(tp.BX);
             }
+
+            if (other_tp.quality == 1) {
+              m_plots["t0_Selected"]->Fill(other_tp.t0);
+              m_plots["LowQ_matched"]->Fill(other_tp.t0);
+              m_plots["BX_LowQ_matched"]->Fill(other_tp.BX);
+            } else {
+              m_plots["t0_Selected"]->Fill(other_tp.t0);
+            } */
           }
         }
       }
     }
-
-      // repeat clustering with phi match information in tps
-    auto PostMatch_clusters = buildClusters(tps, segments, digis, X_CUT, DIGI_CUT);
+    MatchFromHQ_tps.erase(std::remove_if(MatchFromHQ_tps.begin(), MatchFromHQ_tps.end(), [](auto &tp){ return !tp.hasMatched && tp.quality == 1;}), MatchFromHQ_tps.end());
+    // repeat clustering after filtering
+    MatchFromHQ_clusters = buildClusters(MatchFromHQ_tps, segments, digis, X_CUT, DIGI_CUT);
 
 
     // ########## ATTEMPT cluster - muon extrapolation matching #############
@@ -324,7 +367,11 @@ void Analiser::Loop() {
       }
         }
 
-        for (auto &PMcluster : PostMatch_clusters) {
+        for (auto &PMcluster : MatchFromLQ_clusters) {
+          PMcluster.MatchMu(muTrkWheel, muTrkStation, muTrkSector, edgeX, edgeY, muTrkX, i, iMu);
+          PMcluster.MatchDigi(digis, DIGI_CUT);
+        }
+        for (auto &PMcluster : MatchFromHQ_clusters) {
           PMcluster.MatchMu(muTrkWheel, muTrkStation, muTrkSector, edgeX, edgeY, muTrkX, i, iMu);
           PMcluster.MatchDigi(digis, DIGI_CUT);
         }
@@ -337,13 +384,14 @@ void Analiser::Loop() {
     // ########## RUN SOME ANALYSIS #############
     // ########## CLUSTER ANALYSIS #############
     ClusterAnalisis(clusters, tags[0], segments);
-    ClusterAnalisis(PostMatch_clusters, tags[1], segments);
+    ClusterAnalisis(MatchFromLQ_clusters, tags[1], segments);
+    ClusterAnalisis(MatchFromHQ_clusters, tags[2], segments);
 
     // ########## PHI MATCHING TPs ANALYSIS #############
     for (TriggerPrimitive tp : tps) {
-      if (tp.quality == 1 && tp.Matches.size() > 0) {
-        m_plots["LowQ_more1HQ_Phi"]->Fill(tp.t0);
-        m_plots["BX_LowQ_more1HQ"] ->Fill(tp.BX);
+      if (tp.quality == 1) {
+        m_plots["t0_LowQuality"]->Fill(tps.back().t0);
+        m_plots["BX_LowQuality"]->Fill(tps.back().BX);
       }
     }
 
