@@ -64,11 +64,11 @@ bool TriggerPrimitive::MatchFromHQ(TriggerPrimitive &TP, double phicut, double t
         hasMatched = true;
         return true;
 
-      } else if (TP.quality > 1) {
+      } /*else if (TP.quality > 1) {
         TP.hasMatched = true;
         hasMatched = true;
         return true;
-      }
+      }*/
     }
 
     if (wheel > 0 && TP.wheel >= wheel) {
@@ -77,11 +77,11 @@ bool TriggerPrimitive::MatchFromHQ(TriggerPrimitive &TP, double phicut, double t
         hasMatched = true;
         return true;
 
-      } else if (TP.quality > 1) {
+      } /*else if (TP.quality > 1) {
         TP.hasMatched = true;
         hasMatched = true;
         return true;
-      }
+      }*/
     }
 
     if (wheel < 0 && TP.wheel <= wheel && TP.wheel != -5 && wheel != 5) {
@@ -89,11 +89,11 @@ bool TriggerPrimitive::MatchFromHQ(TriggerPrimitive &TP, double phicut, double t
         TP.hasMatched = true;
         hasMatched = true;
         return true;
-      } else if (TP.quality > 1) {
+      } /* else if (TP.quality > 1) {
         TP.hasMatched = true;
         hasMatched = true;
         return true;
-      }
+      }*/
     }
   }
   return false;
@@ -117,41 +117,27 @@ bool TriggerPrimitive::MatchFromLQ(TriggerPrimitive &TP, double phicut, double t
     Matches.push_back(TP.index);  // NELLE QUALITà ALTE METTO L'INDICE DI QUELLE CHE MATCHANO
 
     if (wheel == 0 && std::abs(TP.wheel) < 2) {
-      if (TP.quality == 1 && Deltat0 < timecut) {
+      if (TP.quality > 1 && Deltat0 < timecut) {
         TP.hasMatched = true;
         hasMatched = true;
         return true;
-
-      } else if (TP.quality > 1) {
-        TP.hasMatched = true;
-        hasMatched = true;
-        return true;
-      }
+      } 
     }
 
     if (wheel > 0 && TP.wheel >= wheel) {
-      if (TP.quality == 1 && Deltat0 < timecut) {
+      if (TP.quality > 1 && Deltat0 < timecut) {
         TP.hasMatched = true;
         hasMatched = true;
         return true;
-
-      } else if (TP.quality > 1) {
-        TP.hasMatched = true;
-        hasMatched = true;
-        return true;
-      }
+      } 
     }
 
     if (wheel < 0 && TP.wheel <= wheel && TP.wheel != -5 && wheel != 5) {
-      if (TP.quality == 1 && Deltat0 < timecut) {
+      if (TP.quality > 1 && Deltat0 < timecut) {
         TP.hasMatched = true;
         hasMatched = true;
         return true;
-      } else if (TP.quality > 1) {
-        TP.hasMatched = true;
-        hasMatched = true;
-        return true;
-      }
+      } 
     }
   }
   return false;

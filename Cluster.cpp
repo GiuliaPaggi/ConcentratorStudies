@@ -51,8 +51,8 @@ Cluster::Cluster(std::vector<TriggerPrimitive> & tps, std::vector<Segment> & seg
       foundTP = true;
     }
     // If I have one in-time TP, assign to _bestTP
-    else if (cluster.size() == 1) {
-      _bestTP = tps_in_chamber[0];
+    else if (cluster.size() == 1 ) {
+      _bestTP = cluster[0];
       foundTP = true;
     }
 
@@ -150,7 +150,7 @@ Cluster::Cluster(std::vector<TriggerPrimitive> & tps, std::vector<Segment> & seg
                 [=](auto& dig) {return dig.wheel == wh && dig.station == st && dig.sector == sec && dig.superlayer == 3 && dig.inCluster == false && std::abs(dig.xLoc - _bestSeg.xLoc) < digiCut;});
 
   }
-  else if (foundTP){
+  else if (!foundSeg && foundTP){
     std::copy_if(digis.begin(), digis.end(), std::back_inserter(DigiClusterSl1),
                 [=](auto& dig) {return dig.wheel == wh && dig.station == st && dig.sector == sec && dig.superlayer == 1 && dig.inCluster == false && std::abs(dig.xLoc - _bestTP.xLoc) < digiCut;});
     
@@ -192,9 +192,10 @@ Cluster::Cluster(std::vector<TriggerPrimitive> & tps, std::vector<Segment> & seg
   }
 
   for (auto &d : digis){
-    for (auto Cl_d : _DigiCluster) d.inCluster = true;
+    for (auto &Cl_d : _DigiCluster)
+    if (d.index == Cl_d.index) d.inCluster = true;
   }
-  
+  //if (_DigiCluster.size() > 0) std::cout << " da costruttore cluster: " << _DigiCluster.size() << std::endl;
 }
 
 int Cluster::ootSize() const { return _ootGhosts.size(); };
@@ -264,7 +265,7 @@ void Cluster::MatchDigi(std::vector<Digi> const& digis, double xCut){
 
 const std::vector<Digi> Cluster::matchedDigi() const{ return _matchedDigis; };
 
-const int Cluster::GetNDigi() const {return _matchedDigis.size(); };
+const int Cluster::GetNDigi() const {return _DigiCluster.size(); };
 
 const int Cluster::WhichSL() const{
   if (SL1Cluster && SL3Cluster) return 5;
@@ -273,7 +274,7 @@ const int Cluster::WhichSL() const{
   else return 0;
 };
 
-const double Cluster::MeanDigiTime() const{
+const double Cluster::MeanDigiTime() const {
   if (_DigiCluster.size()==0) return -1.;
   double meantime{0};
   for (auto digi : _DigiCluster) meantime+=digi.time;

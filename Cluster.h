@@ -79,4 +79,8 @@ private:
   const bool hasTP( TriggerPrimitive tp) const;
 };
 
+bool operator==(Cluster const &lCL, Cluster const &rCL) {
+  return (lCL.wheel == rCL.wheel && lCL.sector == rCL.sector && lCL.station == rCL.station && lCL.foundTP && rCL.foundTP &&  lCL.bestTP().xLoc == rCL.bestTP().xLoc  );
+}
+
 #endif

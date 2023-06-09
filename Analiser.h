@@ -651,6 +651,7 @@ public :
    std::map<std::string, TEfficiency*> m_effs;
    std::vector<std::string> tags;
 
+   std::map<std::string, double> m_counters;
    double nClustersGhosts{};
    double ooTHQCount{};
    double nClusters{};
@@ -659,7 +660,6 @@ public :
    void DefinePlot();
 
 };
-
 
 #endif
 
