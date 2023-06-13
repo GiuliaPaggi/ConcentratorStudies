@@ -1,4 +1,4 @@
-#include "Segment.h"
+#include "include/Segment.h"
 
 Segment::Segment(int i, int st, int wh, int sec, int nHits, double x) /*: station(st), wheel(wh), sector(sec), nPhiHits(nHits), xLoc(x)*/ {
     index = i;
@@ -10,9 +10,3 @@ Segment::Segment(int i, int st, int wh, int sec, int nHits, double x) /*: statio
     nPhiHits = nHits;
     xLoc = x;
 }
-
-
-/*bool Segment::MatchCluster(Cluster cluster, double xCut){
-    if ( std::abs(cluster.bestTP().xLoc - xLoc) < xCut) return true;
-    else return false;
-}*/

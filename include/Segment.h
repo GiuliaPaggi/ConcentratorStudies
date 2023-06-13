@@ -5,8 +5,8 @@
 
 class Segment{
     public:
-    Segment(){};
-    Segment(int i, int st, int wh, int sec, int nHits, double x );
+    Segment() = default;
+    Segment(int i, int st, int wh, int sec, int nHits, double x);
     //bool MatchCluster(Cluster cluster, double xCut){};
     
     //private:
@@ -20,5 +20,10 @@ class Segment{
     bool inCluster{false};
 
 };
+
+inline bool operator==(Segment const &lseg, Segment const &rseg) {
+  return lseg.index == rseg.index;
+}
+
 
 #endif  

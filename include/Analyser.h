@@ -5,24 +5,61 @@
 // found on file: DTDPGNtuple_12_4_SingleMu_20-100pT_Eta1p25.root
 //////////////////////////////////////////////////////////
 
-#ifndef Analiser_h
-#define Analiser_h
+#ifndef Analyser_h
+#define Analyser_h
 
 #include <TROOT.h>
 #include <TChain.h>
 #include <TFile.h>
+#include <TVector.h>
+#include <TClonesArray.h>
 
-// Header file for the classes stored in the TTree if any.
-#include "vector"
-#include "vector"
-#include "vector"
-#include "TClonesArray.h"
-#include "vector"
-#include "vector"
-#include "vector"
+#include "include/TriggerPrimitive.h"
+#include "include/Geometry.h"
+#include "include/Cluster.h"
+#include "include/Segment.h"
+#include "include/Digi.h"
 
-class Analiser {
+#include <vector>
+#include <string>
+
+// Helper function to simplify access
+// Vectors of TClonesArrays
+
+template<typename T> T getXY(TClonesArray * arr, int x, int y) 
+{ 
+  return static_cast<T>((*((TVectorT<float> *)(arr->At(x))))[y]); 
+};
+
+inline std::vector<Cluster> buildClusters(const Geometry& geom,
+                                          std::vector<TriggerPrimitive>& tps, 
+                                          std::vector<Segment>& segs,
+                                          std::vector<Digi>& digis, 
+                                          double x_cut, double digi_cut) {
+  std::vector<Cluster> clusters;
+  
+  for (const auto wh : geom.WHEELS) {
+    for (const auto sec : geom.SECTORS) {
+      for (const auto st : geom.STATIONS) {
+          while (true){
+          Cluster cluster{tps, segs, digis, x_cut, digi_cut, wh, sec, st};
+          if (cluster.bestTPQuality() > -1 || cluster.bestSegPhiHits() > -1 || cluster.digiSL()) {
+            clusters.push_back(cluster);  // CB can be improved 
+          }
+          else {
+            break;
+          }
+        }
+      }
+    }
+  }
+
+  return clusters;
+};
+
+class Analyser {
 public :
+   TFile          file;   //!pointer to the analyzed TTree or TChain
    TTree          *fChain;   //!pointer to the analyzed TTree or TChain
    Int_t           fCurrent; //!current Tree number in a TChain
 
@@ -30,11 +67,11 @@ public :
 
    // Declaration of leaf types
    UInt_t          gen_nGenParts;
-   vector<int>     *gen_pdgId;
-   vector<float>   *gen_pt;
-   vector<float>   *gen_phi;
-   vector<float>   *gen_eta;
-   vector<short>   *gen_charge;
+   std::vector<int>     *gen_pdgId;
+   std::vector<float>   *gen_pt;
+   std::vector<float>   *gen_phi;
+   std::vector<float>   *gen_eta;
+   std::vector<short>   *gen_charge;
    Int_t           event_runNumber;
    Int_t           event_lumiBlock;
    Long64_t        event_eventNumber;
@@ -55,47 +92,47 @@ public :
    Float_t         environment_pv_xzErr;
    Float_t         environment_pv_yzErr;
    UInt_t          digi_nDigis;
-   vector<short>   *digi_wheel;
-   vector<short>   *digi_sector;
-   vector<short>   *digi_station;
-   vector<short>   *digi_superLayer;
-   vector<short>   *digi_layer;
-   vector<short>   *digi_wire;
-   vector<float>   *digi_time;
+   std::vector<short>   *digi_wheel;
+   std::vector<short>   *digi_sector;
+   std::vector<short>   *digi_station;
+   std::vector<short>   *digi_superLayer;
+   std::vector<short>   *digi_layer;
+   std::vector<short>   *digi_wire;
+   std::vector<float>   *digi_time;
    UInt_t          ph2Digi_nDigis;
-   vector<short>   *ph2Digi_wheel;
-   vector<short>   *ph2Digi_sector;
-   vector<short>   *ph2Digi_station;
-   vector<short>   *ph2Digi_superLayer;
-   vector<short>   *ph2Digi_layer;
-   vector<short>   *ph2Digi_wire;
-   vector<float>   *ph2Digi_time;
+   std::vector<short>   *ph2Digi_wheel;
+   std::vector<short>   *ph2Digi_sector;
+   std::vector<short>   *ph2Digi_station;
+   std::vector<short>   *ph2Digi_superLayer;
+   std::vector<short>   *ph2Digi_layer;
+   std::vector<short>   *ph2Digi_wire;
+   std::vector<float>   *ph2Digi_time;
    UInt_t          seg_nSegments;
-   vector<short>   *seg_wheel;
-   vector<short>   *seg_sector;
-   vector<short>   *seg_station;
-   vector<short>   *seg_hasPhi;
-   vector<short>   *seg_hasZed;
-   vector<float>   *seg_posLoc_x;
-   vector<float>   *seg_posLoc_y;
-   vector<float>   *seg_posLoc_z;
-   vector<float>   *seg_dirLoc_x;
-   vector<float>   *seg_dirLoc_y;
-   vector<float>   *seg_dirLoc_z;
-   vector<float>   *seg_posLoc_x_SL1;
-   vector<float>   *seg_posLoc_x_SL3;
-   vector<float>   *seg_posLoc_x_midPlane;
-   vector<float>   *seg_posGlb_phi;
-   vector<float>   *seg_posGlb_eta;
-   vector<float>   *seg_dirGlb_phi;
-   vector<float>   *seg_dirGlb_eta;
+   std::vector<short>   *seg_wheel;
+   std::vector<short>   *seg_sector;
+   std::vector<short>   *seg_station;
+   std::vector<short>   *seg_hasPhi;
+   std::vector<short>   *seg_hasZed;
+   std::vector<float>   *seg_posLoc_x;
+   std::vector<float>   *seg_posLoc_y;
+   std::vector<float>   *seg_posLoc_z;
+   std::vector<float>   *seg_dirLoc_x;
+   std::vector<float>   *seg_dirLoc_y;
+   std::vector<float>   *seg_dirLoc_z;
+   std::vector<float>   *seg_posLoc_x_SL1;
+   std::vector<float>   *seg_posLoc_x_SL3;
+   std::vector<float>   *seg_posLoc_x_midPlane;
+   std::vector<float>   *seg_posGlb_phi;
+   std::vector<float>   *seg_posGlb_eta;
+   std::vector<float>   *seg_dirGlb_phi;
+   std::vector<float>   *seg_dirGlb_eta;
    TClonesArray    *seg_hitsExpPos;
    TClonesArray    *seg_hitsExpPosCh;
    TClonesArray    *seg_hitsExpWire;
-   vector<float>   *seg_phi_t0;
-   vector<float>   *seg_phi_vDrift;
-   vector<float>   *seg_phi_normChi2;
-   vector<short>   *seg_phi_nHits;
+   std::vector<float>   *seg_phi_t0;
+   std::vector<float>   *seg_phi_vDrift;
+   std::vector<float>   *seg_phi_normChi2;
+   std::vector<short>   *seg_phi_nHits;
    TClonesArray    *seg_phiHits_pos;
    TClonesArray    *seg_phiHits_posCh;
    TClonesArray    *seg_phiHits_posErr;
@@ -106,8 +143,8 @@ public :
    TClonesArray    *seg_phiHits_superLayer;
    TClonesArray    *seg_phiHits_time;
    TClonesArray    *seg_phiHits_timeCali;
-   vector<float>   *seg_z_normChi2;
-   vector<short>   *seg_z_nHits;
+   std::vector<float>   *seg_z_normChi2;
+   std::vector<short>   *seg_z_nHits;
    TClonesArray    *seg_zHits_pos;
    TClonesArray    *seg_zHits_posCh;
    TClonesArray    *seg_zHits_posErr;
@@ -118,31 +155,31 @@ public :
    TClonesArray    *seg_zHits_time;
    TClonesArray    *seg_zHits_timeCali;
    UInt_t          ph2Seg_nSegments;
-   vector<short>   *ph2Seg_wheel;
-   vector<short>   *ph2Seg_sector;
-   vector<short>   *ph2Seg_station;
-   vector<short>   *ph2Seg_hasPhi;
-   vector<short>   *ph2Seg_hasZed;
-   vector<float>   *ph2Seg_posLoc_x;
-   vector<float>   *ph2Seg_posLoc_y;
-   vector<float>   *ph2Seg_posLoc_z;
-   vector<float>   *ph2Seg_dirLoc_x;
-   vector<float>   *ph2Seg_dirLoc_y;
-   vector<float>   *ph2Seg_dirLoc_z;
-   vector<float>   *ph2Seg_posLoc_x_SL1;
-   vector<float>   *ph2Seg_posLoc_x_SL3;
-   vector<float>   *ph2Seg_posLoc_x_midPlane;
-   vector<float>   *ph2Seg_posGlb_phi;
-   vector<float>   *ph2Seg_posGlb_eta;
-   vector<float>   *ph2Seg_dirGlb_phi;
-   vector<float>   *ph2Seg_dirGlb_eta;
+   std::vector<short>   *ph2Seg_wheel;
+   std::vector<short>   *ph2Seg_sector;
+   std::vector<short>   *ph2Seg_station;
+   std::vector<short>   *ph2Seg_hasPhi;
+   std::vector<short>   *ph2Seg_hasZed;
+   std::vector<float>   *ph2Seg_posLoc_x;
+   std::vector<float>   *ph2Seg_posLoc_y;
+   std::vector<float>   *ph2Seg_posLoc_z;
+   std::vector<float>   *ph2Seg_dirLoc_x;
+   std::vector<float>   *ph2Seg_dirLoc_y;
+   std::vector<float>   *ph2Seg_dirLoc_z;
+   std::vector<float>   *ph2Seg_posLoc_x_SL1;
+   std::vector<float>   *ph2Seg_posLoc_x_SL3;
+   std::vector<float>   *ph2Seg_posLoc_x_midPlane;
+   std::vector<float>   *ph2Seg_posGlb_phi;
+   std::vector<float>   *ph2Seg_posGlb_eta;
+   std::vector<float>   *ph2Seg_dirGlb_phi;
+   std::vector<float>   *ph2Seg_dirGlb_eta;
    TClonesArray    *ph2Seg_hitsExpPos;
    TClonesArray    *ph2Seg_hitsExpPosCh;
    TClonesArray    *ph2Seg_hitsExpWire;
-   vector<float>   *ph2Seg_phi_t0;
-   vector<float>   *ph2Seg_phi_vDrift;
-   vector<float>   *ph2Seg_phi_normChi2;
-   vector<short>   *ph2Seg_phi_nHits;
+   std::vector<float>   *ph2Seg_phi_t0;
+   std::vector<float>   *ph2Seg_phi_vDrift;
+   std::vector<float>   *ph2Seg_phi_normChi2;
+   std::vector<short>   *ph2Seg_phi_nHits;
    TClonesArray    *ph2Seg_phiHits_pos;
    TClonesArray    *ph2Seg_phiHits_posCh;
    TClonesArray    *ph2Seg_phiHits_posErr;
@@ -153,8 +190,8 @@ public :
    TClonesArray    *ph2Seg_phiHits_superLayer;
    TClonesArray    *ph2Seg_phiHits_time;
    TClonesArray    *ph2Seg_phiHits_timeCali;
-   vector<float>   *ph2Seg_z_normChi2;
-   vector<short>   *ph2Seg_z_nHits;
+   std::vector<float>   *ph2Seg_z_normChi2;
+   std::vector<short>   *ph2Seg_z_nHits;
    TClonesArray    *ph2Seg_zHits_pos;
    TClonesArray    *ph2Seg_zHits_posCh;
    TClonesArray    *ph2Seg_zHits_posErr;
@@ -165,35 +202,35 @@ public :
    TClonesArray    *ph2Seg_zHits_time;
    TClonesArray    *ph2Seg_zHits_timeCali;
    UInt_t          mu_nMuons;
-   vector<float>   *mu_pt;
-   vector<float>   *mu_phi;
-   vector<float>   *mu_eta;
-   vector<short>   *mu_charge;
-   vector<bool>    *mu_isGlobal;
-   vector<bool>    *mu_isStandalone;
-   vector<bool>    *mu_isTracker;
-   vector<bool>    *mu_isTrackerArb;
-   vector<bool>    *mu_isRPC;
-   vector<bool>    *mu_firesIsoTrig;
-   vector<bool>    *mu_firesTrig;
-   vector<bool>    *mu_isLoose;
-   vector<bool>    *mu_isMedium;
-   vector<bool>    *mu_isTight;
-   vector<float>   *mu_trkIso03;
-   vector<float>   *mu_pfIso04;
-   vector<float>   *mu_trk_dxy;
-   vector<float>   *mu_trk_dz;
-   vector<int>     *mu_trk_algo;
-   vector<int>     *mu_trk_origAlgo;
-   vector<int>     *mu_trk_numberOfValidPixelHits;
-   vector<int>     *mu_trk_numberOfValidTrackerLayers;
-   vector<unsigned int> *mu_trkMu_stationMask;
-   vector<int>     *mu_trkMu_numberOfMatchedStations;
-   vector<int>     *mu_trkMu_numberOfMatchedRPCLayers;
-   vector<int>     *mu_staMu_numberOfValidMuonHits;
-   vector<float>   *mu_staMu_normChi2;
-   vector<float>   *mu_glbMu_normChi2;
-   vector<unsigned int> *mu_nMatches;
+   std::vector<float>   *mu_pt;
+   std::vector<float>   *mu_phi;
+   std::vector<float>   *mu_eta;
+   std::vector<short>   *mu_charge;
+   std::vector<bool>    *mu_isGlobal;
+   std::vector<bool>    *mu_isStandalone;
+   std::vector<bool>    *mu_isTracker;
+   std::vector<bool>    *mu_isTrackerArb;
+   std::vector<bool>    *mu_isRPC;
+   std::vector<bool>    *mu_firesIsoTrig;
+   std::vector<bool>    *mu_firesTrig;
+   std::vector<bool>    *mu_isLoose;
+   std::vector<bool>    *mu_isMedium;
+   std::vector<bool>    *mu_isTight;
+   std::vector<float>   *mu_trkIso03;
+   std::vector<float>   *mu_pfIso04;
+   std::vector<float>   *mu_trk_dxy;
+   std::vector<float>   *mu_trk_dz;
+   std::vector<int>     *mu_trk_algo;
+   std::vector<int>     *mu_trk_origAlgo;
+   std::vector<int>     *mu_trk_numberOfValidPixelHits;
+   std::vector<int>     *mu_trk_numberOfValidTrackerLayers;
+   std::vector<unsigned int> *mu_trkMu_stationMask;
+   std::vector<int>     *mu_trkMu_numberOfMatchedStations;
+   std::vector<int>     *mu_trkMu_numberOfMatchedRPCLayers;
+   std::vector<int>     *mu_staMu_numberOfValidMuonHits;
+   std::vector<float>   *mu_staMu_normChi2;
+   std::vector<float>   *mu_glbMu_normChi2;
+   std::vector<unsigned int> *mu_nMatches;
    TClonesArray    *mu_matches_wheel;
    TClonesArray    *mu_matches_sector;
    TClonesArray    *mu_matches_station;
@@ -205,132 +242,132 @@ public :
    TClonesArray    *mu_matches_edgeY;
    TClonesArray    *mu_matches_dXdZ;
    TClonesArray    *mu_matches_dYdZ;
-   vector<unsigned int> *mu_staMu_nMatchSeg;
+   std::vector<unsigned int> *mu_staMu_nMatchSeg;
    TClonesArray    *mu_staMu_matchSegIdx;
    UInt_t          ltTwinMuxIn_nTrigs;
-   vector<short>   *ltTwinMuxIn_wheel;
-   vector<short>   *ltTwinMuxIn_sector;
-   vector<short>   *ltTwinMuxIn_station;
-   vector<short>   *ltTwinMuxIn_quality;
-   vector<int>     *ltTwinMuxIn_phi;
-   vector<int>     *ltTwinMuxIn_phiB;
-   vector<float>   *ltTwinMuxIn_posLoc_x;
-   vector<float>   *ltTwinMuxIn_dirLoc_phi;
-   vector<short>   *ltTwinMuxIn_BX;
-   vector<short>   *ltTwinMuxIn_is2nd;
+   std::vector<short>   *ltTwinMuxIn_wheel;
+   std::vector<short>   *ltTwinMuxIn_sector;
+   std::vector<short>   *ltTwinMuxIn_station;
+   std::vector<short>   *ltTwinMuxIn_quality;
+   std::vector<int>     *ltTwinMuxIn_phi;
+   std::vector<int>     *ltTwinMuxIn_phiB;
+   std::vector<float>   *ltTwinMuxIn_posLoc_x;
+   std::vector<float>   *ltTwinMuxIn_dirLoc_phi;
+   std::vector<short>   *ltTwinMuxIn_BX;
+   std::vector<short>   *ltTwinMuxIn_is2nd;
    UInt_t          ltTwinMuxOut_nTrigs;
-   vector<short>   *ltTwinMuxOut_wheel;
-   vector<short>   *ltTwinMuxOut_sector;
-   vector<short>   *ltTwinMuxOut_station;
-   vector<short>   *ltTwinMuxOut_quality;
-   vector<short>   *ltTwinMuxOut_rpcBit;
-   vector<int>     *ltTwinMuxOut_phi;
-   vector<int>     *ltTwinMuxOut_phiB;
-   vector<float>   *ltTwinMuxOut_posLoc_x;
-   vector<float>   *ltTwinMuxOut_dirLoc_phi;
-   vector<short>   *ltTwinMuxOut_BX;
-   vector<short>   *ltTwinMuxOut_is2nd;
+   std::vector<short>   *ltTwinMuxOut_wheel;
+   std::vector<short>   *ltTwinMuxOut_sector;
+   std::vector<short>   *ltTwinMuxOut_station;
+   std::vector<short>   *ltTwinMuxOut_quality;
+   std::vector<short>   *ltTwinMuxOut_rpcBit;
+   std::vector<int>     *ltTwinMuxOut_phi;
+   std::vector<int>     *ltTwinMuxOut_phiB;
+   std::vector<float>   *ltTwinMuxOut_posLoc_x;
+   std::vector<float>   *ltTwinMuxOut_dirLoc_phi;
+   std::vector<short>   *ltTwinMuxOut_BX;
+   std::vector<short>   *ltTwinMuxOut_is2nd;
    UInt_t          ltBmtfIn_nTrigs;
-   vector<short>   *ltBmtfIn_wheel;
-   vector<short>   *ltBmtfIn_sector;
-   vector<short>   *ltBmtfIn_station;
-   vector<short>   *ltBmtfIn_quality;
-   vector<int>     *ltBmtfIn_phi;
-   vector<int>     *ltBmtfIn_phiB;
-   vector<float>   *ltBmtfIn_posLoc_x;
-   vector<float>   *ltBmtfIn_dirLoc_phi;
-   vector<short>   *ltBmtfIn_BX;
-   vector<short>   *ltBmtfIn_is2nd;
+   std::vector<short>   *ltBmtfIn_wheel;
+   std::vector<short>   *ltBmtfIn_sector;
+   std::vector<short>   *ltBmtfIn_station;
+   std::vector<short>   *ltBmtfIn_quality;
+   std::vector<int>     *ltBmtfIn_phi;
+   std::vector<int>     *ltBmtfIn_phiB;
+   std::vector<float>   *ltBmtfIn_posLoc_x;
+   std::vector<float>   *ltBmtfIn_dirLoc_phi;
+   std::vector<short>   *ltBmtfIn_BX;
+   std::vector<short>   *ltBmtfIn_is2nd;
    UInt_t          ltTwinMuxInTh_nTrigs;
-   vector<short>   *ltTwinMuxInTh_wheel;
-   vector<short>   *ltTwinMuxInTh_sector;
-   vector<short>   *ltTwinMuxInTh_station;
-   vector<short>   *ltTwinMuxInTh_BX;
-   vector<unsigned short> *ltTwinMuxInTh_hitMap;
+   std::vector<short>   *ltTwinMuxInTh_wheel;
+   std::vector<short>   *ltTwinMuxInTh_sector;
+   std::vector<short>   *ltTwinMuxInTh_station;
+   std::vector<short>   *ltTwinMuxInTh_BX;
+   std::vector<unsigned short> *ltTwinMuxInTh_hitMap;
    UInt_t          ltBmtfInTh_nTrigs;
-   vector<short>   *ltBmtfInTh_wheel;
-   vector<short>   *ltBmtfInTh_sector;
-   vector<short>   *ltBmtfInTh_station;
-   vector<short>   *ltBmtfInTh_BX;
-   vector<unsigned short> *ltBmtfInTh_hitMap;
+   std::vector<short>   *ltBmtfInTh_wheel;
+   std::vector<short>   *ltBmtfInTh_sector;
+   std::vector<short>   *ltBmtfInTh_station;
+   std::vector<short>   *ltBmtfInTh_BX;
+   std::vector<unsigned short> *ltBmtfInTh_hitMap;
    UInt_t          ph2TpgPhiHw_nTrigs;
-   vector<short>   *ph2TpgPhiHw_wheel;
-   vector<short>   *ph2TpgPhiHw_sector;
-   vector<short>   *ph2TpgPhiHw_station;
-   vector<short>   *ph2TpgPhiHw_quality;
-   vector<short>   *ph2TpgPhiHw_superLayer;
-   vector<short>   *ph2TpgPhiHw_rpcFlag;
-   vector<int>     *ph2TpgPhiHw_chi2;
-   vector<int>     *ph2TpgPhiHw_phi;
-   vector<int>     *ph2TpgPhiHw_phiB;
-   vector<float>   *ph2TpgPhiHw_posLoc_x;
-   vector<float>   *ph2TpgPhiHw_dirLoc_phi;
-   vector<int>     *ph2TpgPhiHw_BX;
-   vector<int>     *ph2TpgPhiHw_t0;
-   vector<short>   *ph2TpgPhiHw_index;
+   std::vector<short>   *ph2TpgPhiHw_wheel;
+   std::vector<short>   *ph2TpgPhiHw_sector;
+   std::vector<short>   *ph2TpgPhiHw_station;
+   std::vector<short>   *ph2TpgPhiHw_quality;
+   std::vector<short>   *ph2TpgPhiHw_superLayer;
+   std::vector<short>   *ph2TpgPhiHw_rpcFlag;
+   std::vector<int>     *ph2TpgPhiHw_chi2;
+   std::vector<int>     *ph2TpgPhiHw_phi;
+   std::vector<int>     *ph2TpgPhiHw_phiB;
+   std::vector<float>   *ph2TpgPhiHw_posLoc_x;
+   std::vector<float>   *ph2TpgPhiHw_dirLoc_phi;
+   std::vector<int>     *ph2TpgPhiHw_BX;
+   std::vector<int>     *ph2TpgPhiHw_t0;
+   std::vector<short>   *ph2TpgPhiHw_index;
    UInt_t          ph2TpgPhiEmuHb_nTrigs;
-   vector<short>   *ph2TpgPhiEmuHb_wheel;
-   vector<short>   *ph2TpgPhiEmuHb_sector;
-   vector<short>   *ph2TpgPhiEmuHb_station;
-   vector<short>   *ph2TpgPhiEmuHb_quality;
-   vector<short>   *ph2TpgPhiEmuHb_superLayer;
-   vector<short>   *ph2TpgPhiEmuHb_rpcFlag;
-   vector<int>     *ph2TpgPhiEmuHb_chi2;
-   vector<int>     *ph2TpgPhiEmuHb_phi;
-   vector<int>     *ph2TpgPhiEmuHb_phiB;
-   vector<float>   *ph2TpgPhiEmuHb_posLoc_x;
-   vector<float>   *ph2TpgPhiEmuHb_dirLoc_phi;
-   vector<int>     *ph2TpgPhiEmuHb_BX;
-   vector<int>     *ph2TpgPhiEmuHb_t0;
-   vector<short>   *ph2TpgPhiEmuHb_index;
+   std::vector<short>   *ph2TpgPhiEmuHb_wheel;
+   std::vector<short>   *ph2TpgPhiEmuHb_sector;
+   std::vector<short>   *ph2TpgPhiEmuHb_station;
+   std::vector<short>   *ph2TpgPhiEmuHb_quality;
+   std::vector<short>   *ph2TpgPhiEmuHb_superLayer;
+   std::vector<short>   *ph2TpgPhiEmuHb_rpcFlag;
+   std::vector<int>     *ph2TpgPhiEmuHb_chi2;
+   std::vector<int>     *ph2TpgPhiEmuHb_phi;
+   std::vector<int>     *ph2TpgPhiEmuHb_phiB;
+   std::vector<float>   *ph2TpgPhiEmuHb_posLoc_x;
+   std::vector<float>   *ph2TpgPhiEmuHb_dirLoc_phi;
+   std::vector<int>     *ph2TpgPhiEmuHb_BX;
+   std::vector<int>     *ph2TpgPhiEmuHb_t0;
+   std::vector<short>   *ph2TpgPhiEmuHb_index;
    UInt_t          ph2TpgPhiEmuAm_nTrigs;
-   vector<short>   *ph2TpgPhiEmuAm_wheel;
-   vector<short>   *ph2TpgPhiEmuAm_sector;
-   vector<short>   *ph2TpgPhiEmuAm_station;
-   vector<short>   *ph2TpgPhiEmuAm_quality;
-   vector<short>   *ph2TpgPhiEmuAm_superLayer;
-   vector<short>   *ph2TpgPhiEmuAm_rpcFlag;
-   vector<int>     *ph2TpgPhiEmuAm_chi2;
-   vector<int>     *ph2TpgPhiEmuAm_phi;
-   vector<int>     *ph2TpgPhiEmuAm_phiB;
-   vector<float>   *ph2TpgPhiEmuAm_posLoc_x;
-   vector<float>   *ph2TpgPhiEmuAm_dirLoc_phi;
-   vector<int>     *ph2TpgPhiEmuAm_BX;
-   vector<int>     *ph2TpgPhiEmuAm_t0;
-   vector<short>   *ph2TpgPhiEmuAm_index;
+   std::vector<short>   *ph2TpgPhiEmuAm_wheel;
+   std::vector<short>   *ph2TpgPhiEmuAm_sector;
+   std::vector<short>   *ph2TpgPhiEmuAm_station;
+   std::vector<short>   *ph2TpgPhiEmuAm_quality;
+   std::vector<short>   *ph2TpgPhiEmuAm_superLayer;
+   std::vector<short>   *ph2TpgPhiEmuAm_rpcFlag;
+   std::vector<int>     *ph2TpgPhiEmuAm_chi2;
+   std::vector<int>     *ph2TpgPhiEmuAm_phi;
+   std::vector<int>     *ph2TpgPhiEmuAm_phiB;
+   std::vector<float>   *ph2TpgPhiEmuAm_posLoc_x;
+   std::vector<float>   *ph2TpgPhiEmuAm_dirLoc_phi;
+   std::vector<int>     *ph2TpgPhiEmuAm_BX;
+   std::vector<int>     *ph2TpgPhiEmuAm_t0;
+   std::vector<short>   *ph2TpgPhiEmuAm_index;
    UInt_t          tfBmtfOut_nBmtfCands;
-   vector<float>   *tfBmtfOut_pt;
-   vector<int>     *tfBmtfOut_bx;
-   vector<float>   *tfBmtfOut_phi;
-   vector<float>   *tfBmtfOut_eta;
-   vector<int>     *tfBmtfOut_dxy;
-   vector<int>     *tfBmtfOut_qual;
-   vector<int>     *tfBmtfOut_etaFine;
+   std::vector<float>   *tfBmtfOut_pt;
+   std::vector<int>     *tfBmtfOut_bx;
+   std::vector<float>   *tfBmtfOut_phi;
+   std::vector<float>   *tfBmtfOut_eta;
+   std::vector<int>     *tfBmtfOut_dxy;
+   std::vector<int>     *tfBmtfOut_qual;
+   std::vector<int>     *tfBmtfOut_etaFine;
    TClonesArray    *tfBmtfOut_matchedTpIdx;
    UInt_t          ph2TpgThetaHw_nTrigs;
-   vector<short>   *ph2TpgThetaHw_wheel;
-   vector<short>   *ph2TpgThetaHw_sector;
-   vector<short>   *ph2TpgThetaHw_station;
-   vector<short>   *ph2TpgThetaHw_quality;
-   vector<short>   *ph2TpgThetaHw_rpcFlag;
-   vector<int>     *ph2TpgThetaHw_chi2;
-   vector<int>     *ph2TpgThetaHw_z;
-   vector<int>     *ph2TpgThetaHw_k;
-   vector<int>     *ph2TpgThetaHw_BX;
-   vector<int>     *ph2TpgThetaHw_t0;
-   vector<short>   *ph2TpgThetaHw_index;
+   std::vector<short>   *ph2TpgThetaHw_wheel;
+   std::vector<short>   *ph2TpgThetaHw_sector;
+   std::vector<short>   *ph2TpgThetaHw_station;
+   std::vector<short>   *ph2TpgThetaHw_quality;
+   std::vector<short>   *ph2TpgThetaHw_rpcFlag;
+   std::vector<int>     *ph2TpgThetaHw_chi2;
+   std::vector<int>     *ph2TpgThetaHw_z;
+   std::vector<int>     *ph2TpgThetaHw_k;
+   std::vector<int>     *ph2TpgThetaHw_BX;
+   std::vector<int>     *ph2TpgThetaHw_t0;
+   std::vector<short>   *ph2TpgThetaHw_index;
    UInt_t          ph2TpgThetaEmuAm_nTrigs;
-   vector<short>   *ph2TpgThetaEmuAm_wheel;
-   vector<short>   *ph2TpgThetaEmuAm_sector;
-   vector<short>   *ph2TpgThetaEmuAm_station;
-   vector<short>   *ph2TpgThetaEmuAm_quality;
-   vector<short>   *ph2TpgThetaEmuAm_rpcFlag;
-   vector<int>     *ph2TpgThetaEmuAm_chi2;
-   vector<int>     *ph2TpgThetaEmuAm_z;
-   vector<int>     *ph2TpgThetaEmuAm_k;
-   vector<int>     *ph2TpgThetaEmuAm_BX;
-   vector<int>     *ph2TpgThetaEmuAm_t0;
-   vector<short>   *ph2TpgThetaEmuAm_index;
+   std::vector<short>   *ph2TpgThetaEmuAm_wheel;
+   std::vector<short>   *ph2TpgThetaEmuAm_sector;
+   std::vector<short>   *ph2TpgThetaEmuAm_station;
+   std::vector<short>   *ph2TpgThetaEmuAm_quality;
+   std::vector<short>   *ph2TpgThetaEmuAm_rpcFlag;
+   std::vector<int>     *ph2TpgThetaEmuAm_chi2;
+   std::vector<int>     *ph2TpgThetaEmuAm_z;
+   std::vector<int>     *ph2TpgThetaEmuAm_k;
+   std::vector<int>     *ph2TpgThetaEmuAm_BX;
+   std::vector<int>     *ph2TpgThetaEmuAm_t0;
+   std::vector<short>   *ph2TpgThetaEmuAm_index;
 
    // List of branches
    TBranch        *b_gen_nGenParts;   //!
@@ -636,49 +673,37 @@ public :
    TBranch        *b_ph2TpgThetaEmuAm_t0;   //!
    TBranch        *b_ph2TpgThetaEmuAm_index;   //!
 
-   Analiser(TTree *tree=0);
-   virtual ~Analiser();
-   virtual Int_t    Cut(Long64_t entry);
+   Analyser(std::string file);
+   virtual ~Analyser();
    virtual Int_t    GetEntry(Long64_t entry);
    virtual Long64_t LoadTree(Long64_t entry);
    virtual void     Init(TTree *tree);
-   virtual void     Loop();
+   virtual void     Loop() = 0;
    virtual Bool_t   Notify();
    virtual void     Show(Long64_t entry = -1);
 };
 
 #endif
 
-#ifdef Analiser_cxx
-Analiser::Analiser(TTree *tree) : fChain(0) 
+#ifdef Analyser_cxx
+Analyser::Analyser(std::string file_name) : file{file_name.c_str()}, fChain{nullptr}
 {
-// if parameter tree is not specified (or zero), connect the file
-// used to generate this class and read the Tree.
-   if (tree == 0) {
-      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("./DTDPGNtuple_12_4_SingleMu_20-100pT_Eta1p25.root");
-      if (!f || !f->IsOpen()) {
-         f = new TFile("./DTDPGNtuple_12_4_SingleMu_20-100pT_Eta1p25.root");
-      }
-      TDirectory * dir = (TDirectory*)f->Get("./DTDPGNtuple_12_4_SingleMu_20-100pT_Eta1p25.root:/dtNtupleProducer");
-      dir->GetObject("DTTREE",tree);
-
-   }
+   TTree* tree{};
+   file.GetObject("dtNtupleProducer/DTTREE",tree);
    Init(tree);
 }
 
-Analiser::~Analiser()
+Analyser::~Analyser()
 {
-   if (!fChain) return;
-   delete fChain->GetCurrentFile();
 }
 
-Int_t Analiser::GetEntry(Long64_t entry)
+Int_t Analyser::GetEntry(Long64_t entry)
 {
 // Read contents of entry.
    if (!fChain) return 0;
    return fChain->GetEntry(entry);
 }
-Long64_t Analiser::LoadTree(Long64_t entry)
+Long64_t Analyser::LoadTree(Long64_t entry)
 {
 // Set the environment to read one entry
    if (!fChain) return -5;
@@ -691,7 +716,7 @@ Long64_t Analiser::LoadTree(Long64_t entry)
    return centry;
 }
 
-void Analiser::Init(TTree *tree)
+void Analyser::Init(TTree *tree)
 {
    // The Init() function is called when the selector needs to initialize
    // a new tree or chain. Typically here the branch addresses and branch
@@ -702,272 +727,272 @@ void Analiser::Init(TTree *tree)
    // (once per file to be processed).
 
    // Set object pointer
-   gen_pdgId = 0;
-   gen_pt = 0;
-   gen_phi = 0;
-   gen_eta = 0;
-   gen_charge = 0;
-   digi_wheel = 0;
-   digi_sector = 0;
-   digi_station = 0;
-   digi_superLayer = 0;
-   digi_layer = 0;
-   digi_wire = 0;
-   digi_time = 0;
-   ph2Digi_wheel = 0;
-   ph2Digi_sector = 0;
-   ph2Digi_station = 0;
-   ph2Digi_superLayer = 0;
-   ph2Digi_layer = 0;
-   ph2Digi_wire = 0;
-   ph2Digi_time = 0;
-   seg_wheel = 0;
-   seg_sector = 0;
-   seg_station = 0;
-   seg_hasPhi = 0;
-   seg_hasZed = 0;
-   seg_posLoc_x = 0;
-   seg_posLoc_y = 0;
-   seg_posLoc_z = 0;
-   seg_dirLoc_x = 0;
-   seg_dirLoc_y = 0;
-   seg_dirLoc_z = 0;
-   seg_posLoc_x_SL1 = 0;
-   seg_posLoc_x_SL3 = 0;
-   seg_posLoc_x_midPlane = 0;
-   seg_posGlb_phi = 0;
-   seg_posGlb_eta = 0;
-   seg_dirGlb_phi = 0;
-   seg_dirGlb_eta = 0;
-   seg_hitsExpPos = 0;
-   seg_hitsExpPosCh = 0;
-   seg_hitsExpWire = 0;
-   seg_phi_t0 = 0;
-   seg_phi_vDrift = 0;
-   seg_phi_normChi2 = 0;
-   seg_phi_nHits = 0;
-   seg_phiHits_pos = 0;
-   seg_phiHits_posCh = 0;
-   seg_phiHits_posErr = 0;
-   seg_phiHits_side = 0;
-   seg_phiHits_wire = 0;
-   seg_phiHits_wirePos = 0;
-   seg_phiHits_layer = 0;
-   seg_phiHits_superLayer = 0;
-   seg_phiHits_time = 0;
-   seg_phiHits_timeCali = 0;
-   seg_z_normChi2 = 0;
-   seg_z_nHits = 0;
-   seg_zHits_pos = 0;
-   seg_zHits_posCh = 0;
-   seg_zHits_posErr = 0;
-   seg_zHits_side = 0;
-   seg_zHits_wire = 0;
-   seg_zHits_wirePos = 0;
-   seg_zHits_layer = 0;
-   seg_zHits_time = 0;
-   seg_zHits_timeCali = 0;
-   ph2Seg_wheel = 0;
-   ph2Seg_sector = 0;
-   ph2Seg_station = 0;
-   ph2Seg_hasPhi = 0;
-   ph2Seg_hasZed = 0;
-   ph2Seg_posLoc_x = 0;
-   ph2Seg_posLoc_y = 0;
-   ph2Seg_posLoc_z = 0;
-   ph2Seg_dirLoc_x = 0;
-   ph2Seg_dirLoc_y = 0;
-   ph2Seg_dirLoc_z = 0;
-   ph2Seg_posLoc_x_SL1 = 0;
-   ph2Seg_posLoc_x_SL3 = 0;
-   ph2Seg_posLoc_x_midPlane = 0;
-   ph2Seg_posGlb_phi = 0;
-   ph2Seg_posGlb_eta = 0;
-   ph2Seg_dirGlb_phi = 0;
-   ph2Seg_dirGlb_eta = 0;
-   ph2Seg_hitsExpPos = 0;
-   ph2Seg_hitsExpPosCh = 0;
-   ph2Seg_hitsExpWire = 0;
-   ph2Seg_phi_t0 = 0;
-   ph2Seg_phi_vDrift = 0;
-   ph2Seg_phi_normChi2 = 0;
-   ph2Seg_phi_nHits = 0;
-   ph2Seg_phiHits_pos = 0;
-   ph2Seg_phiHits_posCh = 0;
-   ph2Seg_phiHits_posErr = 0;
-   ph2Seg_phiHits_side = 0;
-   ph2Seg_phiHits_wire = 0;
-   ph2Seg_phiHits_wirePos = 0;
-   ph2Seg_phiHits_layer = 0;
-   ph2Seg_phiHits_superLayer = 0;
-   ph2Seg_phiHits_time = 0;
-   ph2Seg_phiHits_timeCali = 0;
-   ph2Seg_z_normChi2 = 0;
-   ph2Seg_z_nHits = 0;
-   ph2Seg_zHits_pos = 0;
-   ph2Seg_zHits_posCh = 0;
-   ph2Seg_zHits_posErr = 0;
-   ph2Seg_zHits_side = 0;
-   ph2Seg_zHits_wire = 0;
-   ph2Seg_zHits_wirePos = 0;
-   ph2Seg_zHits_layer = 0;
-   ph2Seg_zHits_time = 0;
-   ph2Seg_zHits_timeCali = 0;
-   mu_pt = 0;
-   mu_phi = 0;
-   mu_eta = 0;
-   mu_charge = 0;
-   mu_isGlobal = 0;
-   mu_isStandalone = 0;
-   mu_isTracker = 0;
-   mu_isTrackerArb = 0;
-   mu_isRPC = 0;
-   mu_firesIsoTrig = 0;
-   mu_firesTrig = 0;
-   mu_isLoose = 0;
-   mu_isMedium = 0;
-   mu_isTight = 0;
-   mu_trkIso03 = 0;
-   mu_pfIso04 = 0;
-   mu_trk_dxy = 0;
-   mu_trk_dz = 0;
-   mu_trk_algo = 0;
-   mu_trk_origAlgo = 0;
-   mu_trk_numberOfValidPixelHits = 0;
-   mu_trk_numberOfValidTrackerLayers = 0;
-   mu_trkMu_stationMask = 0;
-   mu_trkMu_numberOfMatchedStations = 0;
-   mu_trkMu_numberOfMatchedRPCLayers = 0;
-   mu_staMu_numberOfValidMuonHits = 0;
-   mu_staMu_normChi2 = 0;
-   mu_glbMu_normChi2 = 0;
-   mu_nMatches = 0;
-   mu_matches_wheel = 0;
-   mu_matches_sector = 0;
-   mu_matches_station = 0;
-   mu_matches_x = 0;
-   mu_matches_y = 0;
-   mu_matches_phi = 0;
-   mu_matches_eta = 0;
-   mu_matches_edgeX = 0;
-   mu_matches_edgeY = 0;
-   mu_matches_dXdZ = 0;
-   mu_matches_dYdZ = 0;
-   mu_staMu_nMatchSeg = 0;
-   mu_staMu_matchSegIdx = 0;
-   ltTwinMuxIn_wheel = 0;
-   ltTwinMuxIn_sector = 0;
-   ltTwinMuxIn_station = 0;
-   ltTwinMuxIn_quality = 0;
-   ltTwinMuxIn_phi = 0;
-   ltTwinMuxIn_phiB = 0;
-   ltTwinMuxIn_posLoc_x = 0;
-   ltTwinMuxIn_dirLoc_phi = 0;
-   ltTwinMuxIn_BX = 0;
-   ltTwinMuxIn_is2nd = 0;
-   ltTwinMuxOut_wheel = 0;
-   ltTwinMuxOut_sector = 0;
-   ltTwinMuxOut_station = 0;
-   ltTwinMuxOut_quality = 0;
-   ltTwinMuxOut_rpcBit = 0;
-   ltTwinMuxOut_phi = 0;
-   ltTwinMuxOut_phiB = 0;
-   ltTwinMuxOut_posLoc_x = 0;
-   ltTwinMuxOut_dirLoc_phi = 0;
-   ltTwinMuxOut_BX = 0;
-   ltTwinMuxOut_is2nd = 0;
-   ltBmtfIn_wheel = 0;
-   ltBmtfIn_sector = 0;
-   ltBmtfIn_station = 0;
-   ltBmtfIn_quality = 0;
-   ltBmtfIn_phi = 0;
-   ltBmtfIn_phiB = 0;
-   ltBmtfIn_posLoc_x = 0;
-   ltBmtfIn_dirLoc_phi = 0;
-   ltBmtfIn_BX = 0;
-   ltBmtfIn_is2nd = 0;
-   ltTwinMuxInTh_wheel = 0;
-   ltTwinMuxInTh_sector = 0;
-   ltTwinMuxInTh_station = 0;
-   ltTwinMuxInTh_BX = 0;
-   ltTwinMuxInTh_hitMap = 0;
-   ltBmtfInTh_wheel = 0;
-   ltBmtfInTh_sector = 0;
-   ltBmtfInTh_station = 0;
-   ltBmtfInTh_BX = 0;
-   ltBmtfInTh_hitMap = 0;
-   ph2TpgPhiHw_wheel = 0;
-   ph2TpgPhiHw_sector = 0;
-   ph2TpgPhiHw_station = 0;
-   ph2TpgPhiHw_quality = 0;
-   ph2TpgPhiHw_superLayer = 0;
-   ph2TpgPhiHw_rpcFlag = 0;
-   ph2TpgPhiHw_chi2 = 0;
-   ph2TpgPhiHw_phi = 0;
-   ph2TpgPhiHw_phiB = 0;
-   ph2TpgPhiHw_posLoc_x = 0;
-   ph2TpgPhiHw_dirLoc_phi = 0;
-   ph2TpgPhiHw_BX = 0;
-   ph2TpgPhiHw_t0 = 0;
-   ph2TpgPhiHw_index = 0;
-   ph2TpgPhiEmuHb_wheel = 0;
-   ph2TpgPhiEmuHb_sector = 0;
-   ph2TpgPhiEmuHb_station = 0;
-   ph2TpgPhiEmuHb_quality = 0;
-   ph2TpgPhiEmuHb_superLayer = 0;
-   ph2TpgPhiEmuHb_rpcFlag = 0;
-   ph2TpgPhiEmuHb_chi2 = 0;
-   ph2TpgPhiEmuHb_phi = 0;
-   ph2TpgPhiEmuHb_phiB = 0;
-   ph2TpgPhiEmuHb_posLoc_x = 0;
-   ph2TpgPhiEmuHb_dirLoc_phi = 0;
-   ph2TpgPhiEmuHb_BX = 0;
-   ph2TpgPhiEmuHb_t0 = 0;
-   ph2TpgPhiEmuHb_index = 0;
-   ph2TpgPhiEmuAm_wheel = 0;
-   ph2TpgPhiEmuAm_sector = 0;
-   ph2TpgPhiEmuAm_station = 0;
-   ph2TpgPhiEmuAm_quality = 0;
-   ph2TpgPhiEmuAm_superLayer = 0;
-   ph2TpgPhiEmuAm_rpcFlag = 0;
-   ph2TpgPhiEmuAm_chi2 = 0;
-   ph2TpgPhiEmuAm_phi = 0;
-   ph2TpgPhiEmuAm_phiB = 0;
-   ph2TpgPhiEmuAm_posLoc_x = 0;
-   ph2TpgPhiEmuAm_dirLoc_phi = 0;
-   ph2TpgPhiEmuAm_BX = 0;
-   ph2TpgPhiEmuAm_t0 = 0;
-   ph2TpgPhiEmuAm_index = 0;
-   tfBmtfOut_pt = 0;
-   tfBmtfOut_bx = 0;
-   tfBmtfOut_phi = 0;
-   tfBmtfOut_eta = 0;
-   tfBmtfOut_dxy = 0;
-   tfBmtfOut_qual = 0;
-   tfBmtfOut_etaFine = 0;
-   tfBmtfOut_matchedTpIdx = 0;
-   ph2TpgThetaHw_wheel = 0;
-   ph2TpgThetaHw_sector = 0;
-   ph2TpgThetaHw_station = 0;
-   ph2TpgThetaHw_quality = 0;
-   ph2TpgThetaHw_rpcFlag = 0;
-   ph2TpgThetaHw_chi2 = 0;
-   ph2TpgThetaHw_z = 0;
-   ph2TpgThetaHw_k = 0;
-   ph2TpgThetaHw_BX = 0;
-   ph2TpgThetaHw_t0 = 0;
-   ph2TpgThetaHw_index = 0;
-   ph2TpgThetaEmuAm_wheel = 0;
-   ph2TpgThetaEmuAm_sector = 0;
-   ph2TpgThetaEmuAm_station = 0;
-   ph2TpgThetaEmuAm_quality = 0;
-   ph2TpgThetaEmuAm_rpcFlag = 0;
-   ph2TpgThetaEmuAm_chi2 = 0;
-   ph2TpgThetaEmuAm_z = 0;
-   ph2TpgThetaEmuAm_k = 0;
-   ph2TpgThetaEmuAm_BX = 0;
-   ph2TpgThetaEmuAm_t0 = 0;
-   ph2TpgThetaEmuAm_index = 0;
+   gen_pdgId = nullptr;
+   gen_pt = nullptr;
+   gen_phi = nullptr;
+   gen_eta = nullptr;
+   gen_charge = nullptr;
+   digi_wheel = nullptr;
+   digi_sector = nullptr;
+   digi_station = nullptr;
+   digi_superLayer = nullptr;
+   digi_layer = nullptr;
+   digi_wire = nullptr;
+   digi_time = nullptr;
+   ph2Digi_wheel = nullptr;
+   ph2Digi_sector = nullptr;
+   ph2Digi_station = nullptr;
+   ph2Digi_superLayer = nullptr;
+   ph2Digi_layer = nullptr;
+   ph2Digi_wire = nullptr;
+   ph2Digi_time = nullptr;
+   seg_wheel = nullptr;
+   seg_sector = nullptr;
+   seg_station = nullptr;
+   seg_hasPhi = nullptr;
+   seg_hasZed = nullptr;
+   seg_posLoc_x = nullptr;
+   seg_posLoc_y = nullptr;
+   seg_posLoc_z = nullptr;
+   seg_dirLoc_x = nullptr;
+   seg_dirLoc_y = nullptr;
+   seg_dirLoc_z = nullptr;
+   seg_posLoc_x_SL1 = nullptr;
+   seg_posLoc_x_SL3 = nullptr;
+   seg_posLoc_x_midPlane = nullptr;
+   seg_posGlb_phi = nullptr;
+   seg_posGlb_eta = nullptr;
+   seg_dirGlb_phi = nullptr;
+   seg_dirGlb_eta = nullptr;
+   seg_hitsExpPos = nullptr;
+   seg_hitsExpPosCh = nullptr;
+   seg_hitsExpWire = nullptr;
+   seg_phi_t0 = nullptr;
+   seg_phi_vDrift = nullptr;
+   seg_phi_normChi2 = nullptr;
+   seg_phi_nHits = nullptr;
+   seg_phiHits_pos = nullptr;
+   seg_phiHits_posCh = nullptr;
+   seg_phiHits_posErr = nullptr;
+   seg_phiHits_side = nullptr;
+   seg_phiHits_wire = nullptr;
+   seg_phiHits_wirePos = nullptr;
+   seg_phiHits_layer = nullptr;
+   seg_phiHits_superLayer = nullptr;
+   seg_phiHits_time = nullptr;
+   seg_phiHits_timeCali = nullptr;
+   seg_z_normChi2 = nullptr;
+   seg_z_nHits = nullptr;
+   seg_zHits_pos = nullptr;
+   seg_zHits_posCh = nullptr;
+   seg_zHits_posErr = nullptr;
+   seg_zHits_side = nullptr;
+   seg_zHits_wire = nullptr;
+   seg_zHits_wirePos = nullptr;
+   seg_zHits_layer = nullptr;
+   seg_zHits_time = nullptr;
+   seg_zHits_timeCali = nullptr;
+   ph2Seg_wheel = nullptr;
+   ph2Seg_sector = nullptr;
+   ph2Seg_station = nullptr;
+   ph2Seg_hasPhi = nullptr;
+   ph2Seg_hasZed = nullptr;
+   ph2Seg_posLoc_x = nullptr;
+   ph2Seg_posLoc_y = nullptr;
+   ph2Seg_posLoc_z = nullptr;
+   ph2Seg_dirLoc_x = nullptr;
+   ph2Seg_dirLoc_y = nullptr;
+   ph2Seg_dirLoc_z = nullptr;
+   ph2Seg_posLoc_x_SL1 = nullptr;
+   ph2Seg_posLoc_x_SL3 = nullptr;
+   ph2Seg_posLoc_x_midPlane = nullptr;
+   ph2Seg_posGlb_phi = nullptr;
+   ph2Seg_posGlb_eta = nullptr;
+   ph2Seg_dirGlb_phi = nullptr;
+   ph2Seg_dirGlb_eta = nullptr;
+   ph2Seg_hitsExpPos = nullptr;
+   ph2Seg_hitsExpPosCh = nullptr;
+   ph2Seg_hitsExpWire = nullptr;
+   ph2Seg_phi_t0 = nullptr;
+   ph2Seg_phi_vDrift = nullptr;
+   ph2Seg_phi_normChi2 = nullptr;
+   ph2Seg_phi_nHits = nullptr;
+   ph2Seg_phiHits_pos = nullptr;
+   ph2Seg_phiHits_posCh = nullptr;
+   ph2Seg_phiHits_posErr = nullptr;
+   ph2Seg_phiHits_side = nullptr;
+   ph2Seg_phiHits_wire = nullptr;
+   ph2Seg_phiHits_wirePos = nullptr;
+   ph2Seg_phiHits_layer = nullptr;
+   ph2Seg_phiHits_superLayer = nullptr;
+   ph2Seg_phiHits_time = nullptr;
+   ph2Seg_phiHits_timeCali = nullptr;
+   ph2Seg_z_normChi2 = nullptr;
+   ph2Seg_z_nHits = nullptr;
+   ph2Seg_zHits_pos = nullptr;
+   ph2Seg_zHits_posCh = nullptr;
+   ph2Seg_zHits_posErr = nullptr;
+   ph2Seg_zHits_side = nullptr;
+   ph2Seg_zHits_wire = nullptr;
+   ph2Seg_zHits_wirePos = nullptr;
+   ph2Seg_zHits_layer = nullptr;
+   ph2Seg_zHits_time = nullptr;
+   ph2Seg_zHits_timeCali = nullptr;
+   mu_pt = nullptr;
+   mu_phi = nullptr;
+   mu_eta = nullptr;
+   mu_charge = nullptr;
+   mu_isGlobal = nullptr;
+   mu_isStandalone = nullptr;
+   mu_isTracker = nullptr;
+   mu_isTrackerArb = nullptr;
+   mu_isRPC = nullptr;
+   mu_firesIsoTrig = nullptr;
+   mu_firesTrig = nullptr;
+   mu_isLoose = nullptr;
+   mu_isMedium = nullptr;
+   mu_isTight = nullptr;
+   mu_trkIso03 = nullptr;
+   mu_pfIso04 = nullptr;
+   mu_trk_dxy = nullptr;
+   mu_trk_dz = nullptr;
+   mu_trk_algo = nullptr;
+   mu_trk_origAlgo = nullptr;
+   mu_trk_numberOfValidPixelHits = nullptr;
+   mu_trk_numberOfValidTrackerLayers = nullptr;
+   mu_trkMu_stationMask = nullptr;
+   mu_trkMu_numberOfMatchedStations = nullptr;
+   mu_trkMu_numberOfMatchedRPCLayers = nullptr;
+   mu_staMu_numberOfValidMuonHits = nullptr;
+   mu_staMu_normChi2 = nullptr;
+   mu_glbMu_normChi2 = nullptr;
+   mu_nMatches = nullptr;
+   mu_matches_wheel = nullptr;
+   mu_matches_sector = nullptr;
+   mu_matches_station = nullptr;
+   mu_matches_x = nullptr;
+   mu_matches_y = nullptr;
+   mu_matches_phi = nullptr;
+   mu_matches_eta = nullptr;
+   mu_matches_edgeX = nullptr;
+   mu_matches_edgeY = nullptr;
+   mu_matches_dXdZ = nullptr;
+   mu_matches_dYdZ = nullptr;
+   mu_staMu_nMatchSeg = nullptr;
+   mu_staMu_matchSegIdx = nullptr;
+   ltTwinMuxIn_wheel = nullptr;
+   ltTwinMuxIn_sector = nullptr;
+   ltTwinMuxIn_station = nullptr;
+   ltTwinMuxIn_quality = nullptr;
+   ltTwinMuxIn_phi = nullptr;
+   ltTwinMuxIn_phiB = nullptr;
+   ltTwinMuxIn_posLoc_x = nullptr;
+   ltTwinMuxIn_dirLoc_phi = nullptr;
+   ltTwinMuxIn_BX = nullptr;
+   ltTwinMuxIn_is2nd = nullptr;
+   ltTwinMuxOut_wheel = nullptr;
+   ltTwinMuxOut_sector = nullptr;
+   ltTwinMuxOut_station = nullptr;
+   ltTwinMuxOut_quality = nullptr;
+   ltTwinMuxOut_rpcBit = nullptr;
+   ltTwinMuxOut_phi = nullptr;
+   ltTwinMuxOut_phiB = nullptr;
+   ltTwinMuxOut_posLoc_x = nullptr;
+   ltTwinMuxOut_dirLoc_phi = nullptr;
+   ltTwinMuxOut_BX = nullptr;
+   ltTwinMuxOut_is2nd = nullptr;
+   ltBmtfIn_wheel = nullptr;
+   ltBmtfIn_sector = nullptr;
+   ltBmtfIn_station = nullptr;
+   ltBmtfIn_quality = nullptr;
+   ltBmtfIn_phi = nullptr;
+   ltBmtfIn_phiB = nullptr;
+   ltBmtfIn_posLoc_x = nullptr;
+   ltBmtfIn_dirLoc_phi = nullptr;
+   ltBmtfIn_BX = nullptr;
+   ltBmtfIn_is2nd = nullptr;
+   ltTwinMuxInTh_wheel = nullptr;
+   ltTwinMuxInTh_sector = nullptr;
+   ltTwinMuxInTh_station = nullptr;
+   ltTwinMuxInTh_BX = nullptr;
+   ltTwinMuxInTh_hitMap = nullptr;
+   ltBmtfInTh_wheel = nullptr;
+   ltBmtfInTh_sector = nullptr;
+   ltBmtfInTh_station = nullptr;
+   ltBmtfInTh_BX = nullptr;
+   ltBmtfInTh_hitMap = nullptr;
+   ph2TpgPhiHw_wheel = nullptr;
+   ph2TpgPhiHw_sector = nullptr;
+   ph2TpgPhiHw_station = nullptr;
+   ph2TpgPhiHw_quality = nullptr;
+   ph2TpgPhiHw_superLayer = nullptr;
+   ph2TpgPhiHw_rpcFlag = nullptr;
+   ph2TpgPhiHw_chi2 = nullptr;
+   ph2TpgPhiHw_phi = nullptr;
+   ph2TpgPhiHw_phiB = nullptr;
+   ph2TpgPhiHw_posLoc_x = nullptr;
+   ph2TpgPhiHw_dirLoc_phi = nullptr;
+   ph2TpgPhiHw_BX = nullptr;
+   ph2TpgPhiHw_t0 = nullptr;
+   ph2TpgPhiHw_index = nullptr;
+   ph2TpgPhiEmuHb_wheel = nullptr;
+   ph2TpgPhiEmuHb_sector = nullptr;
+   ph2TpgPhiEmuHb_station = nullptr;
+   ph2TpgPhiEmuHb_quality = nullptr;
+   ph2TpgPhiEmuHb_superLayer = nullptr;
+   ph2TpgPhiEmuHb_rpcFlag = nullptr;
+   ph2TpgPhiEmuHb_chi2 = nullptr;
+   ph2TpgPhiEmuHb_phi = nullptr;
+   ph2TpgPhiEmuHb_phiB = nullptr;
+   ph2TpgPhiEmuHb_posLoc_x = nullptr;
+   ph2TpgPhiEmuHb_dirLoc_phi = nullptr;
+   ph2TpgPhiEmuHb_BX = nullptr;
+   ph2TpgPhiEmuHb_t0 = nullptr;
+   ph2TpgPhiEmuHb_index = nullptr;
+   ph2TpgPhiEmuAm_wheel = nullptr;
+   ph2TpgPhiEmuAm_sector = nullptr;
+   ph2TpgPhiEmuAm_station = nullptr;
+   ph2TpgPhiEmuAm_quality = nullptr;
+   ph2TpgPhiEmuAm_superLayer = nullptr;
+   ph2TpgPhiEmuAm_rpcFlag = nullptr;
+   ph2TpgPhiEmuAm_chi2 = nullptr;
+   ph2TpgPhiEmuAm_phi = nullptr;
+   ph2TpgPhiEmuAm_phiB = nullptr;
+   ph2TpgPhiEmuAm_posLoc_x = nullptr;
+   ph2TpgPhiEmuAm_dirLoc_phi = nullptr;
+   ph2TpgPhiEmuAm_BX = nullptr;
+   ph2TpgPhiEmuAm_t0 = nullptr;
+   ph2TpgPhiEmuAm_index = nullptr;
+   tfBmtfOut_pt = nullptr;
+   tfBmtfOut_bx = nullptr;
+   tfBmtfOut_phi = nullptr;
+   tfBmtfOut_eta = nullptr;
+   tfBmtfOut_dxy = nullptr;
+   tfBmtfOut_qual = nullptr;
+   tfBmtfOut_etaFine = nullptr;
+   tfBmtfOut_matchedTpIdx = nullptr;
+   ph2TpgThetaHw_wheel = nullptr;
+   ph2TpgThetaHw_sector = nullptr;
+   ph2TpgThetaHw_station = nullptr;
+   ph2TpgThetaHw_quality = nullptr;
+   ph2TpgThetaHw_rpcFlag = nullptr;
+   ph2TpgThetaHw_chi2 = nullptr;
+   ph2TpgThetaHw_z = nullptr;
+   ph2TpgThetaHw_k = nullptr;
+   ph2TpgThetaHw_BX = nullptr;
+   ph2TpgThetaHw_t0 = nullptr;
+   ph2TpgThetaHw_index = nullptr;
+   ph2TpgThetaEmuAm_wheel = nullptr;
+   ph2TpgThetaEmuAm_sector = nullptr;
+   ph2TpgThetaEmuAm_station = nullptr;
+   ph2TpgThetaEmuAm_quality = nullptr;
+   ph2TpgThetaEmuAm_rpcFlag = nullptr;
+   ph2TpgThetaEmuAm_chi2 = nullptr;
+   ph2TpgThetaEmuAm_z = nullptr;
+   ph2TpgThetaEmuAm_k = nullptr;
+   ph2TpgThetaEmuAm_BX = nullptr;
+   ph2TpgThetaEmuAm_t0 = nullptr;
+   ph2TpgThetaEmuAm_index = nullptr;
    // Set branch addresses and branch pointers
    if (!tree) return;
    fChain = tree;
@@ -1279,7 +1304,7 @@ void Analiser::Init(TTree *tree)
    Notify();
 }
 
-Bool_t Analiser::Notify()
+Bool_t Analyser::Notify()
 {
    // The Notify() function is called when a new file is opened. This
    // can be either for a new TTree in a TChain or when when a new TTree
@@ -1290,18 +1315,11 @@ Bool_t Analiser::Notify()
    return kTRUE;
 }
 
-void Analiser::Show(Long64_t entry)
+void Analyser::Show(Long64_t entry)
 {
 // Print contents of entry.
 // If entry is not specified, print current entry
    if (!fChain) return;
    fChain->Show(entry);
 }
-Int_t Analiser::Cut(Long64_t entry)
-{
-// This function may be called from Loop.
-// returns  1 if entry is accepted.
-// returns -1 otherwise.
-   return 1;
-}
-#endif // #ifdef Analiser_cxx
+#endif // #ifdef Analyser_cxx

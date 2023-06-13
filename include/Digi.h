@@ -1,13 +1,17 @@
 #ifndef Digi_h
 #define Digi_h
 
+#include "include/Geometry.h"
+
+#include <vector>
+
 class Digi{
+
     public:
-    Digi(){};
-    Digi(int i, int wh, int sec, int stat, int SL, int L, int w, double t);
+    Digi() = delete;
+    Digi(const Geometry& geom, int i, int wh, int sec, int st, int sl, int la, int w, double t);
 
-    std::vector<Digi> FindCluster(std::vector<Digi> digisToCluster, double cut);
-
+    std::vector<Digi> findCluster(std::vector<Digi> digis, double cut) const;
 
     std::size_t index{9999};
     int wheel{-1};
@@ -22,6 +26,11 @@ class Digi{
     bool inCluster{false};
 
 };
+
+inline bool operator==(Digi const &ldigi, Digi const &rdigi) {
+  return ldigi.index == rdigi.index;
+}
+
 
 #endif
     

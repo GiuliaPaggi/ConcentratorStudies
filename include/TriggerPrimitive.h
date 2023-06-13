@@ -23,40 +23,36 @@ class TriggerPrimitive {
   double psi{-1000.0};   // in rad
 
   std::array<double, 4> phiExpected;
-  std::vector<int> Matches;
+  std::vector<int> matches;
 
   bool computedPhi{false};
   bool hasMatched{false};
 
-  bool hasRIGHT_BX{false};
+  bool hasRightBX{false};
   bool isGhostOutOfTime{false};
 
   // Cluster info
   bool inCluster{false};
   bool hasHighestQuality{false};
 
-  TriggerPrimitive(){};
+  TriggerPrimitive() = default;
   TriggerPrimitive(std::size_t i, int tpg_wheel, int tpg_sector, int tpg_station,
                                    int tpg_quality, int tpg_phi, int tpg_phiB, int tpg_BX,
                                    int tpg_t0, float tpg_posLoc_x);
 
   ~TriggerPrimitive(){};
 
-  void ComputeExpectedPhi();
-  bool Match(TriggerPrimitive &TP, double PhiCut, double TimeCut);
-  vector<int> MakeCluster(TriggerPrimitive listOfPrimitives[], int size,
-                          double phicut);  // taglio in cm, valore ragionevole 5 cm
-  void FindHigherQuality(TriggerPrimitive listOfPrimitives[], vector<int> clusterIndeces);
-  vector<int> SelectRIGHT_BX(TriggerPrimitive listOfPrimitives[], vector<int> clusterIndeces);
-  void CheckBX();
+  void computeExpectedPhi();
+  bool match(TriggerPrimitive &tp, double phiCut, double timeCut);
+  // std::vector<int> makeCluster(TriggerPrimitive listOfPrimitives[], int size,
+  //                         double phiCut);  // taglio in cm, valore ragionevole 5 cm
+  void findHigherQuality(TriggerPrimitive listOfPrimitives[], const std::vector<int>& clusterIndices);
+  // std::vector<int> selectRightBX(TriggerPrimitive listOfPrimitives[], const std::vector<int>& clusterIndices);
+  void checkBX();
 };
 
-bool operator==(TriggerPrimitive const &ltp, TriggerPrimitive const &rtp) {
+inline bool operator==(TriggerPrimitive const &ltp, TriggerPrimitive const &rtp) {
   return ltp.index == rtp.index;
 }
 
 #endif
-
-// classe cluster-> qualità massima al bx giusto, n di ghost al bx giusto, n
-// ghost al bx sbagliato, accedere a tutti (vettore indici di trigger primitive)
-// parti da prompt

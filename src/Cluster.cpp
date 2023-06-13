@@ -1,225 +1,215 @@
-#include "Cluster.h"
-#include "Segment.h"
+#include "include/Cluster.h"
 
 #include <algorithm>
 #include <iostream>
 
 constexpr int RIGHT_BX{-380};
 
-Cluster::Cluster(std::vector<TriggerPrimitive> & tps, std::vector<Segment> & seg, std::vector<Digi> & digis, double xCut, double digiCut, int wh, int sec, int st)
+Cluster::Cluster(std::vector<TriggerPrimitive> &tps, std::vector<Segment> &segs,
+                 std::vector<Digi> &digis, double xCut, double digiCut, int wh,
+                 int sec, int st)
     : wheel{wh}, sector{sec}, station{st} {
   // in a given wheel-station-sector finds the in-time highest-quality TP
-  // and looks for other TP in a |xCut| interval 
-  // CB TODO: actually xCut not used yet, making 1 cluster per chamber
-  // it's cluster even if no TPs but there's a segment, or more than 10 digis in a SL
+  // and looks for other TP in a |xCut| interval it's cluster even if no TPs but 
+  // here's a segment, or more than 10 digis in a SL
 
+  double clusterX{NAN};
 
+  auto inChamber = [=](auto const & obj) {
+    return obj.wheel == wh && obj.station == st &&
+                        obj.sector == sec && obj.inCluster == false;
+  };
+
+  auto inRange = [&clusterX, &xCut](auto const & obj) {
+    return   std::abs(obj.xLoc - clusterX) < xCut;
+  };
+
+  auto inRangeDigi = [&clusterX, &digiCut](auto const & obj) {
+    return   std::abs(obj.xLoc - clusterX) < digiCut;
+  };
+
+  auto compareTPs = [](auto const &tp1, auto const &tp2) {
+    return (tp1.BX != RIGHT_BX && tp2.BX == RIGHT_BX) ||
+           (tp1.quality < tp2.quality);
+  };
+
+  auto compareSegs = [](Segment &s1, Segment &s2) {
+    return s1.nPhiHits < s2.nPhiHits;
+  };
+
+  auto toggleCluster = [](auto &collection, const auto &target) {
+      for (auto &obj : collection) {
+        if (obj == target) {
+          obj.inCluster = true;
+          return;
+        }
+      }
+    };
+    
   // ########## TPs cluster #############
   std::vector<TriggerPrimitive> tps_in_chamber;
-  // select primitives from a given chamber: wheel-station-sector
-  std::copy_if(tps.begin(), tps.end(), std::back_inserter(tps_in_chamber),
-               [=](auto& tp) { return tp.wheel == wh && tp.station == st && tp.sector == sec && tp.inCluster == false; });
+  std::copy_if(tps.begin(), tps.end(), std::back_inserter(tps_in_chamber), inChamber);
 
-  auto n_tps_in_chamber{tps_in_chamber.size()};
-  
-  if (n_tps_in_chamber > 0 ) {
-    // cluster closeby TPS from tps in chamber 
+  auto bestTPIt{std::max_element(tps_in_chamber.begin(), tps_in_chamber.end(), compareTPs)};
+
+  if (bestTPIt != tps_in_chamber.end()) {
+    _bestTP = *bestTPIt;
+    toggleCluster(tps,_bestTP);
+    tps_in_chamber.erase(bestTPIt);
+  }
+
+  if (tps_in_chamber.size() > 0) {
+    // cluster close-by TPS from tps in chamber
     std::vector<TriggerPrimitive> cluster;
-    
-    std::copy_if( tps_in_chamber.begin(), tps_in_chamber.end(), std::back_inserter(cluster), 
-                  [=] (auto &tp) {return tp.wheel == wh && tp.station == st && tp.sector == sec && std::abs(tp.xLoc-tps_in_chamber[0].xLoc) < xCut;} );
-    for (auto &tp : tps){
-      for (auto &Cl_tp :cluster){
-        if (Cl_tp.index == tp.index) tp.inCluster = true;
-      }
+    clusterX = _bestTP.xLoc;
+
+    std::copy_if(tps_in_chamber.begin(), tps_in_chamber.end(),
+                 std::back_inserter(cluster), inRange);
+
+    for (const auto &tp : cluster) {
+      toggleCluster(tps,tp);
     }
 
-    //sorting (actually partitioning) the vector:
-    // - first part is in-time TPs
-    // - second part is out-of-time TPs
-    auto first_oot = std::partition(cluster.begin(), cluster.end(),
-                                    [=](auto& tp) { return tp.BX == RIGHT_BX; });
+    // sorting (actually partitioning) the vector:
+    //  - first part is in-time TPs
+    //  - second part is out-of-time TPs
+    auto first_oot =
+        std::partition(cluster.begin(), cluster.end(),
+                       [=](const auto &tp) { return tp.BX == RIGHT_BX; });
 
-    // moving OOT TPs to dedicated std::vector and removing them from tps_in_chamber
+    // moving OOT TPs to dedicated std::vector and removing them from
+    // tps_in_chamber
     std::move(first_oot, cluster.end(), std::back_inserter(_ootGhosts));
     cluster.erase(first_oot, cluster.end());
 
-    // If I have more than one in-time TP -> look for the highest quality and assign to _bestTP
-    if (cluster.size() > 1){
-      auto compareQuality = [](auto& tp1 , auto& tp2) { return tp1.quality < tp2.quality; } ; 
-      auto best_tp = ( std::max_element(cluster.begin(), cluster.end(), compareQuality));
-      _bestTP = *best_tp;
-      foundTP = true;
-    }
-    // If I have one in-time TP, assign to _bestTP
-    else if (cluster.size() == 1) {
-      _bestTP = tps_in_chamber[0];
-      foundTP = true;
-    }
-
-    if (bestTPQuality() > 0) {
-      // If I've found _bestTP I remove it from cluster so I only have the ItGhost in it
-      cluster.erase(std::remove(cluster.begin(), cluster.end(), _bestTP));
-    }
-
     _itGhosts = std::move(cluster);
-
   }
 
   // ########## Segments cluster #############
 
+    std::vector<Segment> segments_in_chamber;
+    std::copy_if(segs.begin(), segs.end(),
+                 std::back_inserter(segments_in_chamber), inChamber);
+                 
   // if I found TP cluster-> look for segment around it
-  if (foundTP){
-    std::copy_if(seg.begin(), seg.end(), std::back_inserter(_SegmentCluster),
-                [=](auto& segm){ return  segm.wheel == wh && segm.station == st && segm.sector == sec  && segm.inCluster == false && std::abs(segm.xLoc - _bestTP.xLoc) < xCut; });
-    for (auto &s : seg){
-      for (auto &Cl_seg : _SegmentCluster){
-        if (Cl_seg.index == s.index) {
-          s.inCluster = true;
-        }
-      }
+  if (segments_in_chamber.size() > 0) {
+
+    if (bestTPQuality() == -1) {
+      auto bestSegIt = std::max_element(segments_in_chamber.begin(),
+                                        segments_in_chamber.end(), compareSegs);
+      _bestSeg = *bestSegIt;
+      clusterX = _bestSeg.xLoc;
+    }
+
+    std::copy_if(segments_in_chamber.begin(), segments_in_chamber.end(),
+                   std::back_inserter(_segmentCluster), inRange);
+                   
+    for (auto &seg : _segmentCluster) {
+      toggleCluster(segs,seg);
     }
     
-    // if I find any look for best qual
-    if (_SegmentCluster.size() > 0) {
-      foundSeg = true;
-      segMatched = true;
-
-      if (_SegmentCluster.size() == 1){
-        _bestSeg = _SegmentCluster[0];
-      }
-      // if there's more than a segment find the higher quality one
-      else{
-      auto compareQuality = [](Segment& s1, Segment& s2){return s1.nPhiHits < s2.nPhiHits; };
-      auto best_seg = std::max_element(_SegmentCluster.begin(), _SegmentCluster.end(), compareQuality);
-      _bestSeg = *best_seg;
-      }   
-
-      _matchedSeg = _bestSeg; 
-    }
-  }
-
-  // if I don't have a TPs cluster I try to make a segment cluster
-  else {
-    if ( seg.size() == 1) {
-      _bestSeg = seg[0];
-      seg.erase(seg.begin(), seg.end());
-      seg[0].inCluster = true;
-    }
-
-    else{
-      // find segments in same chamber
-      std::vector<Segment> segments_in_chamber;  
-      std::copy_if(seg.begin(), seg.end(), std::back_inserter(segments_in_chamber),
-                [=](auto& segm) { return segm.wheel == wh && segm.station == st && segm.sector == sec && segm.inCluster == false; });
-
-      std::copy_if(segments_in_chamber.begin(), segments_in_chamber.end(), std::back_inserter(_SegmentCluster),
-          [=](auto& segm) { return std::abs(segm.xLoc -segments_in_chamber[0].xLoc) < xCut; });
-
-      for (auto &s : seg){
-        for (auto &Cl_seg : _SegmentCluster){
-          if (Cl_seg.index == s.index) s.inCluster = true;
-        }
-      }
-
-      // find best quality for segment -> higher n of Phihits
-      if (_SegmentCluster.size() > 0) {
-        foundSeg = true;
-        if (_SegmentCluster.size() == 1){
-          _bestSeg = _SegmentCluster[0];
-        }
-        
-        else{
-        auto compareQuality = [](Segment& s1, Segment& s2){return s1.nPhiHits < s2.nPhiHits; };
-        auto best_seg = std::max_element(_SegmentCluster.begin(), _SegmentCluster.end(), compareQuality);
-        _bestSeg = *best_seg;
-        }    
-      }
+    if (segClusterSize() && bestTPQuality() > 0) {
+      auto bestSegIt = std::max_element(_segmentCluster.begin(),
+                                        _segmentCluster.end(), compareSegs);
+      _bestSeg = *bestSegIt;
     }
   }
 
   // ########## Digi cluster #############
-  std::vector<Digi> DigiClusterSl1;
-  std::vector<Digi> DigiClusterSl3;
+  std::vector<Digi> digis_in_chamber;
+  std::copy_if(digis.begin(), digis.end(),
+               std::back_inserter(digis_in_chamber), [&](const auto & digi){
+                return inChamber(digi) && digi.superlayer != 2;});
+
+  auto first_sl3 = 
+    std::partition(digis_in_chamber.begin(), digis_in_chamber.end(),
+                       [=](const auto &digi) { return digi.superlayer == 1; });
   
-  // if I found TP cluster-> look for digis around it
-  if (foundTP){
-    std::copy_if(digis.begin(), digis.end(), std::back_inserter(DigiClusterSl1),
-                [=](auto& dig) {return dig.wheel == wh && dig.station == st && dig.sector == sec && dig.superlayer == 1 && dig.inCluster == false && std::abs(dig.xLoc - _bestTP.xLoc) < digiCut;});
-    
-    std::copy_if(digis.begin(), digis.end(), std::back_inserter(DigiClusterSl3),
-                [=](auto& dig) {return dig.wheel == wh && dig.station == st && dig.sector == sec && dig.superlayer == 3 && dig.inCluster == false && std::abs(dig.xLoc - _bestTP.xLoc) < digiCut;});
+  // if I found TP or segment cluster-> look for digis around it
+  if (bestTPQuality() > 0 || bestSegPhiHits() > 0) {
+      std::copy_if(digis_in_chamber.begin(), first_sl3, std::back_inserter(_digiCluster), inRangeDigi);
 
-  }
+      if(_digiCluster.size() >= 10) {
+        sl1Cluster = true;
+      } else {
+        _digiCluster.clear();
+      }
+      
+      std::copy_if(first_sl3, digis_in_chamber.end(), std::back_inserter(_digiCluster), inRangeDigi);
+      
+      if(_digiCluster.size() >= 10 + (10 * sl1Cluster)) {
+        sl3Cluster = true;
+      } else {
+        _digiCluster.erase(_digiCluster.begin() + (10 * sl1Cluster), _digiCluster.end());
+      }
+      
+  } else {
 
-  else {
     std::vector<Digi> digis_in_chamber_sl1;
     std::vector<Digi> digis_in_chamber_sl3;
 
-    std::copy_if(digis.begin(), digis.end(), std::back_inserter(digis_in_chamber_sl1),
-                [=](auto& dig) {return dig.wheel == wh && dig.station == st && dig.sector == sec && dig.superlayer == 1 && dig.inCluster == false;});
-    
-    std::copy_if(digis.begin(), digis.end(), std::back_inserter(digis_in_chamber_sl3),
-                [=](auto& dig) {return dig.wheel == wh && dig.station == st && dig.sector == sec && dig.superlayer == 3 && dig.inCluster == false;});
+    std::move(digis_in_chamber.begin(), first_sl3, std::back_inserter(digis_in_chamber_sl1));
+    std::move(first_sl3, digis_in_chamber.end(), std::back_inserter(digis_in_chamber_sl3));
 
-    if (digis_in_chamber_sl1.size() > 10 || digis_in_chamber_sl3.size() > 10){
-      DigiClusterSl1 = digis_in_chamber_sl1[0].FindCluster(digis_in_chamber_sl1, digiCut);
-      DigiClusterSl3 = digis_in_chamber_sl3[0].FindCluster(digis_in_chamber_sl3, digiCut);
+    if (digis_in_chamber_sl1.size() > 10) {
+      _digiCluster = digis_in_chamber_sl1[0].findCluster(digis_in_chamber_sl1, digiCut);
+      if(_digiCluster.size() >= 10) {
+        sl1Cluster = true;
+      } else {
+        _digiCluster.clear();
+      }
     }
-  }  
 
-  // at least 10 digi per superlayer to build a digi cluster
-  if (DigiClusterSl1.size() > 10 ){
-    _DigiCluster = DigiClusterSl1;
-    foundDigi = true;
-    SL1Cluster = true;
-  }
-  if (DigiClusterSl3.size() > 10 ){
-    
-    if (foundDigi == false) {
-      _DigiCluster = DigiClusterSl3;
-      foundDigi = true;
+    if (digis_in_chamber_sl3.size() > 10) {
+      auto tmpCluster = digis_in_chamber_sl3[0].findCluster(digis_in_chamber_sl3, digiCut);
+      if(tmpCluster.size() >= 10 ) {
+        sl3Cluster = true;
+        std::move(tmpCluster.begin(), tmpCluster.end(), std::back_inserter(_digiCluster));
+      }
     }
-    else _DigiCluster.insert(_DigiCluster.end(), DigiClusterSl3.begin(), DigiClusterSl3.end());
-    SL3Cluster = true;
   }
 
-  for (auto &d : digis){
-    for (auto Cl_d : _DigiCluster) d.inCluster = true;
+  for (const auto &digi : _digiCluster) {
+    toggleCluster(digis, digi);
   }
-  
 }
 
 int Cluster::ootSize() const { return _ootGhosts.size(); };
-const std::vector<TriggerPrimitive> & Cluster::ootGhosts() const { return _ootGhosts; };
+const std::vector<TriggerPrimitive> &Cluster::ootGhosts() const {
+  return _ootGhosts;
+};
 
 int Cluster::itSize() const { return _itGhosts.size(); };
-const std::vector<TriggerPrimitive> & Cluster::itGhosts() const { return _itGhosts; };
+const std::vector<TriggerPrimitive> &Cluster::itGhosts() const {
+  return _itGhosts;
+};
 
-int Cluster::tpClusterSize() const { return _ootGhosts.size() + _itGhosts.size() + 1; };
-
+int Cluster::tpClusterSize() const {
+  return _ootGhosts.size() + _itGhosts.size() + 1;
+};
 
 int Cluster::bestTPIndex() const { return _bestTP.index; };
 int Cluster::bestTPQuality() const { return _bestTP.quality; };
-const TriggerPrimitive & Cluster::bestTP() const { return _bestTP; };
+const TriggerPrimitive &Cluster::bestTP() const { return _bestTP; };
 
-int Cluster::itCountIf(std::function<bool(TriggerPrimitive const&)> f) const {
+int Cluster::itCountIf(std::function<bool(TriggerPrimitive const &)> f) const {
   return std::count_if(_itGhosts.begin(), _itGhosts.end(), f);
 }
 
-int Cluster::ootCountIf(std::function<bool(TriggerPrimitive const&)> f) const {
+int Cluster::ootCountIf(std::function<bool(TriggerPrimitive const &)> f) const {
   return std::count_if(_ootGhosts.begin(), _ootGhosts.end(), f);
 }
 
-void Cluster::MatchMu( int muWh, int muStat, int muSec,  double muXedge, double muYedge, double muX, int muIndex, int iMu ) {
-  if (muWh == wheel && muStat == station && muSec == sector && muXedge < -5  && muYedge < -5){
+void Cluster::matchMu(int muWh, int muStat, int muSec, double muXedge,
+                      double muYedge, double muX, int muIndex, int iMu) {
+  if (muWh == wheel && muStat == station && muSec == sector && muXedge < -5 &&
+      muYedge < -5) {
     // if the extrapolated segment is within 10 cm from _bestTP
-    if (segMatched && std::abs( _bestSeg.xLoc - muX ) < 10) {
+    if (segMatched && std::abs(_bestSeg.xLoc - muX) < 10) {
       muMatchedIndex[0] = iMu;
-      muMatchedIndex[1] = muIndex;  
+      muMatchedIndex[1] = muIndex;
       muMatched = true;
-    }
-    else if ( !segMatched && std::abs( _bestTP.xLoc - muX ) < 10 ){
+    } else if (!segMatched && std::abs(_bestTP.xLoc - muX) < 10) {
       muMatchedIndex[0] = iMu;
       muMatchedIndex[1] = muIndex;
       muMatched = true;
@@ -227,22 +217,24 @@ void Cluster::MatchMu( int muWh, int muStat, int muSec,  double muXedge, double 
   }
 }
 
-int Cluster::matchedSegIndex() const {return _matchedSeg.index; };
-int Cluster::matchedSegPhiHits() const {return _matchedSeg.nPhiHits; };
-const Segment& Cluster::matchedSeg() const {return _matchedSeg; };
-int Cluster::segClusterSize() const {return _SegmentCluster.size(); };
-const std::vector<Segment> Cluster::segCluster() const {return _SegmentCluster;};
+int Cluster::segClusterSize() const { return _segmentCluster.size(); };
+const std::vector<Segment> & Cluster::segCluster() const {
+  return _segmentCluster;
+};
 
-int Cluster::bestSegPhiHits() const {return _bestSeg.nPhiHits; };
-const Segment& Cluster::bestSeg() const {return _bestSeg; };
+int Cluster::bestSegIndex() const { return _bestSeg.index; };
+int Cluster::bestSegPhiHits() const { return _bestSeg.nPhiHits; };
+const Segment &Cluster::bestSeg() const { return _bestSeg; };
 
-void Cluster::MatchDigi(std::vector<Digi> const& digis, double xCut){
+void Cluster::matchDigi(std::vector<Digi> const &digis, double xCut) {
   Segment seg = _bestSeg;
 
-  for (auto const &digi: digis) {
-    if (digi.sector != seg.sector && digi.wheel != seg.wheel && digi.station!= seg.station) continue;
-    for (int i = 0; i < seg.nPhiHits; ++i){
-      if (std::abs(seg.xLoc - digi.xLoc ) < xCut ) {
+  for (auto const &digi : digis) {
+    if (digi.sector != seg.sector && digi.wheel != seg.wheel &&
+        digi.station != seg.station)
+      continue;
+    for (int i = 0; i < seg.nPhiHits; ++i) {
+      if (std::abs(seg.xLoc - digi.xLoc) < xCut) {
         digiMatched = true;
         _matchedDigis.emplace_back(digi);
       }
@@ -250,14 +242,17 @@ void Cluster::MatchDigi(std::vector<Digi> const& digis, double xCut){
   }
 };
 
-const std::vector<Digi> Cluster::matchedDigi() const{ return _matchedDigis; };
+const std::vector<Digi> &Cluster::matchedDigi() const { return _matchedDigis; };
 
-const int Cluster::GetNDigi() const {return _matchedDigis.size(); };
+int Cluster::nDigi() const { return _matchedDigis.size(); };
 
-const int Cluster::WhichSL() const{
-  if (SL1Cluster && SL3Cluster) return 5;
-  else if (SL1Cluster && !SL3Cluster) return 1;
-  else if (!SL1Cluster && SL3Cluster) return 3;
-  else return 0;
+int Cluster::digiSL() const {
+  if (sl1Cluster && sl3Cluster)
+    return 5;
+  else if (sl1Cluster)
+    return 1;
+  else if (sl3Cluster)
+    return 3;
+  else
+    return 0;
 };
-

@@ -1,20 +1,20 @@
-#include "TriggerPrimitive.h"
+#include "include/TriggerPrimitive.h"
 
 #include "TMath.h"
 
 TriggerPrimitive::TriggerPrimitive(std::size_t i, int tpg_wheel, int tpg_sector, int tpg_station,
                                    int tpg_quality, int tpg_phi, int tpg_phiB, int tpg_BX,
                                    int tpg_t0, float tpg_posLoc_x)
-    : index(i),
-      wheel(tpg_wheel),
-      sector(tpg_sector),
-      station(tpg_station),
-      quality(tpg_quality),
-      BX(tpg_BX),
-      t0(tpg_t0),
-      xLoc(tpg_posLoc_x) {
+    : index{i},
+      wheel{tpg_wheel},
+      sector{tpg_sector},
+      station{tpg_station},
+      quality{tpg_quality},
+      BX{tpg_BX},
+      t0{tpg_t0},
+      xLoc{tpg_posLoc_x} {
   //(17 bits between 0.5 and 0.5 rad)
-  phi = TMath::Pi() / 6 * sector + tpg_phi * .5 / 65536;
+  phi = TMath::Pi() / 6 * sector + tpg_phi * .5 / 65536; // CB what if phi < 0
   if (phi > TMath::Pi() * 2) {
     phi = phi - TMath::Pi() * 2;
   }
@@ -24,9 +24,9 @@ TriggerPrimitive::TriggerPrimitive(std::size_t i, int tpg_wheel, int tpg_sector,
   psi = phi + phiB;
 };
 
-void TriggerPrimitive::ComputeExpectedPhi() {
-  const double MB[4] = {402.2, 490.5, 597.5, 700.0};
-  for (int stat = 1; stat < 5; ++stat) {
+void TriggerPrimitive::computeExpectedPhi() {
+  const double MB[4] = {402.2, 490.5, 597.5, 700.0}; // CB this could go in GEOM
+  for (int stat = 1; stat < 5; ++stat) { // CB could use GEOM
     if (station == stat){
       phiExpected[stat-1] = phi;
     }
@@ -38,55 +38,54 @@ void TriggerPrimitive::ComputeExpectedPhi() {
   computedPhi = true;
 };
 
-bool TriggerPrimitive::Match(TriggerPrimitive &TP, double phicut, double timecut) {
-  if (TP.index == index) return false;
-  if (!computedPhi) ComputeExpectedPhi();
+bool TriggerPrimitive::match(TriggerPrimitive &tp, double phiCut, double timeCut) {
+  if (tp.index == index) return false;
+  if (!computedPhi) computeExpectedPhi();
 
-  double DeltaPhiExp = 0;
-  std::abs(phiExpected[TP.station] - TP.phi) < TMath::Pi()
-      ? DeltaPhiExp = std::abs(phiExpected[TP.station] - TP.phi)
-      : DeltaPhiExp = std::abs(2 * TMath::Pi() - std::abs(phiExpected[TP.station] - TP.phi));
+  double deltaPhiExp = std::abs(phiExpected[tp.station] - tp.phi) < TMath::Pi()
+                       ? std::abs(phiExpected[tp.station] - tp.phi)
+                       : std::abs(2 * TMath::Pi() - std::abs(phiExpected[tp.station] - tp.phi));
 
-  double Deltat0 = std::abs(t0 - TP.t0);
+  double deltat0 = std::abs(t0 - tp.t0);
 
-  if (DeltaPhiExp < phicut) {
+  if (deltaPhiExp < phiCut) {
 
-    TP.Matches.push_back(index);  // NELLE QUALITà BASSE METTO L'INDICE DI QUELLA ALTA
-    Matches.push_back(TP.index);  // NELLE QUALITà ALTE METTO L'INDICE DI QUELLE CHE MATCHANO
+    tp.matches.push_back(index);  // NELLE QUALITà BASSE METTO L'INDICE DI QUELLA ALTA
+    matches.push_back(tp.index);  // NELLE QUALITà ALTE METTO L'INDICE DI QUELLE CHE MATCHANO
 
-    if (wheel == 0 && std::abs(TP.wheel) < 3) {
-      if (TP.quality == 1 && Deltat0 < timecut) {
-        TP.hasMatched = true;
+    if (wheel == 0 && std::abs(tp.wheel) < 3) {
+      if (tp.quality == 1 && deltat0 < timeCut) {
+        tp.hasMatched = true;
         hasMatched = true;
         return true;
 
-      } else if (TP.quality > 1) {
-        TP.hasMatched = true;
-        hasMatched = true;
-        return true;
-      }
-    }
-
-    if (wheel > 0 && TP.wheel >= wheel) {
-      if (TP.quality == 1 && Deltat0 < timecut) {
-        TP.hasMatched = true;
-        hasMatched = true;
-        return true;
-
-      } else if (TP.quality > 1) {
-        TP.hasMatched = true;
+      } else if (tp.quality > 1) {
+        tp.hasMatched = true;
         hasMatched = true;
         return true;
       }
     }
 
-    if (wheel < 0 && TP.wheel <= wheel && TP.wheel != -5 && wheel != 5) {
-      if (TP.quality == 1 && Deltat0 < timecut) {
-        TP.hasMatched = true;
+    if (wheel > 0 && tp.wheel >= wheel) {
+      if (tp.quality == 1 && deltat0 < timeCut) {
+        tp.hasMatched = true;
         hasMatched = true;
         return true;
-      } else if (TP.quality > 1) {
-        TP.hasMatched = true;
+
+      } else if (tp.quality > 1) {
+        tp.hasMatched = true;
+        hasMatched = true;
+        return true;
+      }
+    }
+
+    if (wheel < 0 && tp.wheel <= wheel && tp.wheel != -5 && wheel != 5) { // CB wheel?
+      if (tp.quality == 1 && deltat0 < timeCut) {
+        tp.hasMatched = true;
+        hasMatched = true;
+        return true;
+      } else if (tp.quality > 1) {
+        tp.hasMatched = true;
         hasMatched = true;
         return true;
       }
@@ -98,7 +97,7 @@ bool TriggerPrimitive::Match(TriggerPrimitive &TP, double phicut, double timecut
 /*/ Makes cluster from the TP that calls it, checking all the TP in list, returns
 // vector of index of the cluster
 
-vector<int> TriggerPrimitive::MakeCluster(TriggerPrimitive listOfPrimitives[], int size,
+vector<int> TriggerPrimitive::makeCluster(TriggerPrimitive listOfPrimitives[], int size,
                                           double xcut) {
   vector<int> Cluster;
 
@@ -118,28 +117,30 @@ vector<int> TriggerPrimitive::MakeCluster(TriggerPrimitive listOfPrimitives[], i
   return Cluster;
 };*/
 
-void TriggerPrimitive::FindHigherQuality(TriggerPrimitive listOfPrimitives[],
-                                         vector<int> clusterIndex) {
+void TriggerPrimitive::findHigherQuality(TriggerPrimitive listOfPrimitives[],
+                                        const std::vector<int>& clusterIndex) {
   if (!inCluster) return;
   if (clusterIndex.size() == 1) return;
 
-  int maxQ = quality;
-  int maxQindex = index;
+  int maxQ{quality};
+  std::size_t maxQIndex{index};
+
   for (auto element : clusterIndex) {
     if (hasHighestQuality) return;
     if (listOfPrimitives[element].quality > maxQ) {
       maxQ = listOfPrimitives[element].quality;
-      maxQindex = element;
+      maxQIndex = element;
     }
   }
 
-  listOfPrimitives[maxQindex].hasHighestQuality = true;
+  listOfPrimitives[maxQIndex].hasHighestQuality = true;
 };
 
-
-void TriggerPrimitive::CheckBX() {
-  if (std::abs(BX + 380) < 1)
-    hasRIGHT_BX = true;
-  else
+void TriggerPrimitive::checkBX() {
+  if (std::abs(BX + 380) < 1){ // CB should put somewhere else?
+    hasRightBX = true;
+  }
+  else {
     isGhostOutOfTime = true;
+  }
 };
