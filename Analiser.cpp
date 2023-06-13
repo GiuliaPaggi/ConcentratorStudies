@@ -230,25 +230,43 @@ void Analiser::ClusterAnalisis(std::vector<Cluster> CLtoAnalize, string CLtype, 
 
 }
 
-std::vector<Cluster> MissingClusters(std::vector<Cluster> FirstCLVector, std::vector<Cluster> SecondCLvector) {
+std::vector<Cluster> MissingClusters(std::vector<Cluster> FirstCLVector, std::vector<Cluster> SecondCLvector, string CLtype) {
   // FirstCL is the smaller set (filtered) , SecondCL is the bigger one (all) 
   std::vector<Cluster> missingClusters;
 
-  for (auto FirstCluster : FirstCLVector) {
+  for (const auto FirstCluster : FirstCLVector) {
     if (!FirstCluster.foundTP) continue;
     bool found = false;
     auto wh{FirstCluster.wheel};
     auto sec{FirstCluster.sector};
     auto st{FirstCluster.station};
 
-    for (auto SecondCluster : SecondCLvector) {
+    int n_cluster_uguali = std::count_if(SecondCLvector.begin(), SecondCLvector.end(), [&](const auto & cl) {return cl == FirstCluster;} );
+    /*for (auto SecondCluster : SecondCLvector) {
       if (!SecondCluster.foundTP) continue;
-      if ( std::abs(FirstCluster.bestTP().xLoc - SecondCluster .bestTP().xLoc) < 3.5 ) {
+      if ( FirstCluster == SecondCluster ){//std::abs(FirstCluster.bestTP().xLoc - SecondCluster .bestTP().xLoc) < 3.5 ) {
+        if (found) std::cout << " ne avevo già trovato uno " << std::endl;
         found = true;
       }
+    }*/
+    if (n_cluster_uguali == 0) {
+      missingClusters.push_back(FirstCluster);
+      std::cout << "Missing cluster for "<< CLtype.c_str() <<"\n" << FirstCluster << std::endl;
+      
+      std::cout << "In the filtered cluster there are also " << std::endl;
+      for (const auto otherFirstclusters : FirstCLVector) {
+        if (otherFirstclusters.wheel != wh || otherFirstclusters.station != st || otherFirstclusters.sector != sec) continue;
+        std::cout << otherFirstclusters << std::endl;
+      }
+      
+      std::cout << "In the same position there were:" <<std::endl;
+      for (const auto SecondCluster : SecondCLvector ) {
+        if (SecondCluster.wheel != wh || SecondCluster.station != st || SecondCluster.sector != sec) continue;
+        std::cout << SecondCluster << std::endl;
+      }
+      std::cout << " ################################################################################# " << std::endl; 
     }
-
-    if (found == false) missingClusters.push_back(FirstCluster);
+    //if (found == false) missingClusters.push_back(FirstCluster);
 
   }
   return missingClusters;
@@ -436,8 +454,8 @@ void Analiser::Loop() {
         if (res != 0) m_plots[Form("%s_ResFilteredCluster", "HQFilter")]->Fill(res);
       }
     }
-    
-    std::vector<Cluster> ClusterCut_LQFilter = MissingClusters(MatchFromLQ_clusters, clusters);
+   
+    std::vector<Cluster> ClusterCut_LQFilter = MissingClusters(MatchFromLQ_clusters, clusters, "LQFilter");
     removedLQFilter += ClusterCut_LQFilter.size();
     if (ClusterCut_LQFilter.size() > 0) {
       double meanxLoc{0};
@@ -449,9 +467,10 @@ void Analiser::Loop() {
       m_plots[Form("%s_meanXLoc_RemovedClusters_st%d", "LQFilter" , ClusterCut_LQFilter[0].station)]->Fill(meanxLoc/ClusterCut_LQFilter.size());
     }
 
-    std::vector<Cluster> ClusterCut_HQFilter = MissingClusters(MatchFromHQ_clusters, clusters);
-    removedHQFilter += ClusterCut_HQFilter.size();
+    std::vector<Cluster> ClusterCut_HQFilter = MissingClusters(MatchFromHQ_clusters, clusters, "HQFilter");
 
+    removedHQFilter += ClusterCut_HQFilter.size();
+    /*
     if (ClusterCut_HQFilter.size() > 0) {
       double meanxLoc{0};
       for (auto Cl: ClusterCut_HQFilter) {
@@ -490,6 +509,7 @@ void Analiser::Loop() {
 
       m_plots[Form("%s_meanXLoc_RemovedClusters_st%d", "HQFilter" , ClusterCut_HQFilter[0].station)]->Fill(meanxLoc/ClusterCut_HQFilter.size());
     }
+    */
 
     for (auto &LQ : ClusterCut_LQFilter){
       for (auto &HQ :ClusterCut_HQFilter){

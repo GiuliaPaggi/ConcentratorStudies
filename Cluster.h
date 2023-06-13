@@ -80,7 +80,19 @@ private:
 };
 
 bool operator==(Cluster const &lCL, Cluster const &rCL) {
-  return (lCL.wheel == rCL.wheel && lCL.sector == rCL.sector && lCL.station == rCL.station && lCL.foundTP && rCL.foundTP &&  lCL.bestTP().xLoc == rCL.bestTP().xLoc  );
+  return (lCL.wheel == rCL.wheel && lCL.sector == rCL.sector && lCL.station == rCL.station && lCL.foundTP && rCL.foundTP &&  lCL.bestTP().quality == rCL.bestTP().quality);
+}
+
+std::ostream& operator <<(std::ostream& os, Cluster const cluster) {
+  os << "Cluster in wh " << cluster.wheel << 
+                       " stat " << cluster.station << 
+                       " sector " << cluster.sector << 
+                       " has BestTP of quality " << cluster.bestTPQuality() << 
+                       " in xLoc " << cluster.bestTP().xLoc << 
+                       ", has " << cluster.segClusterSize() << " segments " <<
+                       " and has " << cluster.GetNDigi() << " digis " << 
+                       endl;   
+  return os;
 }
 
 #endif
