@@ -13,150 +13,245 @@
 #include <iostream>
 #include <vector>
 
-void TestAnalyser::Loop() {
+// CB not optimal, but readable
+const std::vector<int> WHEELS{-2, -1, 0, 1, 2};
+const std::vector<int> SECTORS{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+const std::vector<int> STATIONS{1, 2, 3, 4};
 
-  Geometry geom{};
+double T_MIN{-9800};
+double T_MAX{-9200};
+double BX_MIN{-392};
+double BX_MAX{-368};
 
-  // const std::array<double, 4> MB{402.2, 490.5, 597.5, 700.0}; // CB unused, but could go in Geometry
-  // const int LOW_QUAL_CUT{0}; // CB unused
-  const int HIGH_QUAL_CUT{5};
-  // const double PSI_CUT{TMath::Pi() / 6.0}; // CB unused
-  double PHI_CUT{0.02};
-  // const double PHI_CUT_2{0.01}; // CB unused
-  const double T0_CUT{12.5};
-  const double X_CUT{5.0};
-  const double DIGI_CUT{10.0};
-  // const int CORRECT_BX{380}; // CB unused
-
-  double T_MIN{-9800};
-  double T_MAX{-9200};
-  double BX_MIN{-392};
-  double BX_MAX{-368};
+const std::array<double, 4> MB{402.2, 490.5, 597.5, 700.0};
+const int LOW_QUAL_CUT{0};
+const int HIGH_QUAL_CUT{5};
+const double PSI_CUT{TMath::Pi() / 6.0};
+double PHI_CUT{0.02};
+const double PHI_CUT_2{0.01};
+const double T0_CUT{12.5};
+const double X_CUT{5.0};
+const double DIGI_CUT{10.0};
+const int CORRECT_BX{-380};
 
 
-  // CB unused
-  // TFile *file = new TFile("./DTDPGNtuple_12_4_SingleMu_20-100pT_Eta1p25.root");   
-  //  ./VtxSmeared/DTDPGNtuple_12_4_SingleMu_20-100pT_Eta1p25_VtxSmeared.root
-  //./DTDPGNtuple_12_4_SingleMu_20-100pT_Eta1p25.root
+void TestAnalyser::DefinePlot(){
+
+  m_plots["DigiSL"] = new TH1D("DigiSL", "DigiSL", 6, -0.5, 5.5); 
+  m_plots["t0_LowQuality"] = new TH1D("t0_LowQuality", "t0_LowQuality; t0 (ns); Entries", 100, T_MIN, T_MAX);
+  m_plots["BX_LowQuality"] = new TH1D("BX_LowQuality", "BX_LowQuality; BX; Entries", 24, BX_MIN, BX_MAX);
+  m_plots["BX_LowQ_more1HQ"] =  new TH1D("BX_LowQ_more1HQ", "BX_LowQ_more1HQ; BX; Entries", 24, BX_MIN, BX_MAX);
+
   
-  TFile outputFile("outputFile.root","RECREATE");
-  
-  TH1D *t0_AllQuality = new TH1D("t0_AllQuality", "t0_AllQuality", 100, T_MIN, T_MAX);
-  TH1D *t0_HighQuality =
-      new TH1D("t0_HighQuality", "t0_HighQuality", 100, T_MIN, T_MAX);  // 3+3 4+4 3+4
-  // CB unused
-  // TH1D *t0_IntermediateQuality =
-  //    new TH1D("t0_IntermediateQuality", "t0_IntermediateQuality", 100, T_MIN,
-  //             T_MAX);  // 4+2 3+2 qualities, not there if we use slice-test configuration for emulator
-  TH1D *t0_LowQuality = new TH1D("t0_LowQuality", "t0_LowQuality", 100, T_MIN, T_MAX);
-  TH1D *t0_Selected = new TH1D("t0_Selected", "t0_Selected", 100, T_MIN, T_MAX);
+  for (auto CLtype : tags){
+    m_plots[Form("%s_N_DigiPerCluster", CLtype.c_str())] = new TH1D(Form("%s_N_DigiPerCluster", CLtype.c_str()), Form("%s_N_DigiPerCluster; # digi in cluster; Entries", CLtype.c_str()), 50, 0, 50); 
+    m_plots[Form("%s_N_Ghost", CLtype.c_str())] = new TH1I(Form("%s_N_Ghost", CLtype.c_str()), Form("%s_N_Ghost", CLtype.c_str()), 20, 0, 20);
+    m_plots[Form("%s_Q_Best", CLtype.c_str())] = new TH1I(Form("%s_Q_Best", CLtype.c_str()), Form("%s_Q_Best", CLtype.c_str()), 10, 0, 10);
+    m_plots[Form("%s_Q_Ghost", CLtype.c_str())] = new TH1I(Form("%s_Q_Ghost", CLtype.c_str()), Form("%s_Q_Ghost", CLtype.c_str()), 10, 0, 10);
+    m_plots[Form("%s_OoTGhosts", CLtype.c_str())] = new TH1D(Form("%s_OoTGhosts", CLtype.c_str()), Form("%s_OoTGhosts", CLtype.c_str()), 20, 0, 20);
+    m_plots[Form("%s_ITGhosts", CLtype.c_str())] = new TH1D(Form("%s_ITGhosts", CLtype.c_str()), Form("%s_ITGhosts", CLtype.c_str()), 20, 0, 20);
+    m_plots[Form("%s_BX_ITGhosts", CLtype.c_str())] = new TH1I(Form("%s_BX_ITGhosts", CLtype.c_str()), Form("%s_BX_ITGhosts", CLtype.c_str()), 24, BX_MIN, BX_MAX);
+    m_plots[Form("%s_BX_OoTGhosts", CLtype.c_str())] = new TH1I(Form("%s_BX_OoTGhosts", CLtype.c_str()), Form("%s_BX_OoTGhosts", CLtype.c_str()), 25, BX_MIN, BX_MAX);
+    m_plots[Form("%s_Res_ITGhosts", CLtype.c_str())] = new TH1D(Form("%s_Res_ITGhosts", CLtype.c_str()), Form("%s_Res_ITGhosts", CLtype.c_str()), 111, -5.5, 5.5);
+    m_plots[Form("%s_Res_OoTGhosts", CLtype.c_str())] = new TH1D(Form("%s_Res_OoTGhosts", CLtype.c_str()), Form("%s_Res_OoTGhosts", CLtype.c_str()), 111, -5.5, 5.5);
+    m_plots[Form("%s_Res_SegMatched", CLtype.c_str())]= new TH1D(Form("%s_Res_SegMatched", CLtype.c_str()), Form("%s_Res_SegMatched; cluster.bestTP().xLoc - seg.xLoc; Entries", CLtype.c_str()), 101, -10, 10);
+    m_plots[Form("%s_LowQ_matched", CLtype.c_str())] = new TH1D(Form("%s_LowQ_matched", CLtype.c_str()), Form("%s_LowQ_matched; t0 (ns); Entries", CLtype.c_str()), 100, T_MIN, T_MAX); 
+    m_plots[Form("%s_BX_LowQ_matched", CLtype.c_str())] =  new TH1D(Form("%s_BX_LowQ_matched", CLtype.c_str()), Form("%s_BX_LowQ_matched,BX;Entries", CLtype.c_str()), 24, BX_MIN, BX_MAX);
+    m_plots[Form("%s_t0_Selected", CLtype.c_str())] = new TH1D(Form("%s_t0_Selected", CLtype.c_str()), Form("%s_t0_Selected; t0 (ns); Entries", CLtype.c_str()), 100, T_MIN, T_MAX);
+    m_plots[Form("%s_RemovedQuality", CLtype.c_str())] = new TH1D(Form("%s_RemovedQuality", CLtype.c_str()), Form("%s_RemovedQuality; Quality; Entries", CLtype.c_str()), 10, -0.5, 9.5);
+    m_plots[Form("%s_ResFilteredCluster", CLtype.c_str())] = new TH1D(Form("%s_ResFilteredCluster", CLtype.c_str()), Form("%s_ResFilteredCluster; FilteredCl - OriginalCl; Entries ", CLtype.c_str()), 101, -50, 50);
+    m_plots[Form("%s_ClusterSize", CLtype.c_str())] = new TH1I(Form("%s_ClusterSize", CLtype.c_str()), Form("%s_ClusterSize; # TPs in cluster; Entries", CLtype.c_str()), 21, -.5, 20.5 );
 
-  TH1D *LowQ_matched = new TH1D("LowQ_matched", "LowQ_matched", 100, T_MIN, T_MAX);
-  TH1D *HighQ_matched = new TH1D("HighQ_matched", "HighQ_matched", 100, T_MIN, T_MAX);
+    m_2Dplots[Form("%s_Q_OoTGhosts", CLtype.c_str())] = new TH2D(Form("%s_Q_OoTGhosts", CLtype.c_str()), Form("%s_Q_OoTGhosts;High Quality;Out of time Ghost Quality", CLtype.c_str()), 10, 0, 10, 10, 0, 10);
+    m_2Dplots[Form("%s_Q_ITGhosts", CLtype.c_str())] = new TH2D(Form("%s_Q_ITGhosts", CLtype.c_str()), Form("%s_Q_ITGhosts;High Quality;In time Ghost Quality", CLtype.c_str()), 10, 0, 10, 10, 0, 10);
+    
+    m_counters[Form("%s_nClustersGhosts", CLtype.c_str())] = 0;
+    m_counters[Form("%s_ooTHQCount", CLtype.c_str())] = 0;
+    m_counters[Form("%s_nClusters", CLtype.c_str())] = 0;
+    m_counters[Form("%s_nTPs", CLtype.c_str())] = 0;
 
-  TH1D *BX_LowQuality = new TH1D("BX_LowQuality", "BX_LowQuality,BX;", 24, BX_MIN, BX_MAX);
-  TH1D *BX_LowQ_matched =
-      new TH1D("BX_LowQ_matched", "BX_LowQ_matched,BX;Entries", 24, BX_MIN, BX_MAX);
-  TH1D *BX_LowQ_more1HQ =
-      new TH1D("BX_LowQ_more1HQ", "BX_LowQ_more1HQ,BX;Entries", 24, BX_MIN, BX_MAX);
+    for (const auto st : STATIONS) {
+      m_plots[Form("%s_DigiTime_st%d", CLtype.c_str(), st)]   = new TH1D( Form("%s_DigiTime_st%d", CLtype.c_str(), st), Form("%s_DigiTime_st%d; mean digi cluster time (ns); entries", CLtype.c_str(), st), 300, 400, 1000 );
+      m_plots[Form("%s_x_LowBestQ_st%d", CLtype.c_str(), st)] = new TH1D(Form("%s_x_LowBestQ_st%d", CLtype.c_str(), st), Form("%s_x_LowBestQ_st%d; xLoc; Entries",CLtype.c_str(), st ), 100, -220, 220);
+      
+      m_2Dplots[Form("%s_N_Cluster_st%d", CLtype.c_str(), st)] = new TH2I(Form("%s_N_Cluster_st%d", CLtype.c_str(), st), Form("%s_N_Cluster_st%d", CLtype.c_str(), st), 14, -0.5, 13.5, 7, -3.5, 3.5); 
+      m_2Dplots[Form("%s_N_Digi_st%d", CLtype.c_str(), st)] = new TH2I(Form("%s_N_Digi_st%d", CLtype.c_str(), st), Form("%s_N_Digi_st%d", CLtype.c_str(), st), 14, -0.5, 13.5, 7, -3.5, 3.5);
+      m_2Dplots[Form("%s_TPs_LocalDirectionvsPosition_st%d", CLtype.c_str(), st)] = new TH2D(Form("%s_TPs_LocalDirectionvsPosition_st%d", CLtype.c_str(), st), Form("AllTPs_LocalDirectionvsPosition_st%d", st ), 200, -200, 200, 11, -1, 1 );
 
-  TH1D *t0_Selected_Psi = new TH1D("t0_Selected_Psi", "t0_Selected_Psi", 100, T_MIN, T_MAX);
-  TH1D *LowQ_matched_Psi = new TH1D("LowQ_matched_Psi", "LowQ_matched_Psi", 100, T_MIN, T_MAX);
-  TH1D *HighQ_matched_Psi = new TH1D("HighQ_matched_Psi", "HighQ_matched_Psi", 100, T_MIN, T_MAX);
-
-  TH1D *LowQ_more1HQ = new TH1D("LowQ_more1HQ", "LowQ_more1HQ", 100, T_MIN, T_MAX);
-  TH1D *LowQ_more1HQ_Phi = new TH1D("LowQ_more1HQ_Phi", "LowQ_more1HQ_Phi", 100, T_MIN, T_MAX);
-
-  TEfficiency *Match_vs_Eta = new TEfficiency("Match_vs_Eta", "Match_vs_Eta", 24, 0, 1);
-  TEfficiency *Match_vs_Phi = new TEfficiency("Match_vs_Phi", "Match_vs_Phi", 20, -TMath::Pi(), TMath::Pi());
-  TEfficiency *Match_vs_Pt = new TEfficiency("Match_vs_Pt", "Match_vs_Pt", 40, 20, 100);
-
-  TEfficiency *MatchAndCut_vs_Eta =
-      new TEfficiency("MatchAndCut_vs_Eta", "MatchPhi_vs_Eta", 24, 0, 1);
-  TEfficiency *MatchAndCut_vs_Phi =
-      new TEfficiency("MatchAndCut_vs_Phi", "MatchPhi_vs_Phi", 20, -TMath::Pi(), TMath::Pi());
-  TEfficiency *MatchAndCut_vs_Pt =
-      new TEfficiency("MatchAndCut_vs_Pt", "MatchPhi_vs_Pt", 40, 20, 100);
-
-  TH1D *OoTGhosts = new TH1D("OoTGhosts", "OoTGhosts", 20, 0, 20);
-  TH1D *ITGhosts = new TH1D("ITGhosts", "ITGhosts", 20, 0, 20);
-
-  TH1I *BX_ITGhosts = new TH1I("BX_ITGhosts", "BX_ITGhosts", 24, BX_MIN, BX_MAX);
-  TH1I *BX_OoTGhosts = new TH1I("BX_OoTGhosts", "BX_OoTGhosts", 24, BX_MIN, BX_MAX);
-  TH1D *Res_ITGhosts = new TH1D("Res_ITGhosts", "Res_ITGhosts", 110, -5.5, 5.5);
-  TH1D *Res_OoTGhosts = new TH1D("Res_OoTGhosts", "Res_OoTGhosts", 110, -5.5, 5.5);
-
-  TH2D *Q_OoTGhosts = new TH2D("Q_OoTGhosts", "Q_OoTGhosts;High Quality;Out of time Ghost Quality",
-                               10, 0, 10, 10, 0, 10);
-  TH2D *Q_ITGhosts = new TH2D("Q_ITGhosts", "Q_ITGhosts;High Quality;In time Ghost Quality", 10, 0, 10, 10, 0, 10);
-
-  TH1I *N_Ghost = new TH1I("N_Ghost", "N_Ghost", 20, 0, 20);
-  TH1I *Q_Best = new TH1I("Q_Best", "Q_Best", 10, 0, 10);
-  TH1I *Q_Ghost = new TH1I("Q_Ghost", "Q_Ghost", 10, 0, 10);
-
-  TH2I N_Cluster_style("N_Cluster_style", "N_Cluster_style", 14, -0.5, 13.5, 7, -3.5, 3.5);
-  TH2I *N_Cluster[4];
-  TH2I *N_Digi[4];
-  for (const auto st : geom.STATIONS) {
-    N_Cluster[st - 1] = new TH2I(Form("N_Cluster_st%d", st), Form("N_Cluster_st%d", st), 14, -0.5, 13.5, 7, -3.5, 3.5);
-    N_Digi[st - 1] = new TH2I(Form("N_Digi_st%d", st), Form("N_Digi_st%d", st), 14, -0.5, 13.5, 7, -3.5, 3.5);
+      m_effs[Form("%s_ClusterEfficiency_st%d", CLtype.c_str(), st)] = new TEfficiency(Form("%s_ClusterEfficiency_st%d", CLtype.c_str(), st), Form("%s_ClusterEfficiency_st%d; sector; wheel", CLtype.c_str(), st), 14, -0.5, 13.5, 7, -3.5, 3.5);
+      m_effs[Form("%s_Eff_SegMatch_st%d", CLtype.c_str(), st)] = new TEfficiency(Form("%s_Eff_SegMatch_st%d", CLtype.c_str(), st), Form("%s_Eff_SegMatch_st%d; sector; wheel", CLtype.c_str(), st), 14, -0.5, 13.5, 7, -3.5, 3.5);
+      m_effs[Form("%s_Eff_DigiMatch_st%d", CLtype.c_str(), st)] = new TEfficiency(Form("%s_Eff_DigiMatch_st%d", CLtype.c_str(), st), Form("%s_Eff_DigiMatch_st%d; sector; wheel", CLtype.c_str(), st), 14, -0.5, 13.5, 7, -3.5, 3.5);
+      
+      for (const auto wh : WHEELS){
+        m_plots[Form("%s_Digi_residual_st%d_wh%d", CLtype.c_str(), st, wh)] = new TH1D( Form("%s_Digi_residual_st%d_wh%d", CLtype.c_str(), st, wh), Form("%s_Digi_residual_st%d_wh%d; cluster.bestSeg.xLoc - digi.xLoc; entries", CLtype.c_str(), st, wh), 51, -10, 10 );
+      }
+    }
   }
 
-  TH1D *x_LowBestQ[4];
+  for (const auto st : STATIONS) {
+    m_plots[Form("Res_MuMatched_st%d", st)] = new TH1D(Form("Res_MuMatched_st%d", st), Form("Res_MuMatched; cluster.bestTP().xLoc - mu.xLoc; Entries"), 101, -10, 10);
+    
+    m_2Dplots[Form("N_MuMatch_st%d", st)] = new TH2I(Form("N_MuMatch_st%d", st), Form("N_MuMatch_st%d; sector ; wheel", st), 14, -0.5, 13.5, 7, -3.5, 3.5);
+    m_2Dplots[Form("LQnotinHQ_st%d", st)] = new TH2I(Form("LQnotinHQ_st%d", st), Form("LQnotinHQ_st%d; sector; wheel", st), 14, -0.5, 13.5, 7, -3.5, 3.5);
+    m_2Dplots[Form("HQnotinLQ_st%d", st)] = new TH2I(Form("HQnotinLQ_st%d", st), Form("HQnotinLQ_st%d; sector; wheel", st), 14, -0.5, 13.5, 7, -3.5, 3.5);
 
-  TH1D *Res_MuMatched = new TH1D("Res_MuMatched", "Res_MuMatched; cluster.bestTP().xLoc - mu.xLoc; Entries", 101, -10, 10);
-  TH1D *Res_SegMatched = new TH1D("Res_SegMatched", "Res_SegMatched; cluster.bestTP().xLoc - seg.xLoc; Entries", 101, -10, 10);
-  TH2I *N_MuMatch[4];
-  TH1D *Phi_MuMatch[4];
-  TEfficiency *Eff_MuMatch[4];
-  TH2D *NMuMatch_vs_phi[4];
+    m_effs[Form("Eff_MuMatch_st%d", st)] = new TEfficiency(Form("Eff_MuMatch_st%d", st), Form("Eff_MuMatch_st%d; sector; wheel", st), 14, -0.5, 13.5, 7, -3.5, 3.5);
+  }
+}
 
-  TEfficiency *Eff_SegMatch[4];
+void TestAnalyser::ClusterAnalisis(std::vector<Cluster> CLtoAnalize, std::string CLtype,  std::vector<Segment> Segments){
+    for (auto const &cluster : CLtoAnalize) {
+      auto wh{cluster.wheel};
+      auto sec{cluster.sector};
+      if (sec == 13 ) sec = 4;
+      if (sec == 14 ) sec = 10;
+      auto st{cluster.station};
 
-  TEfficiency *Eff_DigiMatch[4];
-  TH1D *Digi_residual[5][4];
-  TH1D *N_DigiPerCluster = new TH1D("N_DigiPerCluster", "N_DigiPerCluster", 40, 0, 40); 
-  TH1D *DigiSL = new TH1D("DigiSL", "DigiSL", 6, -0.5, 5.5); 
+      m_2Dplots[Form("%s_TPs_LocalDirectionvsPosition_st%d", CLtype.c_str(), st)]->Fill(cluster.bestTP().xLoc, cluster.bestTP().psi);
+      m_plots[Form("%s_ClusterSize", CLtype.c_str())]->Fill(cluster.tpClusterSize()); 
+      // ########## Study TP ghost distribution #############
+      ++m_counters[Form("%s_nClusters", CLtype.c_str())];
+      m_counters[Form("%s_ooTHQCount", CLtype.c_str())] += cluster.ootCountIf([=](TriggerPrimitive const & tp) { return tp.quality > HIGH_QUAL_CUT; });
 
-  for (const auto st : geom.STATIONS) {
-    N_MuMatch[st - 1] = new TH2I(Form("N_MuMatch_st%d", st), Form("N_MuMatch_st%d; sector ; wheel", st), 14, -0.5, 13.5, 7, -3.5, 3.5);
-    Eff_MuMatch[st-1] = new TEfficiency(Form("Eff_MuMatch_st%d", st), Form("Eff_MuMatch_st%d; sector; wheel", st), 14, -0.5, 13.5, 7, -3.5, 3.5);
-    x_LowBestQ[st-1] = new TH1D(Form("x_LowBestQ_st%d", st), Form("x_LowBestQ_st%d; xLoc; Entries",st ), 100, -220, 220);
-    NMuMatch_vs_phi[st-1] = new TH2D(Form("NMuMatch_vs_phi_st%d", st), Form("NMuMatch_vs_phi_st%d ; Muon_Phi; N_MuMatch", st), 50, -TMath::Pi(), TMath::Pi(), 6, 1, 7 );
-    Phi_MuMatch[st-1] = new TH1D(Form("Phi_MuMatch_st%d", st), Form("Phi_MuMatch_st%d; Muon_phi; Entries", st), 50,-TMath::Pi(), TMath::Pi() );
-    Eff_SegMatch[st-1] = new TEfficiency(Form("Eff_SegMatch_st%d", st), Form("Eff_SegMatch_st%d; sector; wheel", st), 14, -0.5, 13.5, 7, -3.5, 3.5);
-    Eff_DigiMatch[st-1] = new TEfficiency(Form("Eff_DigiMatch_st%d", st), Form("Eff_DigiMatch_st%d; sector; wheel", st), 14, -0.5, 13.5, 7, -3.5, 3.5);
-    //Digi_residual[st-1] = new TH1D( Form("Digi_residual_st%d", st), Form("Digi_residual_st%d; digi.xLoc-seg.wirePos; entries", st), 100, -20, 20 );
-    for (const auto wh : geom.WHEELS){
-      Digi_residual[wh+2][st-1] = new TH1D( Form("Digi_residual_st%d_wh%d", st, wh), Form("Digi_residual_st%d_wh%d; cluster.bestSeg.xLoc - digi.xLoc; entries", st, wh), 50, -10, 10 );
+      int bestQ = cluster.bestTPQuality();
+      int ootSize{cluster.ootSize()};
+      int itSize{cluster.itSize()};
+
+      m_plots[Form("%s_Q_Best", CLtype.c_str())]->Fill(bestQ);
+      m_plots[Form("%s_ITGhosts", CLtype.c_str())]->Fill(itSize);
+      m_plots[Form("%s_OoTGhosts", CLtype.c_str())]->Fill(ootSize);
+      m_plots[Form("%s_N_Ghost", CLtype.c_str())]->Fill(ootSize + itSize);
+      m_counters[Form("%s_nTPs", CLtype.c_str())] += cluster.tpClusterSize();
+
+
+      if (bestQ == 1) m_plots[Form("%s_x_LowBestQ_st%d", CLtype.c_str(), st)]->Fill(cluster.bestTP().xLoc);
+      
+      m_2Dplots[Form("%s_N_Cluster_st%d", CLtype.c_str(), st)]->Fill(sec, wh);
+      
+      if (cluster.hasGhosts()) {
+        ++m_counters[Form("%s_nClustersGhosts", CLtype.c_str())];
+
+        for (const auto &ghost : cluster.ootGhosts()) {
+          m_plots[Form("%s_BX_OoTGhosts", CLtype.c_str())]  ->Fill(ghost.BX);
+          m_plots[Form("%s_Res_OoTGhosts", CLtype.c_str())] ->Fill(ghost.xLoc - cluster.bestTP().xLoc);
+          m_2Dplots[Form("%s_Q_OoTGhosts", CLtype.c_str())] ->Fill(bestQ, ghost.quality);
+          m_plots[Form("%s_Q_Ghost", CLtype.c_str())]  ->Fill(ghost.quality);
+
+          if (ghost.quality == 1) {
+            m_plots[Form("%s_t0_Selected", CLtype.c_str())]->Fill(ghost.t0);
+            m_plots[Form("%s_LowQ_matched", CLtype.c_str())]->Fill(ghost.t0);
+            m_plots[Form("%s_BX_LowQ_matched", CLtype.c_str())]->Fill(ghost.BX);
+          }
+        }
+
+        for (const auto &ghost : cluster.itGhosts()) {
+          m_plots[Form("%s_BX_ITGhosts", CLtype.c_str())]->Fill(ghost.BX);
+          m_plots[Form("%s_Res_ITGhosts", CLtype.c_str())]->Fill(ghost.xLoc - cluster.bestTP().xLoc);
+          m_2Dplots[Form("%s_Q_ITGhosts", CLtype.c_str())]->Fill(bestQ, ghost.quality);
+          m_plots[Form("%s_Q_Ghost", CLtype.c_str())]->Fill(ghost.quality);
+
+          if (ghost.quality == 1) {
+            m_plots[Form("%s_t0_Selected", CLtype.c_str())]->Fill(ghost.t0);
+            m_plots[Form("%s_LowQ_matched", CLtype.c_str())]->Fill(ghost.t0);
+            m_plots[Form("%s_BX_LowQ_matched", CLtype.c_str())]->Fill(ghost.BX);
+          }
+        }
+      }
+
+      if (cluster.muMatched && cluster.bestSeg().nPhiHits >= 4 ) {
+        bool efficient = std::abs(cluster.bestTP().BX - CORRECT_BX) < 1;
+        m_effs[Form("%s_ClusterEfficiency_st%d", CLtype.c_str(), st)]->Fill(efficient , sec, wh); 
+      }
+
+      // ########## Study segment matching #############
+      m_effs[Form("%s_Eff_SegMatch_st%d", CLtype.c_str(), st)]->Fill(cluster.segMatched, sec, wh);
+      for (const auto s : Segments)
+      if (cluster.foundTP && s.wheel == wh && s.sector == sec && s.station == st){
+        m_plots[Form("%s_Res_SegMatched", CLtype.c_str())]->Fill( cluster.bestTP().xLoc - s.xLoc );
+      }
+      
+      // ########## Study digi clusters #############
+      m_effs[Form("%s_Eff_DigiMatch_st%d", CLtype.c_str(), st)]->Fill(cluster.digiMatched, sec, wh);
+      
+      if (cluster.digiMatched){
+        for (auto &digi : cluster.matchedDigi()){
+          m_plots[Form("%s_Digi_residual_st%d_wh%d", CLtype.c_str(), st, wh)]->Fill( cluster.bestSeg().xLoc - digi.xLoc );
+        }
+      }
+     
+      m_plots[Form("%s_N_DigiPerCluster", CLtype.c_str())]->Fill(cluster.nDigi());
+      m_plots["DigiSL"]->Fill(cluster.digiSL());
+
+      if (cluster.foundDigi) m_2Dplots[Form("%s_N_Digi_st%d", CLtype.c_str(), st)]->Fill(sec, wh);
     }
-   }
+}
+
+std::vector<Cluster> MissingClusters(std::vector<Cluster> FirstCLVector, std::vector<Cluster> SecondCLvector, std::string CLtype) {
+  // FirstCL is the smaller set (filtered) , SecondCL is the bigger one (all) 
+  std::vector<Cluster> missingClusters;
+
+  for (const auto &FirstCluster : FirstCLVector) {
+    if (!FirstCluster.foundTP) continue;
+    auto wh{FirstCluster.wheel};
+    auto sec{FirstCluster.sector};
+    auto st{FirstCluster.station};
+
+    int n_cluster_uguali = std::count_if(SecondCLvector.begin(), SecondCLvector.end(), [&](const auto & cl) {return cl == FirstCluster;} );
+    if (n_cluster_uguali == 0) {
+      missingClusters.push_back(FirstCluster);
+      std::cout << "Missing cluster for "<< CLtype.c_str() <<"\n" << FirstCluster << std::endl;
+      
+      std::cout << "In the filtered cluster there are also " << std::endl;
+      for (const auto &otherFirstclusters : FirstCLVector) {
+        if (otherFirstclusters.wheel != wh || otherFirstclusters.station != st || otherFirstclusters.sector != sec) continue;
+        std::cout << otherFirstclusters << std::endl;
+      }
+      
+      std::cout << "In the same position there were:" <<std::endl;
+      for (const auto &SecondCluster : SecondCLvector ) {
+        if (SecondCluster.wheel != wh || SecondCluster.station != st || SecondCluster.sector != sec) continue;
+        std::cout << SecondCluster << std::endl;
+      }
+      std::cout << " ################################################################################# " << std::endl; 
+    }
+
+  }
+  return missingClusters;
+}
 
 
-  double nClustersGhosts{};
-  double ooTHQCount{};
-  double nClusters{};
+void TestAnalyser::Loop() {
+  Geometry geom{};
+
+  TFile outputFile("results/prompt/outputFile.root","RECREATE");
+  outputFile.cd();
+
+  tags.push_back("PreFilter");
+  tags.push_back("LQFilter");
+  tags.push_back("HQFilter");
+ 
+// 4+2 3+2 qualities, not there if we use slice-test configuration for emulator
+ 
+  DefinePlot();
+
+  double removedHQFilter{0};
+  double removedLQFilter{0}; 
 
   if (fChain == 0) return;
 
   Long64_t n_entries = fChain->GetEntriesFast();
 
-  // CB unused
-  //Long64_t nbytes = 0, nb = 0;
+  Long64_t nbytes = 0, nb = 0;
   for (Long64_t jentry = 0; jentry < n_entries; ++jentry) {
     Long64_t ientry = LoadTree(jentry);
     if (ientry < 0) break;
-    //nb = 
-    fChain->GetEntry(jentry);
-    //nbytes += nb;
+    nb = fChain->GetEntry(jentry);
+    nbytes += nb;
 
     // ########## LOOP ON EVENTS #############
-    if (jentry % 100 == 0) {
-      std::cout << "Processing event: " << jentry << '\r' << std::flush;
-    }
+    if (jentry % 100 == 0)std::cout << "Processing event: " << jentry << '\r' <<std::flush;
 
     if (std::abs(gen_pdgId->at(0)) != 13 || std::abs(gen_eta->at(0)) > 0.8) continue;
-    // cout << "---------------------------------------" << endl;
 
     // ########## CREATE TPs std::vector #############
     std::vector<TriggerPrimitive> tps;
@@ -168,6 +263,7 @@ void TestAnalyser::Loop() {
                                         ph2TpgPhiEmuAm_phiB->at(j), ph2TpgPhiEmuAm_BX->at(j),
                                         ph2TpgPhiEmuAm_t0->at(j), ph2TpgPhiEmuAm_posLoc_x->at(j)});
     }
+
     // ########## CREATE Digis std::vector #############
     std::vector<Digi> digis;
     for (std::size_t i = 0; i < digi_nDigis; ++i ){
@@ -176,6 +272,7 @@ void TestAnalyser::Loop() {
                               digi_layer->at(i), digi_wire->at(i), 
                               digi_time->at(i)));
     }
+
     //########## BUILD segments std::vector #############
     std::vector<Segment> segments;
     for (std::size_t j = 0; j < seg_nSegments; ++j) {
@@ -184,388 +281,149 @@ void TestAnalyser::Loop() {
                                     seg_posLoc_x->at(j)));
     }
 
+    std::vector<Cluster> MatchFromLQ_clusters;
+    std::vector<Cluster> MatchFromHQ_clusters;
+
     // ########## BUILD clusters std::vector #############
     auto clusters = buildClusters(geom, tps, segments, digis, X_CUT, DIGI_CUT);
 
-    // ########## ATTEMPT cluster - muon extrapolation matching #############
-    for (auto &cluster: clusters){
-      for (std::size_t iMu{}; iMu < mu_nMuons; ++iMu){
+    // ########## BUILD cluster with phi matchin information #############
+    // tag TPs that match using the extrapolation on a straight line 
+  
+    std::vector<TriggerPrimitive> MatchFromLQ_tps = tps;
+    std::vector<TriggerPrimitive> MatchFromHQ_tps = tps;
 
-        for (std::size_t i{}; i < mu_nMatches->at(iMu); ++i){
-          int muTrkWheel = getXY<float>(mu_matches_wheel, iMu, i);
-          int muTrkStation = getXY<float>(mu_matches_station, iMu, i);
-          int muTrkSector = getXY<float>(mu_matches_sector, iMu, i);
-          if (muTrkSector == 13 ) muTrkSector = 4;
-          if (muTrkSector == 14 ) muTrkSector = 10; 
-          double muTrkX = getXY<float>(mu_matches_x, iMu, i);
-          double edgeX = getXY<float>(mu_matches_edgeX, iMu, i);
-          double edgeY = getXY<float>(mu_matches_edgeY, iMu, i);
+    //extrapolate from LQ TP
+    for (TriggerPrimitive &tp : MatchFromLQ_tps) {
 
-          cluster.matchMu(muTrkWheel, muTrkStation, muTrkSector, edgeX, edgeY, muTrkX, i, iMu);
-          cluster.matchDigi(digis, DIGI_CUT);
-        }
-      }
-    }
-
-
-    // ########## RUN SOME ANALYSIS #############
-    for (auto const &cluster : clusters) {
-      auto wh{cluster.wheel};
-      auto sec{cluster.sector};
-      if (sec == 13 ) sec = 4;
-      if (sec == 14 ) sec = 10;
-      auto st{cluster.station};
-
-      // ########## Study TP ghost distribution #############
-      ++nClusters;
-      ooTHQCount += cluster.ootCountIf([=](TriggerPrimitive const & tp) { return tp.quality > HIGH_QUAL_CUT; });
-
-      int bestQ = cluster.bestTPQuality();
-      int ootSize{cluster.ootSize()};
-      int itSize{cluster.itSize()};
-
-      Q_Best->Fill(bestQ);
-      ITGhosts->Fill(itSize);
-      OoTGhosts->Fill(ootSize);
-      N_Ghost->Fill(ootSize + itSize);
-
-      if (bestQ == 1) x_LowBestQ[st-1]->Fill(cluster.bestTP().xLoc);
-
-      Eff_MuMatch[st-1]->Fill(cluster.muMatched, sec, wh);
-        if (cluster.muMatched) {
-          Res_MuMatched->Fill(cluster.bestTP().xLoc - getXY<float>(mu_matches_x, cluster.muMatchedIndex[0], cluster.muMatchedIndex[1]));
-          N_MuMatch[st-1]->Fill(sec, wh);
-      }
-      
-      N_Cluster[st - 1]->Fill(sec, wh);
-      
-      if (!cluster.hasGhosts()) continue;
-      ++nClustersGhosts;
-
-      for (const auto &ghost : cluster.ootGhosts()) {
-        BX_OoTGhosts->Fill(ghost.BX);
-        Res_OoTGhosts->Fill(ghost.xLoc - cluster.bestTP().xLoc);
-        Q_OoTGhosts->Fill(bestQ, ghost.quality);
-        Q_Ghost->Fill(ghost.quality);
-      }
-
-      for (const auto &ghost : cluster.itGhosts()) {
-        BX_ITGhosts->Fill(ghost.BX);
-        Res_ITGhosts->Fill(ghost.xLoc - cluster.bestTP().xLoc);
-        Q_ITGhosts->Fill(bestQ, ghost.quality);
-        Q_Ghost->Fill(ghost.quality);
-      }
-
-      // ########## Study segment matching #############
-
-      Eff_SegMatch[st-1]->Fill(cluster.segMatched, sec, wh);
-      for (const auto s : segments)
-      if (cluster.foundTP && s.wheel == wh && s.sector == sec && s.station == st){
-        Res_SegMatched->Fill( cluster.bestTP().xLoc - s.xLoc );
-      }
-      
-      // ########## Study digi clusters #############
-      Eff_DigiMatch[st-1]->Fill(cluster.digiMatched, sec, wh);
-      if (cluster.digiMatched){
-        for (auto &digi : cluster.matchedDigi()){
-          Digi_residual[wh+2][st-1] ->Fill( cluster.bestSeg().xLoc - digi.xLoc );
-        }
-      }
-     
-      N_DigiPerCluster->Fill(cluster.nDigi());
-      DigiSL->Fill(cluster.digiSL());
-
-      if (cluster.foundDigi) N_Digi[st - 1]->Fill(sec, wh);
-
-      }
-
-
-    for (TriggerPrimitive &tp : tps) {
-      if (tp.quality == 1) {
-        t0_LowQuality->Fill(tps.back().t0);
-        BX_LowQuality->Fill(tps.back().BX);
-      }
-      if (tp.quality > HIGH_QUAL_CUT && !tp.hasMatched) {
-        // select HQ TPs which are not matched 
-        t0_Selected->Fill(tp.t0);
-        for (TriggerPrimitive &other_tp : tps) {
-          if (tp.index != other_tp.index && tp.match(other_tp, PHI_CUT, T0_CUT)) {    
-            if (other_tp.quality == 1) {
-              t0_Selected->Fill(other_tp.t0);
-              LowQ_matched->Fill(other_tp.t0);
-              BX_LowQ_matched->Fill(other_tp.BX);
-            } else {
-              t0_Selected->Fill(other_tp.t0);
-            }
+      if (!tp.hasMatched) {
+        for (TriggerPrimitive &other_tp : MatchFromLQ_tps) {
+          if (tp.index != other_tp.index ) {    
+            tp.MatchFromLQ(other_tp, PHI_CUT, T0_CUT);
           }
         }
       }
     }
 
+    MatchFromLQ_tps.erase(std::remove_if(MatchFromLQ_tps.begin(), MatchFromLQ_tps.end(), [](auto &tp){ return !tp.hasMatched && tp.quality == 1;}), MatchFromLQ_tps.end());
+    // repeat clustering after filtering
+    MatchFromLQ_clusters = buildClusters(geom, MatchFromLQ_tps, segments, digis, X_CUT, DIGI_CUT);
+
+    //extrapolate from HQ TP
+    for (TriggerPrimitive &tp : MatchFromHQ_tps) {
+      if (!tp.hasMatched) {
+        for (TriggerPrimitive &other_tp : MatchFromHQ_tps) {
+          if (tp.index != other_tp.index) {    
+            tp.MatchFromHQ(other_tp, PHI_CUT, T0_CUT);
+          }
+        }
+      }
+    }
+
+    MatchFromHQ_tps.erase(std::remove_if(MatchFromHQ_tps.begin(), MatchFromHQ_tps.end(), [](auto &tp){ return !tp.hasMatched && tp.quality == 1;}), MatchFromHQ_tps.end());
+    // repeat clustering after filtering
+    MatchFromHQ_clusters = buildClusters(geom, MatchFromHQ_tps, segments, digis, X_CUT, DIGI_CUT);
+
+    std::vector<TriggerPrimitive> TPRemovedfromLQ = tps;
+    for (auto tp : MatchFromLQ_tps) TPRemovedfromLQ.erase(std::remove(TPRemovedfromLQ.begin(), TPRemovedfromLQ.end(), tp), TPRemovedfromLQ.end());
+    std::vector<TriggerPrimitive> TPRemovedfromHQ = tps;
+    for (auto tp : MatchFromHQ_tps) TPRemovedfromHQ.erase(std::remove(TPRemovedfromHQ.begin(), TPRemovedfromHQ.end(), tp), TPRemovedfromHQ.end());
+
+    for (auto tp : TPRemovedfromLQ) m_plots[Form("%s_RemovedQuality", "LQFilter")]->Fill(tp.quality);
+    for (auto tp : TPRemovedfromHQ) m_plots[Form("%s_RemovedQuality", "HQFilter")]->Fill(tp.quality);
+
+    // ########## ATTEMPT cluster - muon extrapolation matching #############
+    for (UInt_t iMu = 0; iMu < mu_nMuons; ++iMu){
+      for (UInt_t i = 0; i < mu_nMatches->at(iMu); ++i){
+        int muTrkWheel = getXY<float>(mu_matches_wheel, iMu, i);
+        int muTrkStation = getXY<float>(mu_matches_station, iMu, i);
+        int muTrkSector = getXY<float>(mu_matches_sector, iMu, i);
+        if (muTrkSector == 13 ) muTrkSector = 4;
+        if (muTrkSector == 14 ) muTrkSector = 10; 
+        double muTrkX = getXY<float>(mu_matches_x, iMu, i);
+        double edgeX = getXY<float>(mu_matches_edgeX, iMu, i);
+        double edgeY = getXY<float>(mu_matches_edgeY, iMu, i);
+
+        for (auto &cluster: clusters){
+          auto wh{cluster.wheel};
+          auto sec{cluster.sector};
+          if (sec == 13 ) sec = 4;
+          if (sec == 14 ) sec = 10;
+          auto st{cluster.station};
+          cluster.matchMu(muTrkWheel, muTrkStation, muTrkSector, edgeX, edgeY, muTrkX, i, iMu);
+          cluster.matchDigi(digis, DIGI_CUT);
+          m_effs[Form("Eff_MuMatch_st%d", st)]->Fill(cluster.muMatched, sec, wh);
+          if (cluster.muMatched) {
+            m_plots[Form("Res_MuMatched_st%d", st)]->Fill(cluster.bestTP().xLoc - getXY<float>(mu_matches_x, cluster.muMatchedIndex[0], cluster.muMatchedIndex[1]));
+            m_2Dplots[Form("N_MuMatch_st%d", st)]->Fill(sec, wh);
+          }
+        }
+
+        for (auto &PMcluster : MatchFromLQ_clusters) {
+          PMcluster.matchMu(muTrkWheel, muTrkStation, muTrkSector, edgeX, edgeY, muTrkX, i, iMu);
+          PMcluster.matchDigi(digis, DIGI_CUT);
+        }
+        for (auto &PMcluster : MatchFromHQ_clusters) {
+          PMcluster.matchMu(muTrkWheel, muTrkStation, muTrkSector, edgeX, edgeY, muTrkX, i, iMu);
+          PMcluster.matchDigi(digis, DIGI_CUT);
+        }
+      }
+    }
+
+    // ########## RUN SOME ANALYSIS #############
+    // ########## CLUSTER ANALYSIS #############
+    ClusterAnalisis(clusters, tags[0], segments);
+    ClusterAnalisis(MatchFromLQ_clusters, tags[1], segments);
+    ClusterAnalisis(MatchFromHQ_clusters, tags[2], segments);
+
+    for (auto FirstCluster : MatchFromLQ_clusters){
+      for (auto SecondCluster : clusters){
+        if (SecondCluster.sector != FirstCluster.sector || SecondCluster.wheel != FirstCluster.wheel || SecondCluster.station != FirstCluster.station) continue;
+        double res = FirstCluster.bestTP().xLoc - SecondCluster .bestTP().xLoc;
+        if (res != 0 ) m_plots[Form("%s_ResFilteredCluster", "LQFilter")]->Fill(res);
+      }
+    }
+
+    for (auto FirstCluster : MatchFromHQ_clusters){
+      for (auto SecondCluster : clusters){
+        if (SecondCluster.sector != FirstCluster.sector || SecondCluster.wheel != FirstCluster.wheel || SecondCluster.station != FirstCluster.station) continue;
+        double res = FirstCluster.bestTP().xLoc  - SecondCluster .bestTP().xLoc;
+        if (res != 0) m_plots[Form("%s_ResFilteredCluster", "HQFilter")]->Fill(res);
+      }
+    }
+   
+    std::vector<Cluster> ClusterCut_LQFilter = MissingClusters(MatchFromLQ_clusters, clusters, "LQFilter");
+    removedLQFilter += ClusterCut_LQFilter.size();
+
+
+    std::vector<Cluster> ClusterCut_HQFilter = MissingClusters(MatchFromHQ_clusters, clusters,  "HQFilter");
+    removedHQFilter += ClusterCut_HQFilter.size();
+
+    // ########## PHI MATCHING TPs ANALYSIS #############
     for (TriggerPrimitive tp : tps) {
       if (tp.quality == 1) {
-        MatchAndCut_vs_Eta->Fill(tp.hasMatched, std::abs(gen_eta->at(0)));
-        MatchAndCut_vs_Phi->Fill(tp.hasMatched, std::abs(gen_phi->at(0)));
-        MatchAndCut_vs_Pt->Fill(tp.hasMatched, std::abs(gen_pt->at(0)));
-        Match_vs_Eta->Fill((tp.matches.size() > 0), std::abs(gen_eta->at(0)));
-        Match_vs_Phi->Fill((tp.matches.size() > 0), std::abs(gen_phi->at(0)));
-        Match_vs_Pt->Fill((tp.matches.size() > 0), std::abs(gen_pt->at(0)));
-      }
-      if (tp.quality == 1 && tp.matches.size() > 0) {
-        LowQ_more1HQ_Phi->Fill(tp.t0);
-        BX_LowQ_more1HQ->Fill(tp.BX);
+        m_plots["t0_LowQuality"]->Fill(tps.back().t0);
+        m_plots["BX_LowQuality"]->Fill(tps.back().BX);
       }
     }
   }
-  double ghostFraction = nClustersGhosts / nClusters;
 
-  std::cout << " Ratio LQ/selected with phi=  " << LowQ_matched->GetEntries() << "/ "
-       << t0_LowQuality->GetEntries() << " = "
-       << LowQ_matched->GetEntries() / t0_LowQuality->GetEntries() << std::endl;
-  std::cout << " Ratio LQ/matched with phi=  " << LowQ_more1HQ_Phi->GetEntries() << "/ "
-       << t0_LowQuality->GetEntries() << " = "
-       << LowQ_more1HQ_Phi->GetEntries() / t0_LowQuality->GetEntries() << std::endl;
-  std::cout << " Fraction of clusters with ghost (" << nClustersGhosts << ") on total (" << nClusters
-       << ") = " << ghostFraction << std::endl;
-  std::cout << " HQ out of time clusters: " << ooTHQCount << std::endl;
+  for (auto CLtype : tags){
+  double ghostFraction = m_counters[Form("%s_nClustersGhosts", CLtype.c_str())] / m_counters[Form("%s_nClusters", CLtype.c_str())];
+ std::cout << " \nFor " << CLtype <<std::endl;
+ std::cout << " Ratio LQ/selected with phi=  " << m_plots[Form("%s_LowQ_matched", CLtype.c_str())] ->GetEntries() << "/ "
+       << m_plots["t0_LowQuality"]->GetEntries() << " = "
+       << m_plots[Form("%s_LowQ_matched", CLtype.c_str())] ->GetEntries() / m_plots["t0_LowQuality"]->GetEntries() <<std::endl;
 
-
-// ########## DRAW THE ANALYSIS HISTOS  #############
-
-  // TCanvas *canvas2 = new TCanvas("canvas2", "canvas2", 500, 500, 500, 500);
-  t0_LowQuality->SetLineColor(kBlue);
-  t0_LowQuality->GetXaxis()->SetTitle(" t0 (ns)");
-  t0_LowQuality->GetYaxis()->SetTitle(" Entries");
-  t0_LowQuality->Draw();
-  // LowQ_matched_Psi->SetLineColor(kRed);
-  // LowQ_matched_Psi->Draw("same");
-  LowQ_matched->SetLineColor(kRed);
-  LowQ_matched->Draw("same");
-  // LowQ_more1HQ->Draw("same");
-  LowQ_more1HQ_Phi->SetLineColor(kGreen + 2);
-  LowQ_more1HQ_Phi->Draw("same");
-
-  auto leg = new TLegend(0.1, 0.7, 0.4, 0.9);
-  leg->AddEntry(t0_LowQuality, "Q1");
-  leg->AddEntry(LowQ_matched, "Q1 - #phi cut and time cut");
-  // leg->AddEntry(LowQ_matched_Psi, "Q1 - with psi&time cut ");
-  // leg->AddEntry(LowQ_more1HQ, "Q1 - associated HQ psi cut, no time cut ");
-  leg->AddEntry(LowQ_more1HQ_Phi, "Q1 - #phi cut, no time cut");
-  leg->Draw("same");
-
-  TCanvas *canvas = new TCanvas("canvas", "canvas", 500, 500, 500, 500);
-  canvas->Divide(2, 2);
-
-  canvas->cd(1);
-
-  t0_AllQuality->Draw();
-  // t0_LowQuality->SetLineColor(kRed);
-  t0_LowQuality->Draw("same");
-  t0_HighQuality->SetLineColor(kBlack);
-  t0_HighQuality->Draw("same");
-
-  auto leg1 = new TLegend(0.1, 0.7, 0.35, 0.9);
-  leg1->AddEntry(t0_LowQuality, "LQ (1-3) primitives");
-  leg1->AddEntry(t0_HighQuality, "HQ (6-7-8) primitives");
-  leg1->AddEntry(t0_AllQuality, "All primitives in #eta < 0.8");
-  leg1->Draw("same");
-
-  canvas->cd(2);
-  // t0_LowQuality->SetLineColor(kBlack);
-  t0_LowQuality->Draw();
-  LowQ_matched_Psi->SetLineColor(kRed);
-  LowQ_matched_Psi->Draw("same");
-  // LowQ_matched->SetLineColor(kGreen);
-  // LowQ_matched->Draw("same");
-  LowQ_more1HQ->Draw("same");
-  // LowQ_more1HQ_Phi->SetLineColor(kRed);
-  LowQ_more1HQ_Phi->Draw("same");
-
-  auto leg2 = new TLegend(0.1, 0.7, 0.4, 0.9);
-  leg2->AddEntry(t0_LowQuality, "Q1");
-  leg2->AddEntry(LowQ_matched, "Q1 - expected phi&time cut");
-  leg2->AddEntry(LowQ_matched_Psi, "Q1 - with psi&time cut ");
-  leg2->AddEntry(LowQ_more1HQ, "Q1 - associated HQ psi cut, no time cut ");
-  leg2->AddEntry(LowQ_more1HQ_Phi, "Q1 - associated HQ phi cut, no time cut");
-  leg2->Draw("same");
-
-  canvas->cd(3);
-
-  t0_Selected_Psi->Draw();
-  HighQ_matched_Psi->SetLineColor(kGreen);
-  HighQ_matched_Psi->Draw("same");
-  LowQ_matched_Psi->SetLineColor(kRed);
-  LowQ_matched_Psi->Draw("same");
-
-  auto leg3 = new TLegend(0.1, 0.7, 0.35, 0.9);
-  leg3->AddEntry(LowQ_matched_Psi, "Q1 primitives associated");
-  leg3->AddEntry(HighQ_matched_Psi, "HQ primitives associated");
-  leg3->AddEntry(t0_Selected_Psi, "All primitives");
-  leg3->Draw("same");
-
-  canvas->cd(4);
-
-  t0_Selected->Draw();
-  HighQ_matched->SetLineColor(kRed);
-  HighQ_matched->Draw("same");
-  // LowQ_matched->SetLineColor(kGreen);
-  LowQ_matched->Draw("same");
-
-  auto leg4 = new TLegend(0.1, 0.7, 0.35, 0.9);
-  leg4->AddEntry(LowQ_matched, "Q1 primitives associated");
-  leg4->AddEntry(HighQ_matched, "HQ primitives associated");
-  leg4->AddEntry(t0_Selected, "All primitives");
-  leg4->Draw("same");
-
-  // TCanvas *BXCanvas = new TCanvas("BXCanvas", "BXCanvas", 500, 500, 500, 500);
-  BX_LowQuality->Draw();
-  BX_LowQ_matched->SetLineColor(kRed);
-  BX_LowQ_matched->Draw("same");
-  BX_LowQ_more1HQ->SetLineColor(kGreen + 2);
-  BX_LowQ_more1HQ->Draw("same");
-
-  auto *legend = new TLegend(0.1, 0.7, 0.35, 0.9);
-  legend->AddEntry(BX_LowQuality, "Q1 primitive");
-  legend->AddEntry(BX_LowQ_matched, "Q1 selected #phi match and time cut");
-  legend->AddEntry(BX_LowQ_more1HQ, "Q1 selected #phi match ");
-  legend->Draw("same");
-
-  TCanvas *EffCutCanvas = new TCanvas("EffCutCanvas", "EffCutCanvas", 500, 500, 500, 500);
-  EffCutCanvas->Divide(2, 2);
-
-  EffCutCanvas->cd(1);
-  Match_vs_Phi->Draw();
-  MatchAndCut_vs_Phi->SetLineColor(kRed);
-  MatchAndCut_vs_Phi->Draw("same");
-
-  EffCutCanvas->cd(2);
-  Match_vs_Eta->Draw();
-  MatchAndCut_vs_Eta->SetLineColor(kRed);
-  MatchAndCut_vs_Eta->Draw("same");
-
-  EffCutCanvas->cd(3);
-  Match_vs_Pt->Draw();
-  MatchAndCut_vs_Pt->SetLineColor(kRed);
-  MatchAndCut_vs_Pt->Draw("same");
-
-  TCanvas *ClusterProvaCanvas =
-      new TCanvas("ClusterProvaCanvas", "ClusterProvaCanvas", 500, 500, 500, 500);
-  ClusterProvaCanvas->Divide(2, 2);
-  ClusterProvaCanvas->cd(1);
-  OoTGhosts->Draw();
-
-  ClusterProvaCanvas->cd(2);
-  ITGhosts->Draw();
-
-  ClusterProvaCanvas->cd(3);
-  N_Ghost->Draw();
-
-  ClusterProvaCanvas->cd(4);
-  Q_Ghost->SetLineColor(kOrange + 7);
-  Q_Ghost->Draw();
-  Q_Best->Draw("same");
-  auto *q_legend = new TLegend(0.1, 0.7, 0.35, 0.9);
-  q_legend->AddEntry(Q_Ghost, "Ghost Quality");
-  q_legend->AddEntry(Q_Best, "Best one Quality");
-  q_legend->Draw("same");
-
-  TCanvas *ClusterBXCanvas = new TCanvas("ClusterBXCanvas", "ClusterBXCanvas", 500, 500, 500, 500);
-  ClusterBXCanvas->Divide(2, 2);
-
-  ClusterBXCanvas->cd(1);
-  BX_ITGhosts->SetLineColor(kRed);
-  BX_ITGhosts->Draw();
-  BX_OoTGhosts->Draw("same");
-
-  ClusterBXCanvas->cd(2);
-
-  Res_ITGhosts->SetLineColor(kRed);
-  Res_ITGhosts->Draw();
-  Res_OoTGhosts->Draw("same");
-
-  ClusterBXCanvas->cd(3);
-  Q_OoTGhosts->Draw("box");
-
-  ClusterBXCanvas->cd(4);
-  Q_ITGhosts->Draw("box");
-
-  TCanvas *StatCanvas = new TCanvas("StatCanvas", "StatCanvas", 500, 500, 500, 500);
-  StatCanvas->Divide(2, 2);
-
-  for (int i = 1; i < 5; ++i) {
-    StatCanvas->cd(i);
-    N_Cluster[i - 1]->Draw("COLZ");
+ std::cout << " Fraction of clusters with ghost (" << m_counters[Form("%s_nClustersGhosts", CLtype.c_str())] << ") on total (" << m_counters[Form("%s_nClusters", CLtype.c_str())]
+       << ") = " << ghostFraction << " made with "  << m_counters[Form("%s_nTPs", CLtype.c_str())]<< " TPs" <<std::endl; 
+ std::cout << " HQ out of time clusters: " << m_counters[Form("%s_ooTHQCount", CLtype.c_str())] <<std::endl;
   }
 
-  TCanvas *ResMatchCanvas = new TCanvas("ResMatchCanvas", "ResMatchCanvas", 500, 500, 500, 500);
-  ResMatchCanvas->Divide(1,2);
-  ResMatchCanvas->cd(1);
-  Res_MuMatched->Draw();
-  ResMatchCanvas->cd(2);
-  Res_SegMatched->Draw();
-
-  TCanvas *MuMatch2dCanvas = new TCanvas("MuMatch2dCanvas", "MuMatch2dCanvas", 500, 500, 500, 500);
-  MuMatch2dCanvas->Divide(2,2);
-  for (int i = 1; i < 5; ++i) {
-    MuMatch2dCanvas->cd(i);
-    N_MuMatch[i - 1]->Draw("COLZ");
-  }
-
-  TCanvas *EffMuMatchCanvas = new TCanvas("EffMuMatchCanvas", "EffMuMatchCanvas", 500, 500, 500, 500);
-  EffMuMatchCanvas->Divide(2,2);
-  for (int i = 1; i < 5; ++i) {
-    EffMuMatchCanvas->cd(i);
-    Eff_MuMatch[i - 1]->Draw("COLZ");
-  }
-
-  TCanvas *LowQBestDistributionCanvas = new TCanvas("LowQBestDistributionCanvas", "LowQBestDistributionCanvas", 500, 500, 500, 500);
-  LowQBestDistributionCanvas->Divide(2,2);
-  for(int i = 1; i< 5; ++i ){
-    LowQBestDistributionCanvas->cd(i);
-    x_LowBestQ[i-1]->Draw();
-  }
-
-  TCanvas *SegMatchCanvas = new TCanvas("SegMatchCanvas", "SegMatchCanvas", 500, 500, 500, 500);
-  SegMatchCanvas->Divide(2, 2);
-  for (int i = 1; i < 5; ++i) {
-    SegMatchCanvas->cd(i);
-    Eff_SegMatch[i - 1]->Draw("COLZ");
-  }
-  
-
-  TCanvas *DigiMatch = new TCanvas("DigiMatch", "DigiMatch", 500, 500, 500, 500);
-  DigiMatch->Divide(2, 2);
-  for (int i = 1; i <5; ++i){
-    DigiMatch->cd(i);
-    Eff_DigiMatch[i-1]->Draw("COLZ");
-  }
-
-  TCanvas *DigiRes =  new TCanvas("DigiRes", "DigiRes", 500, 500, 500, 500);
-  DigiRes->Divide(5,4);
-  int cd = 1;
-  for (int i = 1; i <5; ++i){
-    for (int j = 0; j< 5; ++j){
-      DigiRes->cd(cd);
-      Digi_residual[j][i-1]->Draw("COLZ");
-      cd+=1;
-    }
-  }
-
-  TCanvas *DigiCluster = new TCanvas("DigiCluster", "DigiCluster", 500, 500, 500, 500);
-  DigiCluster->Divide(1, 2);
-  DigiCluster->cd(1);
-  N_DigiPerCluster->Draw();
-  DigiCluster->cd(2);
-  DigiSL->Draw();
-  
-  TCanvas *DigiCanvas = new TCanvas("DigiCanvas", "DigiCanvas", 500, 500, 500, 500);
-  DigiCanvas->Divide(2, 2);
-  for (int i = 1; i <5; ++i){
-    DigiCanvas->cd(i);
-    N_Digi[i-1]->Draw("COLZ");
-  }
+  std::cout << "LQFilter found " << removedLQFilter << " more clusters, HQFilter found " << removedHQFilter << " more clusters " << std::endl;
 
   outputFile.Write();
   outputFile.Close();
+
 }
 

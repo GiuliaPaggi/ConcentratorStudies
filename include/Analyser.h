@@ -37,12 +37,15 @@ inline std::vector<Cluster> buildClusters(const Geometry& geom,
                                           std::vector<Digi>& digis, 
                                           double x_cut, double digi_cut) {
   std::vector<Cluster> clusters;
+  std::vector<TriggerPrimitive> tpsToCluster = tps;
+  std::vector<Segment> segToCluster = segs;
+  std::vector<Digi> digiToCluster = digis;
   
   for (const auto wh : geom.WHEELS) {
     for (const auto sec : geom.SECTORS) {
       for (const auto st : geom.STATIONS) {
           while (true){
-          Cluster cluster{tps, segs, digis, x_cut, digi_cut, wh, sec, st};
+          Cluster cluster{tpsToCluster, segToCluster, digiToCluster, x_cut, digi_cut, wh, sec, st}; 
           if (cluster.bestTPQuality() > -1 || cluster.bestSegPhiHits() > -1 || cluster.digiSL()) {
             clusters.push_back(cluster);  // CB can be improved 
           }

@@ -38,84 +38,96 @@ void TriggerPrimitive::computeExpectedPhi() {
   computedPhi = true;
 };
 
-bool TriggerPrimitive::match(TriggerPrimitive &tp, double phiCut, double timeCut) {
-  if (tp.index == index) return false;
+
+bool TriggerPrimitive::MatchFromHQ(TriggerPrimitive &TP, double phicut, double timecut) {
+  if (quality == 1) return false; 
+  if (TP.index == index) return false;
   if (!computedPhi) computeExpectedPhi();
 
-  double deltaPhiExp = std::abs(phiExpected[tp.station] - tp.phi) < TMath::Pi()
-                       ? std::abs(phiExpected[tp.station] - tp.phi)
-                       : std::abs(2 * TMath::Pi() - std::abs(phiExpected[tp.station] - tp.phi));
+  double DeltaPhiExp = 0;
+  std::abs(phiExpected[TP.station] - TP.phi) < TMath::Pi()
+      ? DeltaPhiExp = std::abs(phiExpected[TP.station] - TP.phi)
+      : DeltaPhiExp = std::abs(2 * TMath::Pi() - std::abs(phiExpected[TP.station] - TP.phi));
 
-  double deltat0 = std::abs(t0 - tp.t0);
+  double Deltat0 = std::abs(t0 - TP.t0);
 
-  if (deltaPhiExp < phiCut) {
+  if (DeltaPhiExp < phicut) {
 
-    tp.matches.push_back(index);  // NELLE QUALITà BASSE METTO L'INDICE DI QUELLA ALTA
-    matches.push_back(tp.index);  // NELLE QUALITà ALTE METTO L'INDICE DI QUELLE CHE MATCHANO
+    TP.matches.push_back(index);  // NELLE QUALITà BASSE METTO L'INDICE DI QUELLA ALTA
+    matches.push_back(TP.index);  // NELLE QUALITà ALTE METTO L'INDICE DI QUELLE CHE MATCHANO
 
-    if (wheel == 0 && std::abs(tp.wheel) < 3) {
-      if (tp.quality == 1 && deltat0 < timeCut) {
-        tp.hasMatched = true;
+    if (wheel == 0 && std::abs(TP.wheel) < 2) {
+      if (TP.quality == 1 && Deltat0 < timecut) {
+        TP.hasMatched = true;
         hasMatched = true;
         return true;
 
-      } else if (tp.quality > 1) {
-        tp.hasMatched = true;
+      } 
+    }
+
+    if (wheel > 0 && TP.wheel >= wheel) {
+      if (TP.quality == 1 && Deltat0 < timecut) {
+        TP.hasMatched = true;
         hasMatched = true;
         return true;
+
       }
     }
 
-    if (wheel > 0 && tp.wheel >= wheel) {
-      if (tp.quality == 1 && deltat0 < timeCut) {
-        tp.hasMatched = true;
+    if (wheel < 0 && TP.wheel <= wheel && TP.wheel != -5 && wheel != 5) {
+      if (TP.quality == 1 && Deltat0 < timecut) {
+        TP.hasMatched = true;
         hasMatched = true;
         return true;
-
-      } else if (tp.quality > 1) {
-        tp.hasMatched = true;
-        hasMatched = true;
-        return true;
-      }
-    }
-
-    if (wheel < 0 && tp.wheel <= wheel && tp.wheel != -5 && wheel != 5) { // CB wheel?
-      if (tp.quality == 1 && deltat0 < timeCut) {
-        tp.hasMatched = true;
-        hasMatched = true;
-        return true;
-      } else if (tp.quality > 1) {
-        tp.hasMatched = true;
-        hasMatched = true;
-        return true;
-      }
+      } 
     }
   }
   return false;
 };
 
-/*/ Makes cluster from the TP that calls it, checking all the TP in list, returns
-// vector of index of the cluster
+bool TriggerPrimitive::MatchFromLQ(TriggerPrimitive &TP, double phicut, double timecut) {
+  if (quality > 1) return false;
+  if (TP.index == index) return false;
+  if (!computedPhi) computeExpectedPhi();
 
-vector<int> TriggerPrimitive::makeCluster(TriggerPrimitive listOfPrimitives[], int size,
-                                          double xcut) {
-  vector<int> Cluster;
+  double DeltaPhiExp = 0;
+  std::abs(phiExpected[TP.station] - TP.phi) < TMath::Pi()
+      ? DeltaPhiExp = std::abs(phiExpected[TP.station] - TP.phi)
+      : DeltaPhiExp = std::abs(2 * TMath::Pi() - std::abs(phiExpected[TP.station] - TP.phi));
 
-  for (int i = 0; i < size; ++i) {
-    TriggerPrimitive element = listOfPrimitives[i];
-    double DeltaxLoc = std::abs(element.xLoc - xLoc);
+  double Deltat0 = std::abs(t0 - TP.t0);
 
-    if (element.station == station && element.wheel == wheel && DeltaxLoc < xcut) {
-      if (element.index != index) {
-        inCluster = true;
-        element.inCluster = true;
-        Cluster.push_back(element.index);
-      }
+  if (DeltaPhiExp < phicut) {
+
+    TP.matches.push_back(index);  // NELLE QUALITà BASSE METTO L'INDICE DI QUELLA ALTA
+    matches.push_back(TP.index);  // NELLE QUALITà ALTE METTO L'INDICE DI QUELLE CHE MATCHANO
+
+    if (wheel == 0 && std::abs(TP.wheel) < 2) {
+      if (TP.quality > 1 && Deltat0 < timecut) {
+        TP.hasMatched = true;
+        hasMatched = true;
+        return true;
+      } 
+    }
+
+    if (wheel > 0 && TP.wheel >= wheel) {
+      if (TP.quality > 1 && Deltat0 < timecut) {
+        TP.hasMatched = true;
+        hasMatched = true;
+        return true;
+      } 
+    }
+
+    if (wheel < 0 && TP.wheel <= wheel && TP.wheel != -5 && wheel != 5) {
+      if (TP.quality > 1 && Deltat0 < timecut) {
+        TP.hasMatched = true;
+        hasMatched = true;
+        return true;
+      } 
     }
   }
-
-  return Cluster;
-};*/
+  return false;
+};
 
 void TriggerPrimitive::findHigherQuality(TriggerPrimitive listOfPrimitives[],
                                         const std::vector<int>& clusterIndex) {

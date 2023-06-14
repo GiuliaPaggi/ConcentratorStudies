@@ -49,6 +49,10 @@ class TriggerPrimitive {
   void findHigherQuality(TriggerPrimitive listOfPrimitives[], const std::vector<int>& clusterIndices);
   // std::vector<int> selectRightBX(TriggerPrimitive listOfPrimitives[], const std::vector<int>& clusterIndices);
   void checkBX();
+
+  // Filter functions 
+  bool MatchFromLQ(TriggerPrimitive &TP, double PhiCut, double TimeCut);
+  bool MatchFromHQ(TriggerPrimitive &TP, double PhiCut, double TimeCut);
 };
 
 inline bool operator==(TriggerPrimitive const &ltp, TriggerPrimitive const &rtp) {

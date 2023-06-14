@@ -1,5 +1,5 @@
 #include "include/Digi.h"
-
+#include <algorithm>
 Digi::Digi(const Geometry& geom, int i, int wh, int sec, int stat, int SL, int L, int w, double t) :  wheel{wh}, sector{sec}, station{stat}, superlayer{SL}, layer{L}, wire{w}, time{t} {
     index = i;
 
