@@ -110,7 +110,7 @@ void TestAnalyser::ClusterAnalisis(std::vector<Cluster> CLtoAnalize, std::string
       m_2Dplots[Form("%s_TPs_LocalDirectionvsPosition_st%d", CLtype.c_str(), st)]->Fill(cluster.bestTP().xLoc, cluster.bestTP().psi);
       m_plots[Form("%s_ClusterSize", CLtype.c_str())]->Fill(cluster.tpClusterSize()); 
       // ########## Study TP ghost distribution #############
-      ++m_counters[Form("%s_nClusters", CLtype.c_str())];
+      if (cluster.foundTP) ++m_counters[Form("%s_nClusters", CLtype.c_str())];
       m_counters[Form("%s_ooTHQCount", CLtype.c_str())] += cluster.ootCountIf([=](TriggerPrimitive const & tp) { return tp.quality > HIGH_QUAL_CUT; });
 
       int bestQ = cluster.bestTPQuality();
@@ -187,7 +187,7 @@ void TestAnalyser::ClusterAnalisis(std::vector<Cluster> CLtoAnalize, std::string
 }
 
 std::vector<Cluster> MissingClusters(std::vector<Cluster> FirstCLVector, std::vector<Cluster> SecondCLvector, std::string CLtype) {
-  // FirstCL is the smaller set (filtered) , SecondCL is the bigger one (all) 
+  // FirstCL is the smaller set , SecondCL is the bigger one 
   std::vector<Cluster> missingClusters;
 
   for (const auto &FirstCluster : FirstCLVector) {
@@ -199,15 +199,17 @@ std::vector<Cluster> MissingClusters(std::vector<Cluster> FirstCLVector, std::ve
     int n_cluster_uguali = std::count_if(SecondCLvector.begin(), SecondCLvector.end(), [&](const auto & cl) {return cl == FirstCluster;} );
     if (n_cluster_uguali == 0) {
       missingClusters.push_back(FirstCluster);
-      std::cout << "Missing cluster for "<< CLtype.c_str() <<"\n" << FirstCluster << std::endl;
+      std::cout << "In the original cluster there were:" <<std::endl;
       
-      std::cout << "In the filtered cluster there are also " << std::endl;
+      std::cout << "In the first cluster there are also " << std::endl;
       for (const auto &otherFirstclusters : FirstCLVector) {
         if (otherFirstclusters.wheel != wh || otherFirstclusters.station != st || otherFirstclusters.sector != sec) continue;
+        if (otherFirstclusters == FirstCluster) continue;
         std::cout << otherFirstclusters << std::endl;
       }
       
-      std::cout << "In the same position there were:" <<std::endl;
+
+      std::cout << "Missing cluster for "<< CLtype.c_str() <<"\n" << FirstCluster << std::endl;
       for (const auto &SecondCluster : SecondCLvector ) {
         if (SecondCluster.wheel != wh || SecondCluster.station != st || SecondCluster.sector != sec) continue;
         std::cout << SecondCluster << std::endl;
@@ -286,7 +288,6 @@ void TestAnalyser::Loop() {
 
     // ########## BUILD clusters std::vector #############
     auto clusters = buildClusters(geom, tps, segments, digis, X_CUT, DIGI_CUT);
-
     // ########## BUILD cluster with phi matchin information #############
     // tag TPs that match using the extrapolation on a straight line 
   
@@ -392,12 +393,12 @@ void TestAnalyser::Loop() {
       }
     }
    
-    std::vector<Cluster> ClusterCut_LQFilter = MissingClusters(MatchFromLQ_clusters, clusters, "LQFilter");
-    removedLQFilter += ClusterCut_LQFilter.size();
+    //std::vector<Cluster> ClusterCut_LQFilter = MissingClusters(clusters, MatchFromLQ_clusters, "LQFilter");
+    //removedLQFilter += ClusterCut_LQFilter.size();
 
 
-    std::vector<Cluster> ClusterCut_HQFilter = MissingClusters(MatchFromHQ_clusters, clusters,  "HQFilter");
-    removedHQFilter += ClusterCut_HQFilter.size();
+    //std::vector<Cluster> ClusterCut_HQFilter = MissingClusters(clusters, MatchFromHQ_clusters, "HQFilter");
+    //removedHQFilter += ClusterCut_HQFilter.size();
 
     // ########## PHI MATCHING TPs ANALYSIS #############
     for (TriggerPrimitive tp : tps) {

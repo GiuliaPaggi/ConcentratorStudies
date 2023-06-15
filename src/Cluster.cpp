@@ -38,13 +38,13 @@ Cluster::Cluster(std::vector<TriggerPrimitive> &tps, std::vector<Segment> &segs,
   };
 
   auto toggleCluster = [](auto &collection, const auto &target) {
-      for (auto &obj : collection) {
-        if (obj == target) {
-          obj.inCluster = true;
-          return;
-        }
+    for (auto &obj : collection) {
+      if (obj == target) {
+        obj.inCluster = true;
+        return;
       }
-    };
+    }
+  };
     
   // ########## TPs cluster #############
   std::vector<TriggerPrimitive> tps_in_chamber;
@@ -56,6 +56,7 @@ Cluster::Cluster(std::vector<TriggerPrimitive> &tps, std::vector<Segment> &segs,
     _bestTP = *bestTPIt;
     toggleCluster(tps,_bestTP);
     tps_in_chamber.erase(bestTPIt);
+    foundTP = true;
   }
 
   if (tps_in_chamber.size() > 0) {
@@ -99,6 +100,7 @@ Cluster::Cluster(std::vector<TriggerPrimitive> &tps, std::vector<Segment> &segs,
                                         segments_in_chamber.end(), compareSegs);
       _bestSeg = *bestSegIt;
       clusterX = _bestSeg.xLoc;
+      foundSeg = true;
     }
 
     std::copy_if(segments_in_chamber.begin(), segments_in_chamber.end(),
@@ -112,6 +114,7 @@ Cluster::Cluster(std::vector<TriggerPrimitive> &tps, std::vector<Segment> &segs,
       auto bestSegIt = std::max_element(_segmentCluster.begin(),
                                         _segmentCluster.end(), compareSegs);
       _bestSeg = *bestSegIt;
+      foundSeg = true;
     }
   }
 
@@ -168,7 +171,6 @@ Cluster::Cluster(std::vector<TriggerPrimitive> &tps, std::vector<Segment> &segs,
       }
     }
   }
-
   for (const auto &digi : _digiCluster) {
     toggleCluster(digis, digi);
   }
@@ -244,7 +246,7 @@ void Cluster::matchDigi(std::vector<Digi> const &digis, double xCut) {
 
 const std::vector<Digi> &Cluster::matchedDigi() const { return _matchedDigis; };
 
-int Cluster::nDigi() const { return _matchedDigis.size(); };
+int Cluster::nDigi() const { return _digiCluster.size(); };
 
 int Cluster::digiSL() const {
   if (sl1Cluster && sl3Cluster)

@@ -88,8 +88,8 @@ private:
 };
 
 inline bool operator==(Cluster const &lCL, Cluster const &rCL) {
-  if (lCL.foundTP && rCL.foundTP) return (lCL.wheel == rCL.wheel && lCL.sector == rCL.sector && lCL.station == rCL.station && lCL.bestTP().quality == rCL.bestTP().quality);
-  else return(lCL.wheel == rCL.wheel && lCL.sector == rCL.sector && lCL.foundSeg && rCL.foundSeg && lCL.station == rCL.station && lCL.bestSegPhiHits() == rCL.bestSegPhiHits());
+  return (lCL.wheel == rCL.wheel && lCL.sector == rCL.sector && lCL.station == rCL.station && lCL.foundTP && rCL.foundTP && lCL.bestTP().quality == rCL.bestTP().quality);
+  //else return(lCL.wheel == rCL.wheel && lCL.sector == rCL.sector && lCL.foundSeg && rCL.foundSeg && lCL.station == rCL.station && lCL.bestSegPhiHits() == rCL.bestSegPhiHits());
   
 }
 
@@ -100,6 +100,7 @@ inline std::ostream& operator <<(std::ostream& os, Cluster const cluster) {
                        " has BestTP of quality " << cluster.bestTPQuality() << 
                        " in xLoc " << cluster.bestTP().xLoc << 
                        ", has " << cluster.segClusterSize() << " segments " <<
+                       " in xLoc " << cluster.bestSeg().xLoc << 
                        " and has " << cluster.nDigi() << " digis " << 
                        std::endl;   
   return os;
