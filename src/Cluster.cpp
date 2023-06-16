@@ -28,9 +28,11 @@ Cluster::Cluster(std::vector<TriggerPrimitive> &tps, std::vector<Segment> &segs,
     return   std::abs(obj.xLoc - clusterX) < digiCut;
   };
 
-  auto compareTPs = [](auto const &tp1, auto const &tp2) {
-    return (tp1.BX != RIGHT_BX && tp2.BX == RIGHT_BX) ||
-           (tp1.quality < tp2.quality);
+  auto compareTPs = [](auto const &tp1, auto const &tp2) {      // needs to return true if 1 < 2
+    if (tp1.BX != RIGHT_BX && tp2.BX == RIGHT_BX) return true;
+    else if (tp1.BX == RIGHT_BX && tp2.BX != RIGHT_BX) return false;
+    else return (tp1.quality < tp2.quality);
+    //return (tp1.BX != RIGHT_BX && tp2.BX == RIGHT_BX) && (tp1.quality < tp2.quality);
   };
 
   auto compareSegs = [](Segment &s1, Segment &s2) {
@@ -48,15 +50,24 @@ Cluster::Cluster(std::vector<TriggerPrimitive> &tps, std::vector<Segment> &segs,
     
   // ########## TPs cluster #############
   std::vector<TriggerPrimitive> tps_in_chamber;
+  // select TPs in chamber
   std::copy_if(tps.begin(), tps.end(), std::back_inserter(tps_in_chamber), inChamber);
-
+  // find the higher quality in time 
   auto bestTPIt{std::max_element(tps_in_chamber.begin(), tps_in_chamber.end(), compareTPs)};
 
-  if (bestTPIt != tps_in_chamber.end()) {
+  // the higherst quality in time is the bestTP of the cluster
+  if (bestTPIt != tps_in_chamber.end()) {           // max_element returns last if the range is empty.
     _bestTP = *bestTPIt;
     toggleCluster(tps,_bestTP);
     tps_in_chamber.erase(bestTPIt);
     foundTP = true;
+    //added G
+    clusterX = _bestTP.xLoc;
+    if ( _bestTP.BX != RIGHT_BX && tps_in_chamber.size() > 1) {
+      std::cout << " la best TP di qualità " << _bestTP.quality << " non è in tempo, è al BX " << _bestTP.BX << " nel resto del cluster ho " << std::endl;
+      for (auto const &T : tps_in_chamber ) if (T.index != _bestTP.index && T.BX == RIGHT_BX ) std::cout <<  " TP at BX " << T.BX << " and quality " << T.quality <<  std::endl;
+      std::cout << "------------------------------------------------------------------------" << std::endl;
+    }
   }
 
   if (tps_in_chamber.size() > 0) {

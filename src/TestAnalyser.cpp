@@ -199,7 +199,8 @@ std::vector<Cluster> MissingClusters(std::vector<Cluster> FirstCLVector, std::ve
     int n_cluster_uguali = std::count_if(SecondCLvector.begin(), SecondCLvector.end(), [&](const auto & cl) {return cl == FirstCluster;} );
     if (n_cluster_uguali == 0) {
       missingClusters.push_back(FirstCluster);
-      std::cout << "In the original cluster there were:" <<std::endl;
+      std::cout << "Missing cluster for "<< CLtype.c_str() <<"\n" << FirstCluster << std::endl;
+
       
       std::cout << "In the first cluster there are also " << std::endl;
       for (const auto &otherFirstclusters : FirstCLVector) {
@@ -209,7 +210,7 @@ std::vector<Cluster> MissingClusters(std::vector<Cluster> FirstCLVector, std::ve
       }
       
 
-      std::cout << "Missing cluster for "<< CLtype.c_str() <<"\n" << FirstCluster << std::endl;
+      std::cout << "In the original cluster there were:" <<std::endl;
       for (const auto &SecondCluster : SecondCLvector ) {
         if (SecondCluster.wheel != wh || SecondCluster.station != st || SecondCluster.sector != sec) continue;
         std::cout << SecondCluster << std::endl;
@@ -393,12 +394,12 @@ void TestAnalyser::Loop() {
       }
     }
    
-    //std::vector<Cluster> ClusterCut_LQFilter = MissingClusters(clusters, MatchFromLQ_clusters, "LQFilter");
-    //removedLQFilter += ClusterCut_LQFilter.size();
+    std::vector<Cluster> ClusterCut_LQFilter = MissingClusters(MatchFromLQ_clusters, clusters, "LQFilter");
+    removedLQFilter += ClusterCut_LQFilter.size();
 
 
-    //std::vector<Cluster> ClusterCut_HQFilter = MissingClusters(clusters, MatchFromHQ_clusters, "HQFilter");
-    //removedHQFilter += ClusterCut_HQFilter.size();
+    std::vector<Cluster> ClusterCut_HQFilter = MissingClusters(MatchFromHQ_clusters, clusters, "HQFilter");
+    removedHQFilter += ClusterCut_HQFilter.size();
 
     // ########## PHI MATCHING TPs ANALYSIS #############
     for (TriggerPrimitive tp : tps) {
@@ -421,7 +422,7 @@ void TestAnalyser::Loop() {
  std::cout << " HQ out of time clusters: " << m_counters[Form("%s_ooTHQCount", CLtype.c_str())] <<std::endl;
   }
 
-  std::cout << "LQFilter found " << removedLQFilter << " more clusters, HQFilter found " << removedHQFilter << " more clusters " << std::endl;
+  std::cout << "LQFilter found " << removedLQFilter << " less clusters, HQFilter found " << removedHQFilter << " less clusters " << std::endl;
 
   outputFile.Write();
   outputFile.Close();
