@@ -29,10 +29,10 @@ find_package(ROOT 6.20 COMPONENTS CONFIG REQUIRED)
 if (BUILD_TESTING)
 
   # add runTestAnalisis executable
-  add_executable(testAnalisis bin/testAnalysis.cpp src/TestAnalyser.cpp src/Cluster.cpp src/TriggerPrimitive.cpp src/Segment.cpp src/Digi.cpp )
-  target_include_directories(testAnalisis PRIVATE ./)
-  target_link_libraries(testAnalisis PRIVATE ROOT::Core ROOT::Hist ROOT::Physics ROOT::TreePlayer)
+  add_executable(analisis bin/analysis.cpp src/Analyser.cpp src/Cluster.cpp src/TriggerPrimitive.cpp src/Segment.cpp src/Digi.cpp )
+  target_include_directories(analisis PRIVATE ./)
+  target_link_libraries(analisis PRIVATE ROOT::Core ROOT::Hist ROOT::Physics ROOT::TreePlayer)
   # add runTestAnalisis to test list
-  add_test(NAME testAnalisis COMMAND testAnalisis)
+  add_test(NAME analisis COMMAND analisis)
 
 endif()

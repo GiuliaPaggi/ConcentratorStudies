@@ -1,5 +1,5 @@
 
-#include "include/TestAnalyser.h"
+#include "include/Analyser.h"
 
 #include <iostream>
 #include <filesystem>
@@ -11,6 +11,6 @@ int main(int argc, char* argv[] ) {
     return EXIT_FAILURE;
   }
 
-  TestAnalyser analysis{argv[1]};
+  Analyser analysis{argv[1]};
   analysis.Loop();
 };

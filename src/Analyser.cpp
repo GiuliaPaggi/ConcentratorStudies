@@ -1,5 +1,6 @@
-#define Analyser_cxx
-#include "include/TestAnalyser.h"
+#define AnalyserBase_cxx
+#include "include/Analyser.h"
+#include "include/Geometry.h"
 
 #include <TCanvas.h>
 #include <TEfficiency.h>
@@ -12,11 +13,6 @@
 
 #include <iostream>
 #include <vector>
-
-// CB not optimal, but readable
-const std::vector<int> WHEELS{-2, -1, 0, 1, 2};
-const std::vector<int> SECTORS{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
-const std::vector<int> STATIONS{1, 2, 3, 4};
 
 double T_MIN{-9800};
 double T_MAX{-9200};
@@ -35,7 +31,9 @@ const double DIGI_CUT{10.0};
 const int CORRECT_BX{-380};
 
 
-void TestAnalyser::DefinePlot(){
+void Analyser::DefinePlot(){
+
+  Geometry geom{};
 
   m_plots["DigiSL"] = new TH1D("DigiSL", "DigiSL", 6, -0.5, 5.5); 
   m_plots["t0_LowQuality"] = new TH1D("t0_LowQuality", "t0_LowQuality; t0 (ns); Entries", 100, T_MIN, T_MAX);
@@ -43,52 +41,53 @@ void TestAnalyser::DefinePlot(){
   m_plots["BX_LowQ_more1HQ"] =  new TH1D("BX_LowQ_more1HQ", "BX_LowQ_more1HQ; BX; Entries", 24, BX_MIN, BX_MAX);
 
   
-  for (auto CLtype : tags){
-    m_plots[Form("%s_N_DigiPerCluster", CLtype.c_str())] = new TH1D(Form("%s_N_DigiPerCluster", CLtype.c_str()), Form("%s_N_DigiPerCluster; # digi in cluster; Entries", CLtype.c_str()), 50, 0, 50); 
-    m_plots[Form("%s_N_Ghost", CLtype.c_str())] = new TH1I(Form("%s_N_Ghost", CLtype.c_str()), Form("%s_N_Ghost", CLtype.c_str()), 20, 0, 20);
-    m_plots[Form("%s_Q_Best", CLtype.c_str())] = new TH1I(Form("%s_Q_Best", CLtype.c_str()), Form("%s_Q_Best", CLtype.c_str()), 10, 0, 10);
-    m_plots[Form("%s_Q_Ghost", CLtype.c_str())] = new TH1I(Form("%s_Q_Ghost", CLtype.c_str()), Form("%s_Q_Ghost", CLtype.c_str()), 10, 0, 10);
-    m_plots[Form("%s_OoTGhosts", CLtype.c_str())] = new TH1D(Form("%s_OoTGhosts", CLtype.c_str()), Form("%s_OoTGhosts", CLtype.c_str()), 20, 0, 20);
-    m_plots[Form("%s_ITGhosts", CLtype.c_str())] = new TH1D(Form("%s_ITGhosts", CLtype.c_str()), Form("%s_ITGhosts", CLtype.c_str()), 20, 0, 20);
-    m_plots[Form("%s_BX_ITGhosts", CLtype.c_str())] = new TH1I(Form("%s_BX_ITGhosts", CLtype.c_str()), Form("%s_BX_ITGhosts", CLtype.c_str()), 24, BX_MIN, BX_MAX);
-    m_plots[Form("%s_BX_OoTGhosts", CLtype.c_str())] = new TH1I(Form("%s_BX_OoTGhosts", CLtype.c_str()), Form("%s_BX_OoTGhosts", CLtype.c_str()), 25, BX_MIN, BX_MAX);
-    m_plots[Form("%s_Res_ITGhosts", CLtype.c_str())] = new TH1D(Form("%s_Res_ITGhosts", CLtype.c_str()), Form("%s_Res_ITGhosts", CLtype.c_str()), 111, -5.5, 5.5);
-    m_plots[Form("%s_Res_OoTGhosts", CLtype.c_str())] = new TH1D(Form("%s_Res_OoTGhosts", CLtype.c_str()), Form("%s_Res_OoTGhosts", CLtype.c_str()), 111, -5.5, 5.5);
-    m_plots[Form("%s_Res_SegMatched", CLtype.c_str())]= new TH1D(Form("%s_Res_SegMatched", CLtype.c_str()), Form("%s_Res_SegMatched; cluster.bestTP().xLoc - seg.xLoc; Entries", CLtype.c_str()), 101, -10, 10);
-    m_plots[Form("%s_LowQ_matched", CLtype.c_str())] = new TH1D(Form("%s_LowQ_matched", CLtype.c_str()), Form("%s_LowQ_matched; t0 (ns); Entries", CLtype.c_str()), 100, T_MIN, T_MAX); 
-    m_plots[Form("%s_BX_LowQ_matched", CLtype.c_str())] =  new TH1D(Form("%s_BX_LowQ_matched", CLtype.c_str()), Form("%s_BX_LowQ_matched,BX;Entries", CLtype.c_str()), 24, BX_MIN, BX_MAX);
-    m_plots[Form("%s_t0_Selected", CLtype.c_str())] = new TH1D(Form("%s_t0_Selected", CLtype.c_str()), Form("%s_t0_Selected; t0 (ns); Entries", CLtype.c_str()), 100, T_MIN, T_MAX);
-    m_plots[Form("%s_RemovedQuality", CLtype.c_str())] = new TH1D(Form("%s_RemovedQuality", CLtype.c_str()), Form("%s_RemovedQuality; Quality; Entries", CLtype.c_str()), 10, -0.5, 9.5);
-    m_plots[Form("%s_ResFilteredCluster", CLtype.c_str())] = new TH1D(Form("%s_ResFilteredCluster", CLtype.c_str()), Form("%s_ResFilteredCluster; FilteredCl - OriginalCl; Entries ", CLtype.c_str()), 101, -50, 50);
-    m_plots[Form("%s_ClusterSize", CLtype.c_str())] = new TH1I(Form("%s_ClusterSize", CLtype.c_str()), Form("%s_ClusterSize; # TPs in cluster; Entries", CLtype.c_str()), 21, -.5, 20.5 );
+  for (auto tag : tags){
+    const auto type{tag.c_str()};
+    m_plots[Form("%s_N_DigiPerCluster", type)] = new TH1D(Form("%s_N_DigiPerCluster", type), Form("%s_N_DigiPerCluster; # digi in cluster; Entries", type), 50, 0, 50); 
+    m_plots[Form("%s_N_Ghost", type)] = new TH1I(Form("%s_N_Ghost", type), Form("%s_N_Ghost", type), 20, 0, 20);
+    m_plots[Form("%s_Q_Best", type)] = new TH1I(Form("%s_Q_Best", type), Form("%s_Q_Best", type), 10, 0, 10);
+    m_plots[Form("%s_Q_Ghost", type)] = new TH1I(Form("%s_Q_Ghost", type), Form("%s_Q_Ghost", type), 10, 0, 10);
+    m_plots[Form("%s_OoTGhosts", type)] = new TH1D(Form("%s_OoTGhosts", type), Form("%s_OoTGhosts", type), 20, 0, 20);
+    m_plots[Form("%s_ITGhosts", type)] = new TH1D(Form("%s_ITGhosts", type), Form("%s_ITGhosts", type), 20, 0, 20);
+    m_plots[Form("%s_BX_ITGhosts", type)] = new TH1I(Form("%s_BX_ITGhosts", type), Form("%s_BX_ITGhosts", type), 24, BX_MIN, BX_MAX);
+    m_plots[Form("%s_BX_OoTGhosts", type)] = new TH1I(Form("%s_BX_OoTGhosts", type), Form("%s_BX_OoTGhosts", type), 25, BX_MIN, BX_MAX);
+    m_plots[Form("%s_Res_ITGhosts", type)] = new TH1D(Form("%s_Res_ITGhosts", type), Form("%s_Res_ITGhosts", type), 111, -5.5, 5.5);
+    m_plots[Form("%s_Res_OoTGhosts", type)] = new TH1D(Form("%s_Res_OoTGhosts", type), Form("%s_Res_OoTGhosts", type), 111, -5.5, 5.5);
+    m_plots[Form("%s_Res_SegMatched", type)]= new TH1D(Form("%s_Res_SegMatched", type), Form("%s_Res_SegMatched; cluster.bestTP().xLoc - seg.xLoc; Entries", type), 101, -10, 10);
+    m_plots[Form("%s_LowQ_matched", type)] = new TH1D(Form("%s_LowQ_matched", type), Form("%s_LowQ_matched; t0 (ns); Entries", type), 100, T_MIN, T_MAX); 
+    m_plots[Form("%s_BX_LowQ_matched", type)] =  new TH1D(Form("%s_BX_LowQ_matched", type), Form("%s_BX_LowQ_matched,BX;Entries", type), 24, BX_MIN, BX_MAX);
+    m_plots[Form("%s_t0_Selected", type)] = new TH1D(Form("%s_t0_Selected", type), Form("%s_t0_Selected; t0 (ns); Entries", type), 100, T_MIN, T_MAX);
+    m_plots[Form("%s_RemovedQuality", type)] = new TH1D(Form("%s_RemovedQuality", type), Form("%s_RemovedQuality; Quality; Entries", type), 10, -0.5, 9.5);
+    m_plots[Form("%s_ResFilteredCluster", type)] = new TH1D(Form("%s_ResFilteredCluster", type), Form("%s_ResFilteredCluster; FilteredCl - OriginalCl; Entries ", type), 101, -50, 50);
+    m_plots[Form("%s_ClusterSize", type)] = new TH1I(Form("%s_ClusterSize", type), Form("%s_ClusterSize; # TPs in cluster; Entries", type), 21, -.5, 20.5 );
 
-    m_2Dplots[Form("%s_Q_OoTGhosts", CLtype.c_str())] = new TH2D(Form("%s_Q_OoTGhosts", CLtype.c_str()), Form("%s_Q_OoTGhosts;High Quality;Out of time Ghost Quality", CLtype.c_str()), 10, 0, 10, 10, 0, 10);
-    m_2Dplots[Form("%s_Q_ITGhosts", CLtype.c_str())] = new TH2D(Form("%s_Q_ITGhosts", CLtype.c_str()), Form("%s_Q_ITGhosts;High Quality;In time Ghost Quality", CLtype.c_str()), 10, 0, 10, 10, 0, 10);
+    m_2Dplots[Form("%s_Q_OoTGhosts", type)] = new TH2D(Form("%s_Q_OoTGhosts", type), Form("%s_Q_OoTGhosts;High Quality;Out of time Ghost Quality", type), 10, 0, 10, 10, 0, 10);
+    m_2Dplots[Form("%s_Q_ITGhosts", type)] = new TH2D(Form("%s_Q_ITGhosts", type), Form("%s_Q_ITGhosts;High Quality;In time Ghost Quality", type), 10, 0, 10, 10, 0, 10);
     
-    m_counters[Form("%s_nClustersGhosts", CLtype.c_str())] = 0;
-    m_counters[Form("%s_ooTHQCount", CLtype.c_str())] = 0;
-    m_counters[Form("%s_nClusters", CLtype.c_str())] = 0;
-    m_counters[Form("%s_nTPs", CLtype.c_str())] = 0;
+    m_counters[Form("%s_nClustersGhosts", type)] = 0;
+    m_counters[Form("%s_ooTHQCount", type)] = 0;
+    m_counters[Form("%s_nClusters", type)] = 0;
+    m_counters[Form("%s_nTPs", type)] = 0;
 
-    for (const auto st : STATIONS) {
-      m_plots[Form("%s_DigiTime_st%d", CLtype.c_str(), st)]   = new TH1D( Form("%s_DigiTime_st%d", CLtype.c_str(), st), Form("%s_DigiTime_st%d; mean digi cluster time (ns); entries", CLtype.c_str(), st), 300, 400, 1000 );
-      m_plots[Form("%s_x_LowBestQ_st%d", CLtype.c_str(), st)] = new TH1D(Form("%s_x_LowBestQ_st%d", CLtype.c_str(), st), Form("%s_x_LowBestQ_st%d; xLoc; Entries",CLtype.c_str(), st ), 100, -220, 220);
+    for (const auto st : geom.STATIONS) {
+      m_plots[Form("%s_DigiTime_st%d", type, st)]   = new TH1D( Form("%s_DigiTime_st%d", type, st), Form("%s_DigiTime_st%d; mean digi cluster time (ns); entries", type, st), 300, 400, 1000 );
+      m_plots[Form("%s_x_LowBestQ_st%d", type, st)] = new TH1D(Form("%s_x_LowBestQ_st%d", type, st), Form("%s_x_LowBestQ_st%d; xLoc; Entries",type, st ), 100, -220, 220);
       
-      m_2Dplots[Form("%s_N_Cluster_st%d", CLtype.c_str(), st)] = new TH2I(Form("%s_N_Cluster_st%d", CLtype.c_str(), st), Form("%s_N_Cluster_st%d", CLtype.c_str(), st), 14, -0.5, 13.5, 7, -3.5, 3.5); 
-      m_2Dplots[Form("%s_N_Digi_st%d", CLtype.c_str(), st)] = new TH2I(Form("%s_N_Digi_st%d", CLtype.c_str(), st), Form("%s_N_Digi_st%d", CLtype.c_str(), st), 14, -0.5, 13.5, 7, -3.5, 3.5);
-      m_2Dplots[Form("%s_TPs_LocalDirectionvsPosition_st%d", CLtype.c_str(), st)] = new TH2D(Form("%s_TPs_LocalDirectionvsPosition_st%d", CLtype.c_str(), st), Form("AllTPs_LocalDirectionvsPosition_st%d", st ), 200, -200, 200, 11, -1, 1 );
+      m_2Dplots[Form("%s_N_Cluster_st%d", type, st)] = new TH2I(Form("%s_N_Cluster_st%d", type, st), Form("%s_N_Cluster_st%d", type, st), 14, -0.5, 13.5, 7, -3.5, 3.5); 
+      m_2Dplots[Form("%s_N_Digi_st%d", type, st)] = new TH2I(Form("%s_N_Digi_st%d", type, st), Form("%s_N_Digi_st%d", type, st), 14, -0.5, 13.5, 7, -3.5, 3.5);
+      m_2Dplots[Form("%s_TPs_LocalDirectionvsPosition_st%d", type, st)] = new TH2D(Form("%s_TPs_LocalDirectionvsPosition_st%d", type, st), Form("AllTPs_LocalDirectionvsPosition_st%d", st ), 200, -200, 200, 11, -1, 1 );
 
-      m_effs[Form("%s_ClusterEfficiency_st%d", CLtype.c_str(), st)] = new TEfficiency(Form("%s_ClusterEfficiency_st%d", CLtype.c_str(), st), Form("%s_ClusterEfficiency_st%d; sector; wheel", CLtype.c_str(), st), 14, -0.5, 13.5, 7, -3.5, 3.5);
-      m_effs[Form("%s_Eff_SegMatch_st%d", CLtype.c_str(), st)] = new TEfficiency(Form("%s_Eff_SegMatch_st%d", CLtype.c_str(), st), Form("%s_Eff_SegMatch_st%d; sector; wheel", CLtype.c_str(), st), 14, -0.5, 13.5, 7, -3.5, 3.5);
-      m_effs[Form("%s_Eff_DigiMatch_st%d", CLtype.c_str(), st)] = new TEfficiency(Form("%s_Eff_DigiMatch_st%d", CLtype.c_str(), st), Form("%s_Eff_DigiMatch_st%d; sector; wheel", CLtype.c_str(), st), 14, -0.5, 13.5, 7, -3.5, 3.5);
+      m_effs[Form("%s_ClusterEfficiency_st%d", type, st)] = new TEfficiency(Form("%s_ClusterEfficiency_st%d", type, st), Form("%s_ClusterEfficiency_st%d; sector; wheel", type, st), 14, -0.5, 13.5, 7, -3.5, 3.5);
+      m_effs[Form("%s_Eff_SegMatch_st%d", type, st)] = new TEfficiency(Form("%s_Eff_SegMatch_st%d", type, st), Form("%s_Eff_SegMatch_st%d; sector; wheel", type, st), 14, -0.5, 13.5, 7, -3.5, 3.5);
+      m_effs[Form("%s_Eff_DigiMatch_st%d", type, st)] = new TEfficiency(Form("%s_Eff_DigiMatch_st%d", type, st), Form("%s_Eff_DigiMatch_st%d; sector; wheel", type, st), 14, -0.5, 13.5, 7, -3.5, 3.5);
       
-      for (const auto wh : WHEELS){
-        m_plots[Form("%s_Digi_residual_st%d_wh%d", CLtype.c_str(), st, wh)] = new TH1D( Form("%s_Digi_residual_st%d_wh%d", CLtype.c_str(), st, wh), Form("%s_Digi_residual_st%d_wh%d; cluster.bestSeg.xLoc - digi.xLoc; entries", CLtype.c_str(), st, wh), 51, -10, 10 );
+      for (const auto wh : geom.WHEELS){
+        m_plots[Form("%s_Digi_residual_st%d_wh%d", type, st, wh)] = new TH1D( Form("%s_Digi_residual_st%d_wh%d", type, st, wh), Form("%s_Digi_residual_st%d_wh%d; cluster.bestSeg.xLoc - digi.xLoc; entries", type, st, wh), 51, -10, 10 );
       }
     }
   }
 
-  for (const auto st : STATIONS) {
+  for (const auto st : geom.STATIONS) {
     m_plots[Form("Res_MuMatched_st%d", st)] = new TH1D(Form("Res_MuMatched_st%d", st), Form("Res_MuMatched; cluster.bestTP().xLoc - mu.xLoc; Entries"), 101, -10, 10);
     
     m_2Dplots[Form("N_MuMatch_st%d", st)] = new TH2I(Form("N_MuMatch_st%d", st), Form("N_MuMatch_st%d; sector ; wheel", st), 14, -0.5, 13.5, 7, -3.5, 3.5);
@@ -99,96 +98,98 @@ void TestAnalyser::DefinePlot(){
   }
 }
 
-void TestAnalyser::ClusterAnalisis(std::vector<Cluster> CLtoAnalize, std::string CLtype,  std::vector<Segment> Segments){
-    for (auto const &cluster : CLtoAnalize) {
+void Analyser::ClusterAnalisis(const std::vector<Cluster> & clusters, const std::string & typeStr,  const std::vector<Segment> & segments){
+    for (auto const &cluster : clusters) {
       auto wh{cluster.wheel};
       auto sec{cluster.sector};
       if (sec == 13 ) sec = 4;
       if (sec == 14 ) sec = 10;
       auto st{cluster.station};
-
-      m_2Dplots[Form("%s_TPs_LocalDirectionvsPosition_st%d", CLtype.c_str(), st)]->Fill(cluster.bestTP().xLoc, cluster.bestTP().psi);
-      m_plots[Form("%s_ClusterSize", CLtype.c_str())]->Fill(cluster.tpClusterSize()); 
+      const auto type{typeStr.c_str()};
+      
+      m_2Dplots[Form("%s_TPs_LocalDirectionvsPosition_st%d", type, st)]->Fill(cluster.bestTP().xLoc, cluster.bestTP().psi);
+      m_plots[Form("%s_ClusterSize", type)]->Fill(cluster.tpClusterSize()); 
       // ########## Study TP ghost distribution #############
-      if (cluster.foundTP) ++m_counters[Form("%s_nClusters", CLtype.c_str())];
-      m_counters[Form("%s_ooTHQCount", CLtype.c_str())] += cluster.ootCountIf([=](TriggerPrimitive const & tp) { return tp.quality > HIGH_QUAL_CUT; });
+      if (cluster.foundTP) ++m_counters[Form("%s_nClusters", type)];
+      m_counters[Form("%s_ooTHQCount", type)] += cluster.ootCountIf([=](TriggerPrimitive const & tp) { return tp.quality > HIGH_QUAL_CUT; });
 
       int bestQ = cluster.bestTPQuality();
       int ootSize{cluster.ootSize()};
       int itSize{cluster.itSize()};
 
-      m_plots[Form("%s_Q_Best", CLtype.c_str())]->Fill(bestQ);
-      m_plots[Form("%s_ITGhosts", CLtype.c_str())]->Fill(itSize);
-      m_plots[Form("%s_OoTGhosts", CLtype.c_str())]->Fill(ootSize);
-      m_plots[Form("%s_N_Ghost", CLtype.c_str())]->Fill(ootSize + itSize);
-      m_counters[Form("%s_nTPs", CLtype.c_str())] += cluster.tpClusterSize();
+      m_plots[Form("%s_Q_Best", type)]->Fill(bestQ);
+      m_plots[Form("%s_ITGhosts", type)]->Fill(itSize);
+      m_plots[Form("%s_OoTGhosts", type)]->Fill(ootSize);
+      m_plots[Form("%s_N_Ghost", type)]->Fill(ootSize + itSize);
+      m_counters[Form("%s_nTPs", type)] += cluster.tpClusterSize();
 
 
-      if (bestQ == 1) m_plots[Form("%s_x_LowBestQ_st%d", CLtype.c_str(), st)]->Fill(cluster.bestTP().xLoc);
+      if (bestQ == 1) m_plots[Form("%s_x_LowBestQ_st%d", type, st)]->Fill(cluster.bestTP().xLoc);
       
-      m_2Dplots[Form("%s_N_Cluster_st%d", CLtype.c_str(), st)]->Fill(sec, wh);
+      m_2Dplots[Form("%s_N_Cluster_st%d", type, st)]->Fill(sec, wh);
       
       if (cluster.hasGhosts()) {
-        ++m_counters[Form("%s_nClustersGhosts", CLtype.c_str())];
+        ++m_counters[Form("%s_nClustersGhosts", type)];
 
         for (const auto &ghost : cluster.ootGhosts()) {
-          m_plots[Form("%s_BX_OoTGhosts", CLtype.c_str())]  ->Fill(ghost.BX);
-          m_plots[Form("%s_Res_OoTGhosts", CLtype.c_str())] ->Fill(ghost.xLoc - cluster.bestTP().xLoc);
-          m_2Dplots[Form("%s_Q_OoTGhosts", CLtype.c_str())] ->Fill(bestQ, ghost.quality);
-          m_plots[Form("%s_Q_Ghost", CLtype.c_str())]  ->Fill(ghost.quality);
+          m_plots[Form("%s_BX_OoTGhosts", type)]  ->Fill(ghost.BX);
+          m_plots[Form("%s_Res_OoTGhosts", type)] ->Fill(ghost.xLoc - cluster.bestTP().xLoc);
+          m_2Dplots[Form("%s_Q_OoTGhosts", type)] ->Fill(bestQ, ghost.quality);
+          m_plots[Form("%s_Q_Ghost", type)]  ->Fill(ghost.quality);
 
           if (ghost.quality == 1) {
-            m_plots[Form("%s_t0_Selected", CLtype.c_str())]->Fill(ghost.t0);
-            m_plots[Form("%s_LowQ_matched", CLtype.c_str())]->Fill(ghost.t0);
-            m_plots[Form("%s_BX_LowQ_matched", CLtype.c_str())]->Fill(ghost.BX);
+            m_plots[Form("%s_t0_Selected", type)]->Fill(ghost.t0);
+            m_plots[Form("%s_LowQ_matched", type)]->Fill(ghost.t0);
+            m_plots[Form("%s_BX_LowQ_matched", type)]->Fill(ghost.BX);
           }
         }
 
         for (const auto &ghost : cluster.itGhosts()) {
-          m_plots[Form("%s_BX_ITGhosts", CLtype.c_str())]->Fill(ghost.BX);
-          m_plots[Form("%s_Res_ITGhosts", CLtype.c_str())]->Fill(ghost.xLoc - cluster.bestTP().xLoc);
-          m_2Dplots[Form("%s_Q_ITGhosts", CLtype.c_str())]->Fill(bestQ, ghost.quality);
-          m_plots[Form("%s_Q_Ghost", CLtype.c_str())]->Fill(ghost.quality);
+          m_plots[Form("%s_BX_ITGhosts", type)]->Fill(ghost.BX);
+          m_plots[Form("%s_Res_ITGhosts", type)]->Fill(ghost.xLoc - cluster.bestTP().xLoc);
+          m_2Dplots[Form("%s_Q_ITGhosts", type)]->Fill(bestQ, ghost.quality);
+          m_plots[Form("%s_Q_Ghost", type)]->Fill(ghost.quality);
 
           if (ghost.quality == 1) {
-            m_plots[Form("%s_t0_Selected", CLtype.c_str())]->Fill(ghost.t0);
-            m_plots[Form("%s_LowQ_matched", CLtype.c_str())]->Fill(ghost.t0);
-            m_plots[Form("%s_BX_LowQ_matched", CLtype.c_str())]->Fill(ghost.BX);
+            m_plots[Form("%s_t0_Selected", type)]->Fill(ghost.t0);
+            m_plots[Form("%s_LowQ_matched", type)]->Fill(ghost.t0);
+            m_plots[Form("%s_BX_LowQ_matched", type)]->Fill(ghost.BX);
           }
         }
       }
 
       if (cluster.muMatched && cluster.bestSeg().nPhiHits >= 4 ) {
         bool efficient = std::abs(cluster.bestTP().BX - CORRECT_BX) < 1;
-        m_effs[Form("%s_ClusterEfficiency_st%d", CLtype.c_str(), st)]->Fill(efficient , sec, wh); 
+        m_effs[Form("%s_ClusterEfficiency_st%d", type, st)]->Fill(efficient , sec, wh); 
       }
 
       // ########## Study segment matching #############
-      m_effs[Form("%s_Eff_SegMatch_st%d", CLtype.c_str(), st)]->Fill(cluster.segMatched, sec, wh);
-      for (const auto s : Segments)
+      m_effs[Form("%s_Eff_SegMatch_st%d", type, st)]->Fill(cluster.segMatched, sec, wh);
+      for (const auto s : segments)
       if (cluster.foundTP && s.wheel == wh && s.sector == sec && s.station == st){
-        m_plots[Form("%s_Res_SegMatched", CLtype.c_str())]->Fill( cluster.bestTP().xLoc - s.xLoc );
+        m_plots[Form("%s_Res_SegMatched", type)]->Fill( cluster.bestTP().xLoc - s.xLoc );
       }
       
       // ########## Study digi clusters #############
-      m_effs[Form("%s_Eff_DigiMatch_st%d", CLtype.c_str(), st)]->Fill(cluster.digiMatched, sec, wh);
+      m_effs[Form("%s_Eff_DigiMatch_st%d", type, st)]->Fill(cluster.digiMatched, sec, wh);
       
       if (cluster.digiMatched){
         for (auto &digi : cluster.matchedDigi()){
-          m_plots[Form("%s_Digi_residual_st%d_wh%d", CLtype.c_str(), st, wh)]->Fill( cluster.bestSeg().xLoc - digi.xLoc );
+          m_plots[Form("%s_Digi_residual_st%d_wh%d", type, st, wh)]->Fill( cluster.bestSeg().xLoc - digi.xLoc );
         }
       }
      
-      m_plots[Form("%s_N_DigiPerCluster", CLtype.c_str())]->Fill(cluster.nDigi());
+      m_plots[Form("%s_N_DigiPerCluster", type)]->Fill(cluster.nDigi());
       m_plots["DigiSL"]->Fill(cluster.digiSL());
 
-      if (cluster.foundDigi) m_2Dplots[Form("%s_N_Digi_st%d", CLtype.c_str(), st)]->Fill(sec, wh);
+      if (cluster.foundDigi) m_2Dplots[Form("%s_N_Digi_st%d", type, st)]->Fill(sec, wh);
     }
 }
 
-std::vector<Cluster> MissingClusters(std::vector<Cluster> FirstCLVector, std::vector<Cluster> SecondCLvector, std::string CLtype) {
+std::vector<Cluster> MissingClusters(std::vector<Cluster> FirstCLVector, std::vector<Cluster> SecondCLvector, std::string typeStr) {
   // FirstCL is the smaller set , SecondCL is the bigger one 
   std::vector<Cluster> missingClusters;
+  const auto type{typeStr.c_str()};
 
   for (const auto &FirstCluster : FirstCLVector) {
     if (!FirstCluster.foundTP) continue;
@@ -199,7 +200,7 @@ std::vector<Cluster> MissingClusters(std::vector<Cluster> FirstCLVector, std::ve
     int n_cluster_uguali = std::count_if(SecondCLvector.begin(), SecondCLvector.end(), [&](const auto & cl) {return cl == FirstCluster;} );
     if (n_cluster_uguali == 0) {
       missingClusters.push_back(FirstCluster);
-      std::cout << "Missing cluster for "<< CLtype.c_str() <<"\n" << FirstCluster << std::endl;
+      std::cout << "Missing cluster for "<< type <<"\n" << FirstCluster << std::endl;
 
       
       std::cout << "In the first cluster there are also " << std::endl;
@@ -223,10 +224,10 @@ std::vector<Cluster> MissingClusters(std::vector<Cluster> FirstCLVector, std::ve
 }
 
 
-void TestAnalyser::Loop() {
+void Analyser::Loop() {
   Geometry geom{};
 
-  TFile outputFile("results/prompt/outputFile.root","RECREATE");
+  TFile outputFile("results/outputFile.root","RECREATE");
   outputFile.cd();
 
   tags.push_back("PreFilter");
@@ -410,16 +411,17 @@ void TestAnalyser::Loop() {
     }
   }
 
-  for (auto CLtype : tags){
-  double ghostFraction = m_counters[Form("%s_nClustersGhosts", CLtype.c_str())] / m_counters[Form("%s_nClusters", CLtype.c_str())];
- std::cout << " \nFor " << CLtype <<std::endl;
- std::cout << " Ratio LQ/selected with phi=  " << m_plots[Form("%s_LowQ_matched", CLtype.c_str())] ->GetEntries() << "/ "
+  for (auto tag : tags){
+    const auto type{tag.c_str()};
+  double ghostFraction = m_counters[Form("%s_nClustersGhosts", type)] / m_counters[Form("%s_nClusters", type)];
+ std::cout << " \nFor " << tag <<std::endl;
+ std::cout << " Ratio LQ/selected with phi=  " << m_plots[Form("%s_LowQ_matched", type)] ->GetEntries() << "/ "
        << m_plots["t0_LowQuality"]->GetEntries() << " = "
-       << m_plots[Form("%s_LowQ_matched", CLtype.c_str())] ->GetEntries() / m_plots["t0_LowQuality"]->GetEntries() <<std::endl;
+       << m_plots[Form("%s_LowQ_matched", type)] ->GetEntries() / m_plots["t0_LowQuality"]->GetEntries() <<std::endl;
 
- std::cout << " Fraction of clusters with ghost (" << m_counters[Form("%s_nClustersGhosts", CLtype.c_str())] << ") on total (" << m_counters[Form("%s_nClusters", CLtype.c_str())]
-       << ") = " << ghostFraction << " made with "  << m_counters[Form("%s_nTPs", CLtype.c_str())]<< " TPs" <<std::endl; 
- std::cout << " HQ out of time clusters: " << m_counters[Form("%s_ooTHQCount", CLtype.c_str())] <<std::endl;
+ std::cout << " Fraction of clusters with ghost (" << m_counters[Form("%s_nClustersGhosts", type)] << ") on total (" << m_counters[Form("%s_nClusters", type)]
+       << ") = " << ghostFraction << " made with "  << m_counters[Form("%s_nTPs", type)]<< " TPs" <<std::endl; 
+ std::cout << " HQ out of time clusters: " << m_counters[Form("%s_ooTHQCount", type)] <<std::endl;
   }
 
   std::cout << "LQFilter found " << removedLQFilter << " less clusters, HQFilter found " << removedHQFilter << " less clusters " << std::endl;

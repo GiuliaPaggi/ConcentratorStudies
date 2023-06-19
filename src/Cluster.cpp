@@ -29,10 +29,8 @@ Cluster::Cluster(std::vector<TriggerPrimitive> &tps, std::vector<Segment> &segs,
   };
 
   auto compareTPs = [](auto const &tp1, auto const &tp2) {      // needs to return true if 1 < 2
-    if (tp1.BX != RIGHT_BX && tp2.BX == RIGHT_BX) return true;
-    else if (tp1.BX == RIGHT_BX && tp2.BX != RIGHT_BX) return false;
-    else return (tp1.quality < tp2.quality);
-    //return (tp1.BX != RIGHT_BX && tp2.BX == RIGHT_BX) && (tp1.quality < tp2.quality);
+    return (tp1.BX != RIGHT_BX && tp2.BX == RIGHT_BX) || 
+           (tp1.BX == RIGHT_BX && tp2.BX == RIGHT_BX && tp1.quality < tp2.quality);
   };
 
   auto compareSegs = [](Segment &s1, Segment &s2) {
@@ -56,7 +54,7 @@ Cluster::Cluster(std::vector<TriggerPrimitive> &tps, std::vector<Segment> &segs,
   auto bestTPIt{std::max_element(tps_in_chamber.begin(), tps_in_chamber.end(), compareTPs)};
 
   // the higherst quality in time is the bestTP of the cluster
-  if (bestTPIt != tps_in_chamber.end()) {           // max_element returns last if the range is empty.
+  if (bestTPIt != tps_in_chamber.end() && bestTPIt->BX == RIGHT_BX) {           // max_element returns last if the range is empty.
     _bestTP = *bestTPIt;
     toggleCluster(tps,_bestTP);
     tps_in_chamber.erase(bestTPIt);
@@ -65,7 +63,11 @@ Cluster::Cluster(std::vector<TriggerPrimitive> &tps, std::vector<Segment> &segs,
     clusterX = _bestTP.xLoc;
     if ( _bestTP.BX != RIGHT_BX && tps_in_chamber.size() > 1) {
       std::cout << " la best TP di qualità " << _bestTP.quality << " non è in tempo, è al BX " << _bestTP.BX << " nel resto del cluster ho " << std::endl;
-      for (auto const &T : tps_in_chamber ) if (T.index != _bestTP.index && T.BX == RIGHT_BX ) std::cout <<  " TP at BX " << T.BX << " and quality " << T.quality <<  std::endl;
+      for (auto const &T : tps_in_chamber ) {
+        if (T.index != _bestTP.index) {
+          std::cout <<  " TP at BX " << T.BX << " and quality " << T.quality <<  std::endl;
+        }
+      }
       std::cout << "------------------------------------------------------------------------" << std::endl;
     }
   }
@@ -73,8 +75,12 @@ Cluster::Cluster(std::vector<TriggerPrimitive> &tps, std::vector<Segment> &segs,
   if (tps_in_chamber.size() > 0) {
     // cluster close-by TPS from tps in chamber
     std::vector<TriggerPrimitive> cluster;
-    clusterX = _bestTP.xLoc;
-
+    
+    if (_bestTP.index == 9999)
+    {
+      clusterX = tps_in_chamber[0].xLoc;
+    }
+ 
     std::copy_if(tps_in_chamber.begin(), tps_in_chamber.end(),
                  std::back_inserter(cluster), inRange);
 
