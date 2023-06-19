@@ -1,29 +1,29 @@
 #ifndef Cluster_h
 #define Cluster_h
 
-#include "include/TriggerPrimitive.h"
-#include "include/Segment.h"
 #include "include/Digi.h"
+#include "include/Segment.h"
+#include "include/TriggerPrimitive.h"
 
 // classe cluster-> qualità massima al bx giusto, n di ghost al bx giusto, n
 // ghost al bx sbagliato, accedere a tutti (vettore indici di trigger primitive)
 // parti da prompt
-class Cluster{
-public:
+class Cluster {
+ public:
   int wheel{-5};
   int sector{-1};
-  int station{-1}; // CB can they be const?
+  int station{-1};  // CB can they be const?
 
   bool muMatched{false};
   std::array<int, 2> muMatchedIndex;
 
-  bool foundTP{false}; // CB what do we need out of this?
+  bool foundTP{false};  // CB what do we need out of this?
   bool foundSeg{false};
   bool foundDigi{false};
   bool segMatched{false};
   bool digiMatched{false};
 
-private:
+ private:
   Segment _bestSeg{};
   std::vector<Segment> _segmentCluster;
 
@@ -37,14 +37,14 @@ private:
   bool sl1Cluster{false};
   bool sl3Cluster{false};
 
-
  public:
   Cluster(){};
-  Cluster(std::vector<TriggerPrimitive> & tps, std::vector<Segment> & seg, std::vector<Digi> & digis, double xCut, double digiCut, int wh, int sec, int st);
+  Cluster(std::vector<TriggerPrimitive>& tps, std::vector<Segment>& seg, std::vector<Digi>& digis, double xCut,
+          double digiCut, int wh, int sec, int st);
 
-  void matchMu( int muWh, int muStat, int muSec,  double muXedge, double muYedge, double muX, int muIndex, int nmu );
-  void matchSegment(Segment segment, double xCut); // CB what is this for?
-  void matchDigi(std::vector<Digi> const& digis, double xCut); // CB what is this for?
+  void matchMu(int muWh, int muStat, int muSec, double muXedge, double muYedge, double muX, int muIndex, int nmu);
+  void matchSegment(Segment segment, double xCut);              // CB what is this for?
+  void matchDigi(std::vector<Digi> const& digis, double xCut);  // CB what is this for?
 
   /// Size of TP clusters
   int itSize() const;
@@ -52,7 +52,7 @@ private:
   int tpClusterSize() const;
 
   /// ??
-  bool isolated() const{ return bestTPQuality() < 0 && !hasGhosts(); }; // CB what is this?
+  bool isolated() const { return bestTPQuality() < 0 && !hasGhosts(); };  // CB what is this?
   bool hasGhosts() const { return itSize() || ootSize(); };
 
   /// Provide list of in-time and out-of-time ghosts in cluster
@@ -61,7 +61,7 @@ private:
 
   /// Count number of in-time and out-of-time ghosts compatible with a given criteria
   int itCountIf(std::function<bool(TriggerPrimitive const&)> f) const;
-  int ootCountIf(std::function<bool(TriggerPrimitive const&)>  f) const;
+  int ootCountIf(std::function<bool(TriggerPrimitive const&)> f) const;
 
   /// Information about the "best" TP in the cluster
   int bestTPIndex() const;
@@ -70,7 +70,7 @@ private:
 
   /// Size and vector of segment cluster
   int segClusterSize() const;
-  const std::vector<Segment> & segCluster() const;
+  const std::vector<Segment>& segCluster() const;
 
   /// Information about the "best" segment in the cluster
   int bestSegIndex() const;
@@ -79,31 +79,24 @@ private:
 
   /// Size and SL of the digi cluster
   int nDigi() const;
-  int digiSL() const; // return 1 - 3 or 5 for both
+  int digiSL() const;  // return 1 - 3 or 5 for both
 
   /// Vector of digis in the cluster
   const std::vector<Digi>& matchedDigi() const;
-
-
 };
 
-inline bool operator==(Cluster const &lCL, Cluster const &rCL) {
-  return (lCL.wheel == rCL.wheel && lCL.sector == rCL.sector && lCL.station == rCL.station && lCL.foundTP && rCL.foundTP && lCL.bestTP().quality == rCL.bestTP().quality);
-  //else return(lCL.wheel == rCL.wheel && lCL.sector == rCL.sector && lCL.foundSeg && rCL.foundSeg && lCL.station == rCL.station && lCL.bestSegPhiHits() == rCL.bestSegPhiHits());
-  
+inline bool operator==(Cluster const& lCL, Cluster const& rCL) {
+  return (lCL.wheel == rCL.wheel && lCL.sector == rCL.sector && lCL.station == rCL.station && lCL.foundTP &&
+          rCL.foundTP && lCL.bestTP().quality == rCL.bestTP().quality);
+  // else return(lCL.wheel == rCL.wheel && lCL.sector == rCL.sector && lCL.foundSeg && rCL.foundSeg && lCL.station ==
+  // rCL.station && lCL.bestSegPhiHits() == rCL.bestSegPhiHits());
 }
 
-inline std::ostream& operator <<(std::ostream& os, Cluster const cluster) {
-  os << "Cluster in wh " << cluster.wheel << 
-                       " stat " << cluster.station << 
-                       " sector " << cluster.sector << 
-                       " has BestTP of quality " << cluster.bestTPQuality() << 
-                       " in xLoc " << cluster.bestTP().xLoc << 
-                       " at BX " << cluster.bestTP().BX << 
-                       ", has " << cluster.segClusterSize() << " segments " <<
-                       " in xLoc " << cluster.bestSeg().xLoc << 
-                       " and has " << cluster.nDigi() << " digis " << 
-                       std::endl;   
+inline std::ostream& operator<<(std::ostream& os, Cluster const cluster) {
+  os << "Cluster in wh " << cluster.wheel << " stat " << cluster.station << " sector " << cluster.sector
+     << " has BestTP of quality " << cluster.bestTPQuality() << " in xLoc " << cluster.bestTP().xLoc << " at BX "
+     << cluster.bestTP().BX << ", has " << cluster.segClusterSize() << " segments "
+     << " in xLoc " << cluster.bestSeg().xLoc << " and has " << cluster.nDigi() << " digis " << std::endl;
   return os;
 }
 

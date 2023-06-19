@@ -14,7 +14,7 @@ class TriggerPrimitive {
   int quality{-1};
 
   int BX{-1000};
-  int t0{-100000}; // in ns
+  int t0{-100000};  // in ns
 
   float xLoc{-1000.0};  // in cm
 
@@ -36,9 +36,8 @@ class TriggerPrimitive {
   bool hasHighestQuality{false};
 
   TriggerPrimitive() = default;
-  TriggerPrimitive(std::size_t i, int tpg_wheel, int tpg_sector, int tpg_station,
-                                   int tpg_quality, int tpg_phi, int tpg_phiB, int tpg_BX,
-                                   int tpg_t0, float tpg_posLoc_x);
+  TriggerPrimitive(std::size_t i, int tpg_wheel, int tpg_sector, int tpg_station, int tpg_quality, int tpg_phi,
+                   int tpg_phiB, int tpg_BX, int tpg_t0, float tpg_posLoc_x);
 
   ~TriggerPrimitive(){};
 
@@ -46,17 +45,15 @@ class TriggerPrimitive {
   bool match(TriggerPrimitive &tp, double phiCut, double timeCut);
   // std::vector<int> makeCluster(TriggerPrimitive listOfPrimitives[], int size,
   //                         double phiCut);  // taglio in cm, valore ragionevole 5 cm
-  void findHigherQuality(TriggerPrimitive listOfPrimitives[], const std::vector<int>& clusterIndices);
+  void findHigherQuality(TriggerPrimitive listOfPrimitives[], const std::vector<int> &clusterIndices);
   // std::vector<int> selectRightBX(TriggerPrimitive listOfPrimitives[], const std::vector<int>& clusterIndices);
   void checkBX();
 
-  // Filter functions 
+  // Filter functions
   bool MatchFromLQ(TriggerPrimitive &TP, double PhiCut, double TimeCut);
   bool MatchFromHQ(TriggerPrimitive &TP, double PhiCut, double TimeCut);
 };
 
-inline bool operator==(TriggerPrimitive const &ltp, TriggerPrimitive const &rtp) {
-  return ltp.index == rtp.index;
-}
+inline bool operator==(TriggerPrimitive const &ltp, TriggerPrimitive const &rtp) { return ltp.index == rtp.index; }
 
 #endif

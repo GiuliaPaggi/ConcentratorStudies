@@ -1,36 +1,30 @@
 #ifndef Digi_h
 #define Digi_h
 
-#include "include/Geometry.h"
-
 #include <vector>
 
-class Digi{
+#include "include/Geometry.h"
 
-    public:
-    Digi() = delete;
-    Digi(const Geometry& geom, int i, int wh, int sec, int st, int sl, int la, int w, double t);
+class Digi {
+ public:
+  Digi() = delete;
+  Digi(const Geometry &geom, int i, int wh, int sec, int st, int sl, int la, int w, double t);
 
-    std::vector<Digi> findCluster(std::vector<Digi> digis, double cut) const;
+  std::vector<Digi> findCluster(std::vector<Digi> digis, double cut) const;
 
-    std::size_t index{9999};
-    int wheel{-1};
-    int sector{-1};
-    int station{-1};
-    int superlayer{-1};
-    int layer{-1};
-    int wire{-1};
-    double time{-1.0};
-    double xLoc{-1.0};
+  std::size_t index{9999};
+  int wheel{-1};
+  int sector{-1};
+  int station{-1};
+  int superlayer{-1};
+  int layer{-1};
+  int wire{-1};
+  double time{-1.0};
+  double xLoc{-1.0};
 
-    bool inCluster{false};
-
+  bool inCluster{false};
 };
 
-inline bool operator==(Digi const &ldigi, Digi const &rdigi) {
-  return ldigi.index == rdigi.index;
-}
-
+inline bool operator==(Digi const &ldigi, Digi const &rdigi) { return ldigi.index == rdigi.index; }
 
 #endif
-    

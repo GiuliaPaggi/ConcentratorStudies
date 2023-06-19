@@ -6,10 +6,9 @@
 #include <vector>
 
 class Geometry {
+  double geometry[5][4][14][3][4][2];  // CB sectors are 14
 
-  double geometry[5][4][14][3][4][2]; // CB sectors are 14
-
-public:
+ public:
   // CB not optimal, but readable
   const std::vector<int> WHEELS{-2, -1, 0, 1, 2};
   const std::vector<int> SECTORS{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
