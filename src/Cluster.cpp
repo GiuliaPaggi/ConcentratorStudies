@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <iostream>
 
-constexpr int RIGHT_BX{-380};
+constexpr int RIGHT_BX{20};
 
 Cluster::Cluster(std::vector<TriggerPrimitive> &tps, std::vector<Segment> &segs, std::vector<Digi> &digis, double xCut,
                  double digiCut, int wh, int sec, int st)

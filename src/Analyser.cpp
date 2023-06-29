@@ -15,10 +15,7 @@
 
 #include "include/Geometry.h"
 
-double T_MIN{-9800};
-double T_MAX{-9200};
-double BX_MIN{-392};
-double BX_MAX{-368};
+
 
 const std::array<double, 4> MB{402.2, 490.5, 597.5, 700.0};
 const int LOW_QUAL_CUT{0};
@@ -29,7 +26,13 @@ const double PHI_CUT_2{0.01};
 const double T0_CUT{12.5};
 const double X_CUT{5.0};
 const double DIGI_CUT{10.0};
-const int CORRECT_BX{-380};
+const int CORRECT_BX{20};
+
+double BX_MIN{CORRECT_BX-12};
+double BX_MAX{CORRECT_BX+12};
+
+double T_MIN{BX_MIN*25};
+double T_MAX{BX_MAX*25};
 
 void Analyser::DefinePlot() {
   Geometry geom{};
@@ -38,6 +41,7 @@ void Analyser::DefinePlot() {
   m_plots["t0_LowQuality"] = new TH1D("t0_LowQuality", "t0_LowQuality; t0 (ns); Entries", 100, T_MIN, T_MAX);
   m_plots["BX_LowQuality"] = new TH1D("BX_LowQuality", "BX_LowQuality; BX; Entries", 24, BX_MIN, BX_MAX);
   m_plots["BX_LowQ_more1HQ"] = new TH1D("BX_LowQ_more1HQ", "BX_LowQ_more1HQ; BX; Entries", 24, BX_MIN, BX_MAX);
+  m_plots["Res_Mu_Gen"] = new TH1D("Res_Mu_Gen", "Res_Mu_Gen; Mu_DeltaR-gen_DeltaR; Entries", 100, -4, 4);
 
   for (auto tag : tags) {
     const auto type{tag.c_str()};
@@ -124,10 +128,6 @@ void Analyser::DefinePlot() {
 
     m_2Dplots[Form("N_MuMatch_st%d", st)] =
         new TH2I(Form("N_MuMatch_st%d", st), Form("N_MuMatch_st%d; sector ; wheel", st), 14, -0.5, 13.5, 7, -3.5, 3.5);
-    m_2Dplots[Form("LQnotinHQ_st%d", st)] =
-        new TH2I(Form("LQnotinHQ_st%d", st), Form("LQnotinHQ_st%d; sector; wheel", st), 14, -0.5, 13.5, 7, -3.5, 3.5);
-    m_2Dplots[Form("HQnotinLQ_st%d", st)] =
-        new TH2I(Form("HQnotinLQ_st%d", st), Form("HQnotinLQ_st%d; sector; wheel", st), 14, -0.5, 13.5, 7, -3.5, 3.5);
 
     m_effs[Form("Eff_MuMatch_st%d", st)] = new TEfficiency(
         Form("Eff_MuMatch_st%d", st), Form("Eff_MuMatch_st%d; sector; wheel", st), 14, -0.5, 13.5, 7, -3.5, 3.5);
@@ -197,7 +197,7 @@ void Analyser::ClusterAnalisis(const std::vector<Cluster> &clusters, const std::
     }
 
     if (cluster.muMatched && cluster.bestSeg().nPhiHits >= 4) {
-      bool efficient = std::abs(cluster.bestTP().BX - CORRECT_BX) < 1;
+      bool efficient = (cluster.bestTPQuality() > 3) &&(std::abs(cluster.bestTP().BX - CORRECT_BX) < 1);
       m_effs[Form("%s_ClusterEfficiency_st%d", type, st)]->Fill(efficient, sec, wh);
     }
 
@@ -291,8 +291,10 @@ void Analyser::Loop() {
 
     // ########## LOOP ON EVENTS #############
     if (jentry % 100 == 0) std::cout << "Processing event: " << jentry << '\r' << std::flush;
-
-    if (std::abs(gen_pdgId->at(0)) != 13 || std::abs(gen_eta->at(0)) > 0.8) continue;
+    if (gen_pdgId->size() < 1 ) continue;
+    //if (std::abs(gen_pdgId->at(0)) != 13 || std::abs(gen_eta->at(0)) > 0.8) continue;
+    int genMatch = -5;
+    
 
     // ########## CREATE TPs std::vector #############
     std::vector<TriggerPrimitive> tps;
@@ -376,6 +378,7 @@ void Analyser::Loop() {
     // ########## ATTEMPT cluster - muon extrapolation matching #############
     for (UInt_t iMu = 0; iMu < mu_nMuons; ++iMu) {
       for (UInt_t i = 0; i < mu_nMatches->at(iMu); ++i) {
+        if (!mu_isMedium->at(iMu)) continue;
         int muTrkWheel = getXY<float>(mu_matches_wheel, iMu, i);
         int muTrkStation = getXY<float>(mu_matches_station, iMu, i);
         int muTrkSector = getXY<float>(mu_matches_sector, iMu, i);
@@ -384,6 +387,15 @@ void Analyser::Loop() {
         double muTrkX = getXY<float>(mu_matches_x, iMu, i);
         double edgeX = getXY<float>(mu_matches_edgeX, iMu, i);
         double edgeY = getXY<float>(mu_matches_edgeY, iMu, i);
+        double muDeltaR = std::sqrt( mu_eta->at(iMu)*mu_eta->at(iMu) + mu_phi->at(iMu)*mu_phi->at(iMu) );
+        for (int igen = 0; igen < gen_nGenParts; ++igen){
+          double genDeltaR = std::sqrt( gen_eta->at(igen)*gen_eta->at(igen) + gen_phi->at(igen)*gen_phi->at(igen));
+          m_plots["Res_Mu_Gen"]->Fill(muDeltaR-genDeltaR);
+          if (std::abs(muDeltaR-genDeltaR) < .25) genMatch = igen;
+        }
+
+        if (genMatch < 0 ) continue;
+        if (gen_pdgId->at(genMatch) !=13 || gen_eta->at(genMatch)  > 0.8) continue;
 
         for (auto &cluster : clusters) {
           auto wh{cluster.wheel};
@@ -401,7 +413,6 @@ void Analyser::Loop() {
             m_2Dplots[Form("N_MuMatch_st%d", st)]->Fill(sec, wh);
           }
         }
-
         for (auto &PMcluster : MatchFromLQ_clusters) {
           PMcluster.matchMu(muTrkWheel, muTrkStation, muTrkSector, edgeX, edgeY, muTrkX, i, iMu);
           PMcluster.matchDigi(digis, DIGI_CUT);
@@ -415,6 +426,8 @@ void Analyser::Loop() {
 
     // ########## RUN SOME ANALYSIS #############
     // ########## CLUSTER ANALYSIS #############
+    if (genMatch < 0 ) continue;
+    if (gen_pdgId->at(genMatch) !=13 || gen_eta->at(genMatch)  > 0.8) continue;
     ClusterAnalisis(clusters, tags[0], segments);
     ClusterAnalisis(MatchFromLQ_clusters, tags[1], segments);
     ClusterAnalisis(MatchFromHQ_clusters, tags[2], segments);
