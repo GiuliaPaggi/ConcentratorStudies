@@ -37,17 +37,11 @@ The project is divided into several files:
 * Analiser.h and Analiser.cpp, where the Ntuple content is analysed.
 
 ## Usage
+    
+      cmake -B build -S . -DCMAKE_BUILD_TYPE=Debug
+      cmake --build build/
+      ./build/analisis NTupleFile.root
 
-For now, the NTuple file name is hard-coded at https://github.com/GiuliaPaggi/ConcentratorStudies/blob/main/Analiser.cpp#L73 and https://github.com/GiuliaPaggi/ConcentratorStudies/blob/main/Analiser.h#L658. 
-To run the analiser, once in ROOT use:  
-      
-      .L TriggerPrimitive.cpp
-      .L Segment.cpp
-      .L Digi.cpp
-      .L Cluster.cpp
-      .L Analiser.cpp
-      Analiser a
-      a.Loop()
 
 
 ## Output
