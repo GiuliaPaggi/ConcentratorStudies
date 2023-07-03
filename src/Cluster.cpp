@@ -175,7 +175,7 @@ Cluster::Cluster(std::vector<TriggerPrimitive> &tps, std::vector<Segment> &segs,
     }
   }
 
-  if ( _digiCluster.size() > 0) foundDigi = true; 
+  if (_digiCluster.size() > 0) foundDigi = true;
 
   for (const auto &digi : _digiCluster) {
     toggleCluster(digis, digi);
@@ -202,20 +202,23 @@ int Cluster::ootCountIf(std::function<bool(TriggerPrimitive const &)> f) const {
   return std::count_if(_ootGhosts.begin(), _ootGhosts.end(), f);
 }
 
-void Cluster::matchMu(int muWh, int muStat, int muSec, double muXedge, double muYedge, double muX, int muIndex,
+bool Cluster::matchMu(int muWh, int muStat, int muSec, double muXedge, double muYedge, double muX, int muIndex,
                       int iMu) {
-  if (muWh == wheel && muStat == station && muSec == sector && muXedge < -5 && muYedge < -5) {
+  if (!muMatched && muWh == wheel && muStat == station && muSec == sector && muXedge < -5 && muYedge < -5) {
     // if the extrapolated segment is within 10 cm from _bestTP
     if (foundSeg && std::abs(_bestSeg.xLoc - muX) < 10) {
       muMatchedIndex[0] = iMu;
       muMatchedIndex[1] = muIndex;
       muMatched = true;
+      return true;
     } else if (!foundSeg && std::abs(_bestTP.xLoc - muX) < 10) {
       muMatchedIndex[0] = iMu;
       muMatchedIndex[1] = muIndex;
       muMatched = true;
+      return true;
     }
   }
+  return false;
 }
 
 int Cluster::segClusterSize() const { return _segmentCluster.size(); };

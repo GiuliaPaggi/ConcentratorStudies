@@ -40,7 +40,7 @@ class Cluster {
   Cluster(std::vector<TriggerPrimitive>& tps, std::vector<Segment>& seg, std::vector<Digi>& digis, double xCut,
           double digiCut, int wh, int sec, int st);
 
-  void matchMu(int muWh, int muStat, int muSec, double muXedge, double muYedge, double muX, int muIndex, int nmu);
+  bool matchMu(int muWh, int muStat, int muSec, double muXedge, double muYedge, double muX, int muIndex, int nmu);
 
   /// Size of TP clusters
   int itSize() const;

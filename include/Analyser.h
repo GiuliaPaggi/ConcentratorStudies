@@ -13,14 +13,14 @@
 class Analyser : public AnalyserBase {
  private:
   std::map<std::string, TH1 *> m_plots;
-  std::map<std::string, TH2 *> m_2Dplots;
+  std::map<std::string, TH2 *> m_2Dplots; // CB in theory not needed
   std::map<std::string, TEfficiency *> m_effs;
   std::vector<std::string> tags;
 
   std::map<std::string, double> m_counters;
-  double nClustersGhosts{};
-  double ooTHQCount{};
-  double nClusters{};
+  // double nClustersGhosts{};
+  // double ooTHQCount{}; // CB not used
+  // double nClusters{};
 
   void ClusterAnalisis(const std::vector<Cluster> &, const std::string &, const std::vector<Segment> &);
   void DefinePlot();
