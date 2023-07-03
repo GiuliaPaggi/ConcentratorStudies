@@ -52,8 +52,7 @@ Cluster::Cluster(std::vector<TriggerPrimitive> &tps, std::vector<Segment> &segs,
     toggleCluster(tps, _bestTP);
     tps_in_chamber.erase(bestTPIt);
     foundTP = true;
-    // added G
-    clusterX = _bestTP.xLoc;
+    
     if (_bestTP.BX != RIGHT_BX && tps_in_chamber.size() > 1) {
       std::cout << " la best TP di qualità " << _bestTP.quality << " non è in tempo, è al BX " << _bestTP.BX
                 << " nel resto del cluster ho " << std::endl;
