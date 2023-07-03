@@ -5,9 +5,9 @@ Digi::Digi(const Geometry& geom, int i, int wh, int sec, int stat, int SL, int L
     : wheel{wh}, sector{sec}, station{stat}, superlayer{SL}, layer{L}, wire{w}, time{t} {
   index = i;
 
-  if (sec == 13)
+  if (sector == 13)
     sector = 4;
-  else if (sec == 14)
+  else if (sector == 14)
     sector = 10;
 
   const auto firstWire{geom.firstWire(wheel, station, sector, superlayer, layer)};

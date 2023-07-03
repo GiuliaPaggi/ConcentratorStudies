@@ -15,13 +15,11 @@ class Cluster {
   int station{-1};  // CB can they be const?
 
   bool muMatched{false};
-  std::array<int, 2> muMatchedIndex;
+  std::array<int, 2> muMatchedIndex;  
 
   bool foundTP{false};  // CB what do we need out of this?
   bool foundSeg{false};
   bool foundDigi{false};
-  bool segMatched{false};
-  bool digiMatched{false};
 
  private:
   Segment _bestSeg{};
@@ -43,8 +41,6 @@ class Cluster {
           double digiCut, int wh, int sec, int st);
 
   void matchMu(int muWh, int muStat, int muSec, double muXedge, double muYedge, double muX, int muIndex, int nmu);
-  void matchSegment(Segment segment, double xCut);              // CB what is this for?
-  void matchDigi(std::vector<Digi> const& digis, double xCut);  // CB what is this for?
 
   /// Size of TP clusters
   int itSize() const;

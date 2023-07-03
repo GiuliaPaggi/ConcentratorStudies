@@ -13,6 +13,12 @@ TriggerPrimitive::TriggerPrimitive(std::size_t i, int tpg_wheel, int tpg_sector,
       t0{tpg_t0},
       xLoc{tpg_posLoc_x} {
   //(17 bits between 0.5 and 0.5 rad)
+  
+  if (sector == 13)
+    sector = 4;
+  else if (sector == 14)
+    sector = 10;
+
   phi = TMath::Pi() / 6 * sector + tpg_phi * .5 / 65536;  // CB what if phi < 0
   if (phi > TMath::Pi() * 2) {
     phi = phi - TMath::Pi() * 2;

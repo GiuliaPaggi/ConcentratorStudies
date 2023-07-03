@@ -12,6 +12,11 @@ Cluster::Cluster(std::vector<TriggerPrimitive> &tps, std::vector<Segment> &segs,
   // and looks for other TP in a |xCut| interval it's cluster even if no TPs but
   // here's a segment, or more than 10 digis in a SL
 
+  if (sector == 13)
+    sector = 4;
+  else if (sector == 14)
+    sector = 10;
+
   double clusterX{NAN};
 
   auto inChamber = [=](auto const &obj) {
@@ -52,7 +57,7 @@ Cluster::Cluster(std::vector<TriggerPrimitive> &tps, std::vector<Segment> &segs,
     toggleCluster(tps, _bestTP);
     tps_in_chamber.erase(bestTPIt);
     foundTP = true;
-    
+
     if (_bestTP.BX != RIGHT_BX && tps_in_chamber.size() > 1) {
       std::cout << " la best TP di qualità " << _bestTP.quality << " non è in tempo, è al BX " << _bestTP.BX
                 << " nel resto del cluster ho " << std::endl;
@@ -169,6 +174,9 @@ Cluster::Cluster(std::vector<TriggerPrimitive> &tps, std::vector<Segment> &segs,
       }
     }
   }
+
+  if ( _digiCluster.size() > 0) foundDigi = true; 
+
   for (const auto &digi : _digiCluster) {
     toggleCluster(digis, digi);
   }
@@ -198,11 +206,11 @@ void Cluster::matchMu(int muWh, int muStat, int muSec, double muXedge, double mu
                       int iMu) {
   if (muWh == wheel && muStat == station && muSec == sector && muXedge < -5 && muYedge < -5) {
     // if the extrapolated segment is within 10 cm from _bestTP
-    if (segMatched && std::abs(_bestSeg.xLoc - muX) < 10) {
+    if (foundSeg && std::abs(_bestSeg.xLoc - muX) < 10) {
       muMatchedIndex[0] = iMu;
       muMatchedIndex[1] = muIndex;
       muMatched = true;
-    } else if (!segMatched && std::abs(_bestTP.xLoc - muX) < 10) {
+    } else if (!foundSeg && std::abs(_bestTP.xLoc - muX) < 10) {
       muMatchedIndex[0] = iMu;
       muMatchedIndex[1] = muIndex;
       muMatched = true;
@@ -216,20 +224,6 @@ const std::vector<Segment> &Cluster::segCluster() const { return _segmentCluster
 int Cluster::bestSegIndex() const { return _bestSeg.index; };
 int Cluster::bestSegPhiHits() const { return _bestSeg.nPhiHits; };
 const Segment &Cluster::bestSeg() const { return _bestSeg; };
-
-void Cluster::matchDigi(std::vector<Digi> const &digis, double xCut) {
-  Segment seg = _bestSeg;
-
-  for (auto const &digi : digis) {
-    if (digi.sector != seg.sector && digi.wheel != seg.wheel && digi.station != seg.station) continue;
-    for (int i = 0; i < seg.nPhiHits; ++i) {
-      if (std::abs(seg.xLoc - digi.xLoc) < xCut) {
-        digiMatched = true;
-        _matchedDigis.emplace_back(digi);
-      }
-    }
-  }
-};
 
 const std::vector<Digi> &Cluster::matchedDigi() const { return _matchedDigis; };
 

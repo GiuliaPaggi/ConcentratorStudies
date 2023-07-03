@@ -11,11 +11,11 @@ class Segment {
 
   // private:
   std::size_t index{9999};
-  double xLoc{-5000};
+  int station{-1};
   int wheel{-5};
   int sector{-1};
-  int station{-1};
   int nPhiHits{-1};
+  double xLoc{-5000};
 
   bool inCluster{false};
 };
