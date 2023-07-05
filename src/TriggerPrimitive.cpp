@@ -2,6 +2,8 @@
 
 #include "TMath.h"
 
+constexpr int RIGHT_BX{20};
+
 TriggerPrimitive::TriggerPrimitive(std::size_t i, int tpg_wheel, int tpg_sector, int tpg_station, int tpg_quality,
                                    int tpg_phi, int tpg_phiB, int tpg_BX, int tpg_t0, float tpg_posLoc_x)
     : index{i},
@@ -147,7 +149,7 @@ void TriggerPrimitive::findHigherQuality(TriggerPrimitive listOfPrimitives[], co
 };
 
 void TriggerPrimitive::checkBX() {
-  if (std::abs(BX + 380) < 1) {  // CB should put somewhere else?
+  if (std::abs(BX - RIGHT_BX) < 1) {  // CB should put somewhere else?
     hasRightBX = true;
   } else {
     isGhostOutOfTime = true;

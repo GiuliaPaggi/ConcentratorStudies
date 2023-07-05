@@ -15,7 +15,7 @@ class Cluster {
   int station{-1};  // CB can they be const?
 
   bool muMatched{false};
-  std::array<int, 2> muMatchedIndex;  
+  std::array<int, 2> muMatchedIndex;  // 0 index of nmatches, 1 mu index
 
   bool foundTP{false};  // CB what do we need out of this?
   bool foundSeg{false};
@@ -79,6 +79,9 @@ class Cluster {
 
   /// Vector of digis in the cluster
   const std::vector<Digi>& matchedDigi() const;
+
+  //Index of matched Muon
+  int MuIndex() const;
 };
 
 inline bool operator==(Cluster const& lCL, Cluster const& rCL) {

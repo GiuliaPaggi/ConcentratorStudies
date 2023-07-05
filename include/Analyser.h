@@ -4,6 +4,7 @@
 #include <TEfficiency.h>
 #include <TH1.h>
 #include <TH2.h>
+#include <TProfile2D.h>
 
 #include <map>
 #include <vector>
@@ -15,6 +16,7 @@ class Analyser : public AnalyserBase {
   std::map<std::string, TH1 *> m_plots;
   std::map<std::string, TH2 *> m_2Dplots; // CB in theory not needed
   std::map<std::string, TEfficiency *> m_effs;
+  std::map<std::string, TProfile2D *> m_2Dprofiles; 
   std::vector<std::string> tags;
 
   std::map<std::string, double> m_counters;

@@ -143,8 +143,8 @@ Cluster::Cluster(std::vector<TriggerPrimitive> &tps, std::vector<Segment> &segs,
     }
 
     std::copy_if(first_sl3, digis_in_chamber.end(), std::back_inserter(_digiCluster), inRangeDigi);
-
-    if (_digiCluster.size() >= 10 + (10 * sl1Cluster)) {
+    int digiClusterSize = _digiCluster.size();
+    if ( digiClusterSize >= (10 + (10 * sl1Cluster))) {
       sl3Cluster = true;
     } else {
       _digiCluster.erase(_digiCluster.begin() + (10 * sl1Cluster), _digiCluster.end());
@@ -241,4 +241,9 @@ int Cluster::digiSL() const {
     return 3;
   else
     return 0;
+};
+
+int Cluster::MuIndex() const {
+  if (muMatched) return muMatchedIndex[0];
+  else return -1;
 };
