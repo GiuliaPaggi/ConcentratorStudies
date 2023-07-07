@@ -26,8 +26,8 @@ class Analyser : public AnalyserBase {
 
   void ClusterAnalisis(const std::vector<Cluster> &, const std::string &, const std::vector<Segment> &);
   void DefinePlot();
-  void FillEfficiency(const std::string &, const std::string &, const int &, const int &, const double &);
-  void FillEfficiency2D(const std::string &, const std::string &, const int &, const int &, const double &, const double &);
+  void FillEfficiency(const std::string &, const std::string &, const int &, const int &, const double &, const Cluster &);
+  void FillEfficiency2D(const std::string &, const std::string &, const int &, const int &, const double &, const double &, const Cluster &);
  public:
   Analyser(std::string file) : AnalyserBase{file} {}
   ~Analyser() final {}
