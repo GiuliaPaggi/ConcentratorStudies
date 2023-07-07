@@ -15,7 +15,7 @@ class Cluster {
   int station{-1};  // CB can they be const?
 
   bool muMatched{false};
-  std::array<int, 2> muMatchedIndex;  // 0 index of nmatches, 1 mu index
+  std::array<int, 2> muMatchedIndex;  // 0 index of mu, 1 index of nmatch
 
   bool foundTP{false};  // CB what do we need out of this?
   bool foundSeg{false};
@@ -40,7 +40,7 @@ class Cluster {
   Cluster(std::vector<TriggerPrimitive>& tps, std::vector<Segment>& seg, std::vector<Digi>& digis, double xCut,
           double digiCut, int wh, int sec, int st);
 
-  bool matchMu(int muWh, int muStat, int muSec, double muXedge, double muYedge, double muX, int muIndex, int nmu);
+  bool matchMu(int muWh, int muStat, int muSec, double muXedge, double muYedge, double muX, int muIndex, int nmu, double xCut);
 
   /// Size of TP clusters
   int itSize() const;

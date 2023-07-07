@@ -11,7 +11,7 @@ class TriggerPrimitive {
   int wheel{-5};
   int sector{-1};
   int station{-1};
-  int quality{-1};
+  int quality{-5};
 
   int BX{-1000};
   int t0{-100000};  // in ns

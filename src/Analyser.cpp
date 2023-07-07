@@ -10,6 +10,7 @@
 #include <TMath.h>
 #include <TStyle.h>
 #include <TProfile2D.h>
+#include <TLorentzVector.h>
 
 #include <cassert>
 #include <iostream>
@@ -41,7 +42,23 @@ namespace MU {
 const double MAX_ETA{0.8};
 const double MIN_PT{5.0};
 const double MAX_GEN_DR{0.25};
+const double MASS{105.7};
+const double X_CUT{5.0}; //cm
 }  // namespace MU
+
+const std::array<int, 3> QUAL_PLOT{3, 6, 8};
+
+void Analyser::FillEfficiency(const std::string &typeStr, const std::string &varStr, const int &st, const int &qual, const double &valueToFill){
+  const auto type{typeStr.c_str()};
+  const auto var{varStr.c_str()};
+  m_effs[Form("%s_ClusterEfficiencyVS%s_st%d_maxqual%d", type, var, st, qual)]->Fill(1, valueToFill);
+}
+
+void Analyser::FillEfficiency2D(const std::string &typeStr, const std::string &varStr, const int &st, const int &qual, const double &valueToFillx, const double &valueToFilly){
+  const auto type{typeStr.c_str()};
+  const auto var{varStr.c_str()};
+  m_effs[Form("%s_ClusterEfficiencyVS%s_st%d_maxqual%d", type, var, st, qual)]->Fill(1, valueToFillx, valueToFilly);
+}
 
 void Analyser::DefinePlot() {
   Geometry geom{};
@@ -49,7 +66,7 @@ void Analyser::DefinePlot() {
   m_plots["DigiSL"] = new TH1D("DigiSL", "DigiSL", 6, -0.5, 5.5);
   m_plots["t0_LowQuality"] = new TH1D("t0_LowQuality", "t0_LowQuality; t0 (ns); Entries", 100, T_MIN, T_MAX);
   m_plots["BX_LowQuality"] = new TH1D("BX_LowQuality", "BX_LowQuality; BX; Entries", 24, BX_MIN, BX_MAX);
-  m_plots["BX_LowQ_more1HQ"] = new TH1D("BX_LowQ_more1HQ", "BX_LowQ_more1HQ; BX; Entries", 24, BX_MIN, BX_MAX);
+  //m_plots["BX_LowQ_more1HQ"] = new TH1D("BX_LowQ_more1HQ", "BX_LowQ_more1HQ; BX; Entries", 24, BX_MIN, BX_MAX);
 
   m_plots["ClusterPerEvent"] = new TH1I("ClusterPerEvent", "ClusterPerEvent; # clusters; Entries", 30, 0, 30);
   m_plots["GoodMuClusterPerEvent"] = new TH1I("GoodMuClusterPerEvent", "GoodMuClusterPerEvent; # clusters; Entries", 30, 0, 30);
@@ -87,11 +104,11 @@ void Analyser::DefinePlot() {
         new TH1D(Form("%s_BX_LowQ_matched", type), Form("%s_BX_LowQ_matched,BX;Entries", type), 24, BX_MIN, BX_MAX);
     m_plots[Form("%s_t0_Selected", type)] =
         new TH1D(Form("%s_t0_Selected", type), Form("%s_t0_Selected; t0 (ns); Entries", type), 100, T_MIN, T_MAX);
-    m_plots[Form("%s_RemovedQuality", type)] =
-        new TH1D(Form("%s_RemovedQuality", type), Form("%s_RemovedQuality; Quality; Entries", type), 10, -0.5, 9.5);
-    m_plots[Form("%s_ResFilteredCluster", type)] =
-        new TH1D(Form("%s_ResFilteredCluster", type),
-                 Form("%s_ResFilteredCluster; FilteredCl - OriginalCl; Entries ", type), 101, -50, 50);
+    //m_plots[Form("%s_RemovedQuality", type)] =
+    //    new TH1D(Form("%s_RemovedQuality", type), Form("%s_RemovedQuality; Quality; Entries", type), 10, -0.5, 9.5);
+    //m_plots[Form("%s_ResFilteredCluster", type)] =
+    //    new TH1D(Form("%s_ResFilteredCluster", type),
+    //             Form("%s_ResFilteredCluster; FilteredCl - OriginalCl; Entries ", type), 101, -50, 50);
     m_plots[Form("%s_ClusterSize", type)] =
         new TH1I(Form("%s_ClusterSize", type), Form("%s_ClusterSize; # TPs in cluster; Entries", type), 21, -.5, 20.5);
 
@@ -108,12 +125,15 @@ void Analyser::DefinePlot() {
     m_counters[Form("%s_nTPs", type)] = 0;
 
     for (const auto st : geom.STATIONS) {
-      m_plots[Form("%s_DigiTime_st%d", type, st)] =
-          new TH1D(Form("%s_DigiTime_st%d", type, st),
-                   Form("%s_DigiTime_st%d; mean digi cluster time (ns); entries", type, st), 300, 400, 1000);
+      //m_plots[Form("%s_DigiTime_st%d", type, st)] =
+      //    new TH1D(Form("%s_DigiTime_st%d", type, st),
+      //             Form("%s_DigiTime_st%d; mean digi cluster time (ns); entries", type, st), 300, 400, 1000);
       m_plots[Form("%s_x_LowBestQ_st%d", type, st)] = new TH1D(
           Form("%s_x_LowBestQ_st%d", type, st), Form("%s_x_LowBestQ_st%d; xLoc; Entries", type, st), 100, -220, 220);
-
+      m_plots[Form("%s_xLoc_ITGhost_st%d", type, st)] = new TH1D(
+          Form("%s_xLoc_ITGhost_st%d", type, st), Form("%s_xLoc_ITGhost_st%d; xLoc; Entries", type, st), 100, -220, 220);
+      m_plots[Form("%s_xLoc_OoTGhost_st%d", type, st)] = new TH1D(
+          Form("%s_xLoc_OoTGhost_st%d", type, st), Form("%s_xLoc_OoTGhost_st%d; xLoc; Entries", type, st), 100, -220, 220);
       m_2Dplots[Form("%s_N_Cluster_st%d", type, st)] = new TH2I(
           Form("%s_N_Cluster_st%d", type, st), Form("%s_N_Cluster_st%d", type, st), 14, -0.5, 13.5, 7, -3.5, 3.5);
       m_2Dplots[Form("%s_N_Digi_st%d", type, st)] =
@@ -122,14 +142,17 @@ void Analyser::DefinePlot() {
           new TH2D(Form("%s_TPs_LocalDirectionvsPosition_st%d", type, st),
                    Form("AllTPs_LocalDirectionvsPosition_st%d", st), 200, -200, 200, 11, -1, 1);
 
-      m_effs[Form("%s_ClusterEfficiency_st%d", type, st)] =
-          new TEfficiency(Form("%s_ClusterEfficiency_st%d", type, st),
-                          Form("%s_ClusterEfficiency_st%d; sector; wheel", type, st), 14, -0.5, 13.5, 7, -3.5, 3.5);
+      for (auto q : QUAL_PLOT){
+        m_effs[Form("%s_ClusterEfficiencyVSpos_st%d_maxqual%i", type, st, q)] =
+            new TEfficiency(Form("%s_ClusterEfficiencyVSpos_st%d_maxqual%d", type, st, q),
+                            Form("%s_ClusterEfficiencyVSpos_st%d_maxqual%d; sector; wheel", type, st, q), 14, -0.5, 13.5, 7, -3.5, 3.5);
+        m_effs[Form("%s_ClusterEfficiencyVSpT_st%d_maxqual%d", type, st, q)] = new TEfficiency(Form("%s_ClusterEfficiencyVSpT_st%d_maxqual%d", type, st, q), Form("%s_ClusterEfficiencyVSpT_st%d_maxqual%d; pT (Gev); Efficiency", type, st, q), 50, MU::MIN_PT, 100);
+        m_effs[Form("%s_ClusterEfficiencyVSphi_st%d_maxqual%d", type, st, q)] = new TEfficiency(Form("%s_ClusterEfficiencyVSphi_st%d_maxqual%d", type, st, q), Form("%s_ClusterEfficiencyVSphi_st%d_maxqual%d; phi (rad); Efficiency", type, st, q), 40, -TMath::Pi(), TMath::Pi());
+        m_effs[Form("%s_ClusterEfficiencyVSeta_st%d_maxqual%d", type, st, q)] = new TEfficiency(Form("%s_ClusterEfficiencyVSeta_st%d_maxqual%d", type, st, q), Form("%s_ClusterEfficiencyVSeta_st%d_maxqual%d; eta; Efficiency", type, st, q), 50, -1, 1);
+        m_effs[Form("%s_ClusterEfficiencyVSsegxLoc_st%d_maxqual%d", type, st, q)] = new TEfficiency(Form("%s_ClusterEfficiencyVSsegxLoc_st%d_maxqual%d", type, st, q), Form("%s_ClusterEfficiencyVSsegxLoc_st%d_maxqual%d; bestSeg_xLoc (cm); Efficiency", type, st, q), 100, -220, 220);
+        m_effs[Form("%s_ClusterEfficiencyVSsegDirLoc_st%d_maxqual%d", type, st, q)] = new TEfficiency(Form("%s_ClusterEfficiencyVSsegDirLoc_st%d_maxqual%d", type, st, q), Form("%s_ClusterEfficiencyVSsegDirLoc_st%d_maxqual%d; bestSeg_dirLoc; Efficieny", type, st, q), 40, -TMath::Pi(), TMath::Pi()); 
+      }
 
-      m_effs[Form("%sClusterEfficiencyVSpT_st%d", type, st)] = new TEfficiency(Form("%sClusterEfficiencyVSpT_st%d", type, st), Form("%sClusterEfficiencyVSpT_st%d; pT (Gev); Efficiency", type, st), 50, MU::MIN_PT, 100);
-      m_effs[Form("%sClusterEfficiencyVSphi_st%d", type, st)] = new TEfficiency(Form("%sClusterEfficiencyVSphi_st%d", type, st), Form("%sClusterEfficiencyVSphi_st%d; phi (rad); Efficiency", type, st), 40, -TMath::Pi(), TMath::Pi());
-      m_effs[Form("%sClusterEfficiencyVSeta_st%d", type, st)] = new TEfficiency(Form("%sClusterEfficiencyVSeta_st%d", type, st), Form("%sClusterEfficiencyVSeta_st%d; eta; Efficiency", type, st), 50, -1, 1);
-  
       m_effs[Form("%s_Eff_SegMatch_st%d", type, st)] =
           new TEfficiency(Form("%s_Eff_SegMatch_st%d", type, st), Form("%s_Eff_SegMatch_st%d; sector; wheel", type, st),
                           14, -0.5, 13.5, 7, -3.5, 3.5);
@@ -156,7 +179,6 @@ void Analyser::DefinePlot() {
 // diventa TProfile 2d, per riempirlo mi serve un array 4 -> indice== stazione -1-> ogni volta che trovo un match in una stazione faccio array[stazione]++ -> alla fine prima di uscire dal ciclo del mu faccio ciclo su array per riempire i 4 tprofile 2d in funzione di phi ed eta
     m_2Dprofiles[Form("NMatchGoodMu_st%d", st)] = new TProfile2D(Form("NMatchGoodMu_st%d", st), Form("NMatchGoodMu_st%d; eta; phi (rad)", st), 50, -1, 1, 50, -TMath::Pi(), TMath::Pi(), 0, 25);
 
-
     m_effs[Form("Eff_MuMatch_st%d", st)] = new TEfficiency(
         Form("Eff_MuMatch_st%d", st), Form("Eff_MuMatch_st%d; sector; wheel", st), 14, -0.5, 13.5, 7, -3.5, 3.5);
 
@@ -172,8 +194,11 @@ void Analyser::ClusterAnalisis(const std::vector<Cluster> &clusters, const std::
     auto st{cluster.station};
     const auto type{typeStr.c_str()};
 
-    m_2Dplots[Form("%s_TPs_LocalDirectionvsPosition_st%d", type, st)]->Fill(cluster.bestTP().xLoc,
-                                                                            cluster.bestTP().psi);
+    TriggerPrimitive bestTP = cluster.bestTP();
+    Segment bestSeg = cluster.bestSeg();
+
+    m_2Dplots[Form("%s_TPs_LocalDirectionvsPosition_st%d", type, st)]->Fill(bestTP.xLoc,
+                                                                            bestTP.psi);
     m_plots[Form("%s_ClusterSize", type)]->Fill(cluster.tpClusterSize());
     // ########## Study TP ghost distribution #############
     if (cluster.foundTP) ++m_counters[Form("%s_nClusters", type)];
@@ -190,7 +215,7 @@ void Analyser::ClusterAnalisis(const std::vector<Cluster> &clusters, const std::
     m_plots[Form("%s_N_Ghost", type)]->Fill(ootSize + itSize);
     m_counters[Form("%s_nTPs", type)] += cluster.tpClusterSize();
 
-    if (bestQ == 1) m_plots[Form("%s_x_LowBestQ_st%d", type, st)]->Fill(cluster.bestTP().xLoc);
+    if (bestQ == 1) m_plots[Form("%s_x_LowBestQ_st%d", type, st)]->Fill(bestTP.xLoc);
 
     m_2Dplots[Form("%s_N_Cluster_st%d", type, st)]->Fill(sec, wh);
 
@@ -199,9 +224,10 @@ void Analyser::ClusterAnalisis(const std::vector<Cluster> &clusters, const std::
 
       for (const auto &ghost : cluster.ootGhosts()) {
         m_plots[Form("%s_BX_OoTGhosts", type)]->Fill(ghost.BX);
-        m_plots[Form("%s_Res_OoTGhosts", type)]->Fill(ghost.xLoc - cluster.bestTP().xLoc);
+        m_plots[Form("%s_Res_OoTGhosts", type)]->Fill(ghost.xLoc - bestTP.xLoc);
         m_2Dplots[Form("%s_Q_OoTGhosts", type)]->Fill(bestQ, ghost.quality);
         m_plots[Form("%s_Q_Ghost", type)]->Fill(ghost.quality);
+        m_plots[Form("%s_xLoc_OoTGhost_st%d", type, st)]->Fill(ghost.xLoc);
 
         if (ghost.quality == 1) {
           m_plots[Form("%s_t0_Selected", type)]->Fill(ghost.t0);
@@ -212,9 +238,10 @@ void Analyser::ClusterAnalisis(const std::vector<Cluster> &clusters, const std::
 
       for (const auto &ghost : cluster.itGhosts()) {
         m_plots[Form("%s_BX_ITGhosts", type)]->Fill(ghost.BX);
-        m_plots[Form("%s_Res_ITGhosts", type)]->Fill(ghost.xLoc - cluster.bestTP().xLoc);
+        m_plots[Form("%s_Res_ITGhosts", type)]->Fill(ghost.xLoc - bestTP.xLoc);
         m_2Dplots[Form("%s_Q_ITGhosts", type)]->Fill(bestQ, ghost.quality);
         m_plots[Form("%s_Q_Ghost", type)]->Fill(ghost.quality);
+        m_plots[Form("%s_xLoc_ITGhost_st%d", type, st)]->Fill(ghost.xLoc);
 
         if (ghost.quality == 1) {
           m_plots[Form("%s_t0_Selected", type)]->Fill(ghost.t0);
@@ -224,21 +251,32 @@ void Analyser::ClusterAnalisis(const std::vector<Cluster> &clusters, const std::
       }
     }
 
-    if (cluster.muMatched && cluster.bestSeg().nPhiHits >= 4) {
-      bool efficient = (std::abs(cluster.bestTP().BX - CORRECT_BX) < 1);  //(cluster.bestTPQuality() > 3) &&
-      m_effs[Form("%s_ClusterEfficiency_st%d", type, st)]->Fill(efficient, sec, wh);
+    if (cluster.muMatched && bestSeg.nPhiHits >= 4) {
+      bool efficient = (std::abs(bestTP.BX - CORRECT_BX) < 1);  //(cluster.bestTPQuality() > 3) &&
+      //m_effs[Form("%s_ClusterEfficiencyVSpos_st%d", type, st)]->Fill(efficient, sec, wh);
       
       int muon = cluster.MuIndex();
-      m_effs[Form("%sClusterEfficiencyVSpT_st%d", type, st)]->Fill(efficient, mu_pt->at(muon));
-      m_effs[Form("%sClusterEfficiencyVSphi_st%d", type, st)]->Fill(efficient, mu_phi->at(muon));
-      m_effs[Form("%sClusterEfficiencyVSeta_st%d", type, st)]->Fill(efficient, mu_eta->at(muon));
+      double bestSegIndex = cluster.bestSegIndex();
+      double dirLoc = std::atan( seg_dirLoc_x->at(bestSegIndex) / seg_dirLoc_z->at(bestSegIndex));
+      for (auto qual : QUAL_PLOT){
+        if (cluster.bestTPQuality() <= qual) {
+          if (efficient) {
+            FillEfficiency2D(type, "pos", st, qual, sec, wh);
+            FillEfficiency(type, "pT", st, qual, mu_pt->at(muon));
+            FillEfficiency(type, "phi", st, qual, mu_phi->at(muon));
+            FillEfficiency(type, "eta", st, qual, mu_eta->at(muon));
+            FillEfficiency(type, "segxLoc", st, qual, bestSeg.xLoc);
+            FillEfficiency(type, "segDirLoc", st, qual, dirLoc);
+          }
+        }
+      }
     }
 
     // ########## Study segment matching #############
     m_effs[Form("%s_Eff_SegMatch_st%d", type, st)]->Fill(cluster.foundSeg, sec, wh);
     for (const auto s : segments)
       if (cluster.foundTP && s.wheel == wh && s.sector == sec && s.station == st) {
-        m_plots[Form("%s_Res_SegMatched", type)]->Fill(cluster.bestTP().xLoc - s.xLoc);
+        m_plots[Form("%s_Res_SegMatched", type)]->Fill(bestTP.xLoc - s.xLoc);
       }
 
     // ########## Study digi clusters #############
@@ -246,7 +284,7 @@ void Analyser::ClusterAnalisis(const std::vector<Cluster> &clusters, const std::
 
     if (cluster.foundDigi) {
       for (auto &digi : cluster.matchedDigi()) {
-        m_plots[Form("%s_Digi_residual_st%d_wh%d", type, st, wh)]->Fill(cluster.bestSeg().xLoc - digi.xLoc);
+        m_plots[Form("%s_Digi_residual_st%d_wh%d", type, st, wh)]->Fill(bestSeg.xLoc - digi.xLoc);
       }
     }
 
@@ -410,8 +448,11 @@ void Analyser::Loop() {
     std::vector<UInt_t> goodMuons;
     for (UInt_t iMu = 0; iMu < mu_nMuons; ++iMu) {
       if (!mu_isMedium->at(iMu)) continue;
+      TLorentzVector mu;
       double muEta = mu_eta->at(iMu);
       double muPhi = mu_phi->at(iMu);
+      double muPT = mu_pt->at(iMu);
+      mu.SetPtEtaPhiM(muPT, muEta, muPhi, MU::MASS);
       // check if the muon can be matched to one of the particles generated in this event
       for (UInt_t igen = 0; igen < gen_nGenParts; ++igen) {
         if (std::abs(gen_pdgId->at(igen)) != 13 || std::abs(gen_eta->at(igen)) > MU::MAX_ETA ||
@@ -419,9 +460,10 @@ void Analyser::Loop() {
           continue;
         double genEta = gen_eta->at(igen);
         double genPhi = gen_phi->at(igen);
-        double dEta = muEta - genEta;
-        double dPhi = std::acos(std::cos(muPhi - genPhi));
-        double dR = std::sqrt(dEta * dEta + dPhi * dPhi);  // CB actually can use ROOT
+        double genPT = gen_pt->at(igen);
+        TLorentzVector genMu;
+        genMu.SetPtEtaPhiM(genPT, genEta, genPhi, MU::MASS);
+        double dR = genMu.DeltaR(mu);
         m_plots["DeltaR"]->Fill(dR);
         if (std::abs(dR) < MU::MAX_GEN_DR) {
           goodMuons.push_back(iMu);
@@ -463,7 +505,7 @@ void Analyser::Loop() {
           if (sec == 13) sec = 4;
           if (sec == 14) sec = 10;
           auto st{cluster.station};
-          if (cluster.matchMu(muWheel, muStation, muSector, edgeX, edgeY, muX, i, iMu)) {
+          if (cluster.matchMu(muWheel, muStation, muSector, edgeX, edgeY, muX, i, iMu, MU::X_CUT)) {
             ++nMatchedClusters;
             ++stationMatch[muStation-1];
             m_2Dplots[Form("PosGoodMu_st%d", muStation)]->Fill(muEta, muPhi);
@@ -479,11 +521,11 @@ void Analyser::Loop() {
         }
 
         for (auto &PMcluster : matchFromLQ_clusters) {
-          PMcluster.matchMu(muWheel, muStation, muSector, edgeX, edgeY, muX, i, iMu);
+          PMcluster.matchMu(muWheel, muStation, muSector, edgeX, edgeY, muX, i, iMu, MU::X_CUT);
         }
 
         for (auto &PMcluster : matchFromHQ_clusters) {
-          PMcluster.matchMu(muWheel, muStation, muSector, edgeX, edgeY, muX, i, iMu);
+          PMcluster.matchMu(muWheel, muStation, muSector, edgeX, edgeY, muX, i, iMu, MU::X_CUT);
         }
       }
       

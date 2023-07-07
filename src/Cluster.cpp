@@ -57,6 +57,7 @@ Cluster::Cluster(std::vector<TriggerPrimitive> &tps, std::vector<Segment> &segs,
     toggleCluster(tps, _bestTP);
     tps_in_chamber.erase(bestTPIt);
     foundTP = true;
+    clusterX = _bestTP.xLoc;
 
     if (_bestTP.BX != RIGHT_BX && tps_in_chamber.size() > 1) {
       std::cout << " la best TP di qualità " << _bestTP.quality << " non è in tempo, è al BX " << _bestTP.BX
@@ -203,15 +204,15 @@ int Cluster::ootCountIf(std::function<bool(TriggerPrimitive const &)> f) const {
 }
 
 bool Cluster::matchMu(int muWh, int muStat, int muSec, double muXedge, double muYedge, double muX, int muIndex,
-                      int iMu) {
+                      int iMu, double xCut) {
   if (!muMatched && muWh == wheel && muStat == station && muSec == sector && muXedge < -5 && muYedge < -5) {
     // if the extrapolated segment is within 10 cm from _bestTP
-    if (foundSeg && std::abs(_bestSeg.xLoc - muX) < 10) {
+    if (foundSeg && std::abs(_bestSeg.xLoc - muX) < xCut) {
       muMatchedIndex[0] = iMu;
       muMatchedIndex[1] = muIndex;
       muMatched = true;
       return true;
-    } else if (!foundSeg && std::abs(_bestTP.xLoc - muX) < 10) {
+    } else if (!foundSeg && std::abs(_bestTP.xLoc - muX) < xCut) {
       muMatchedIndex[0] = iMu;
       muMatchedIndex[1] = muIndex;
       muMatched = true;
