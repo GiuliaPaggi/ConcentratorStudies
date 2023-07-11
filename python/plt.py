@@ -176,7 +176,7 @@ class Plotter:
                 histo.SetMinimum(axis_z.min)
                 histo.SetMaximum(axis_z.max)
                 histo.SetContour(nBins)
-                histo.Draw(option)
+                histo.Draw(options.option)
 
                 if options.gridBySector:
                     line = TLine()
