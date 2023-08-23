@@ -3,7 +3,7 @@
 """
 Provides a set of classes handling the configuration of plotter Objects
 __add__ operators:
-    are overloaded to allow updating incomplete configurations
+    are overloaded to allow updating 'partial' configurations
     by summing a 'partial' configuration with 'base' configuration.
 "Basic" unit-tests:
     are provided as __main__ script
@@ -38,6 +38,22 @@ class Axis:
         self.max = vec[1]
         self.label = vec[2]
 
+    def __str__(self):
+        """
+        Print
+        """
+        result = "Axis: {"
+        for name, item in vars(self).items():
+            result = f"{result} {name}: {item} "
+        result = f"{result}}}"
+        return result
+
+    def __bool__(self):
+        """
+        Cast to bool defining a non valid Axis
+        """
+        return not (self.min == 0.0 and self.max == 0.0 and self.label == "")
+
 
 # pylint: disable=R0902
 @dataclass
@@ -60,12 +76,23 @@ class Plot:
         """
         Assign values
         """
-        for name, var in vars(self).items():
+        for name, item in vars(self).items():
             if name in cfg.keys():
                 if name in ['x', 'y', 'z']:
-                    var.assign(cfg[name])
+                    item.assign(cfg[name])
                 else:
                     setattr(self, name, cfg[name])
+
+    def __str__(self):
+        """
+        Print
+        """
+        result = "Plot: {\n"
+        for name, item in vars(self).items():
+            result = f"{result}  {name}: {item}\n"
+        result = f"{result}}}"
+        return result
+
 # pylint: enable=R0902
 
 
@@ -92,6 +119,15 @@ class Output:
         """
         return [os.path.join(self.directory, f'{self.file_name}.{t}') for t in self.file_types]
 
+    def __str__(self):
+        """
+        Print
+        """
+        result = "Output:\n"
+        for name, item in vars(self).items():
+            result = f"{result} {name}: {item}\n"
+        return result
+
 
 @dataclass
 class Input:
@@ -99,18 +135,27 @@ class Input:
     Handle plot information
     """
     name: str = ''
-    legend_entry: str = ''
-    file_name: str = 'results/outputFile.root'
+    file_name: str = 'results/outputFile_HSCPppstau_M-871_noPU_noRPC.root'
     folder: str = ''
     plot_name: str = ''
 
-    def assign(self, cfg):
+    def assign(self, n, cfg):
         """
         Assign values
         """
+        self.name = n
         for name in vars(self).keys():
             if name in cfg.keys():
                 setattr(self, name, cfg[name])
+
+    def __str__(self):
+        """
+        Print
+        """
+        result = "Input:\n"
+        for item, val in vars(self).items():
+            result = f"{result} {item}: {val}\n"
+        return result
 
 
 @dataclass
@@ -132,12 +177,22 @@ class BaseConfig:
                 else:
                     setattr(self, name, cfg[name])
 
+    def __str__(self):
+        """
+        Print
+        """
+        result = "BaseConfig:\n"
+        for item, val in vars(self).items():
+            result = f"{result} {item}: {val}\n"
+        return result
+
 
 @dataclass
 class Config(BaseConfig):
     """
     Handle config
     """
+    base: str = ''
     inputs: list[Input] = field(default_factory=list)
 
     def assign(self, cfg):
@@ -149,9 +204,9 @@ class Config(BaseConfig):
                 if name in ['plot', 'output']:
                     var.assign(cfg[name])
                 elif name == 'inputs':
-                    for o_cfg in cfg[name].values():
+                    for key, i_cfg in cfg[name].items():
                         tmp = Input()
-                        tmp.assign(o_cfg)
+                        tmp.assign(key,i_cfg)
                         getattr(self, name).append(tmp)
                 else:
                     setattr(self, name, cfg[name])
@@ -162,12 +217,11 @@ class Config(BaseConfig):
         """
         cfg = self
 
-        for name in vars(self).keys():
-            if name in ['plot', 'output']:  # CB snellisci se funziona!
-                for p_name in vars(getattr(self, name)).keys():
-                    if not getattr(getattr(cfg, name), p_name):
-                        attr = getattr(getattr(other, name), p_name)
-                        setattr(getattr(cfg, name), p_name, attr)
+        for category in ['plot', 'output']:
+            for name in vars(getattr(cfg, category)).keys():
+                if not getattr(getattr(cfg, category), name):
+                    attr = getattr(getattr(other, category), name)
+                    setattr(getattr(cfg, category), name, attr)
 
         return cfg
 
@@ -180,10 +234,19 @@ class Config(BaseConfig):
 
         return self.__add__(other)
 
+    def __str__(self):
+        """
+        Print
+        """
+        result = "Config:\n"
+        for item, val in vars(self).items():
+            result = f"{result} {item}: {val}\n"
+        return result
+
 
 if __name__ == '__main__':
     a = Axis()
-    a.assign([0, 1, 'axis'])
+    a.assign([0, 1, 'axis title'])
     print(a)
 
     plot_cfg = {
@@ -193,8 +256,8 @@ if __name__ == '__main__':
         "legend_title": "leg",
         "caption": "RunD (2022 pp data, 13 TeV)",
         "logo": ["CMS", "Preliminary"],
-        "color_map": [1, 2, 3, 4, 5, 6, 7, 8, 9],
-        "marker_map": [20, 21, 22, 23, 24, 25, 26],
+        "colors": [1, 2, 3, 4, 5, 6, 7, 8, 9],
+        "markers": [20, 21, 22, 23, 24, 25, 26],
         "legend_range": [0.49, 0.67, 0.85, 0.80]
     }
     p = Plot()
@@ -219,7 +282,7 @@ if __name__ == '__main__':
     }
 
     i = Input()
-    i.assign(input_cfg)
+    i.assign("input",input_cfg)
     print(i)
 
     base_cfg = {

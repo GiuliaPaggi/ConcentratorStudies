@@ -1,623 +1,376 @@
 {
-    "preFilter_efficiencyVSpT_st1": {
+    "PreFilter_efficiencyVSpT_st1": {
+        "base" : "base_pt",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "PreFilter_ClusterEfficiencyVSpT_st1_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "PreFilter_ClusterEfficiencyVSpT_st1_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "PreFilter_ClusterEfficiencyVSpT_st1_minqual6"
-            }
+            "1 all qualities": { "plot_name": "PreFilter_ClusterEfficiencyVSpT_st1_minqual0"},
+            "quality >= 3": { "plot_name": "PreFilter_ClusterEfficiencyVSpT_st1_minqual3"},
+            "quality >= 6": { "plot_name": "PreFilter_ClusterEfficiencyVSpT_st1_minqual6" }
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
             "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
         },
         "output": {
-            "file_name": "01_preFilter_efficiencyVSpT_st1"
+            "file_name": "01_PreFilter_efficiencyVSpT_st1"
         }
     }, 
 
-    "preFilter_efficiencyVSpT_st2": {
+    "PreFilter_efficiencyVSpT_st2": {
+        "base" : "base_pt",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "PreFilter_ClusterEfficiencyVSpT_st2_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "PreFilter_ClusterEfficiencyVSpT_st2_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "PreFilter_ClusterEfficiencyVSpT_st2_minqual6"
-            }
+            "1 all qualities": { "plot_name": "PreFilter_ClusterEfficiencyVSpT_st2_minqual0"},
+            "quality >= 3": { "plot_name": "PreFilter_ClusterEfficiencyVSpT_st2_minqual3"},
+            "quality >= 6": { "plot_name": "PreFilter_ClusterEfficiencyVSpT_st2_minqual6" }
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
             "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
         },
         "output": {
-            "file_name": "01_preFilter_efficiencyVSpT_st2"
+            "file_name": "01_PreFilter_efficiencyVSpT_st2"
         }
     }, 
 
-    "preFilter_efficiencyVSpT_st3": {
+    "PreFilter_efficiencyVSpT_st3": {
+        "base" : "base_pt",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "PreFilter_ClusterEfficiencyVSpT_st3_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "PreFilter_ClusterEfficiencyVSpT_st3_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "PreFilter_ClusterEfficiencyVSpT_st3_minqual6"
-            }
+            "1 all qualities": { "plot_name": "PreFilter_ClusterEfficiencyVSpT_st3_minqual0"},
+            "quality >= 3": { "plot_name": "PreFilter_ClusterEfficiencyVSpT_st3_minqual3"},
+            "quality >= 6": { "plot_name": "PreFilter_ClusterEfficiencyVSpT_st3_minqual6" }
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
             "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
         },
         "output": {
-            "file_name": "01_preFilter_efficiencyVSpT_st3"
+            "file_name": "01_PreFilter_efficiencyVSpT_st3"
         }
     }, 
 
-    "preFilter_efficiencyVSpT_st4": {
+    "PreFilter_efficiencyVSpT_st4": {
+        "base" : "base_pt",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "PreFilter_ClusterEfficiencyVSpT_st4_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "PreFilter_ClusterEfficiencyVSpT_st4_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "PreFilter_ClusterEfficiencyVSpT_st4_minqual6"
-            }
+            "1 all qualities": { "plot_name": "PreFilter_ClusterEfficiencyVSpT_st4_minqual0"},
+            "quality >= 3": { "plot_name": "PreFilter_ClusterEfficiencyVSpT_st4_minqual3"},
+            "quality >= 6": { "plot_name": "PreFilter_ClusterEfficiencyVSpT_st4_minqual6" }
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
             "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
         },
         "output": {
-            "file_name": "01_preFilter_efficiencyVSpT_st4"
-        }
-    }, 
-
-    "preFilter_efficiencyVSpos_st1": {
-        "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "PreFilter_ClusterEfficiencyVSpos_st1_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "PreFilter_ClusterEfficiencyVSpos_st1_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "PreFilter_ClusterEfficiencyVSpos_st1_minqual6"
-            }
-        },
-        "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
-            "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
-        },
-        "output": {
-            "file_name": "02_preFilter_efficiencyVSpos_st1"
-        }
-    }, 
-
-    "preFilter_efficiencyVSpos_st2": {
-        "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "PreFilter_ClusterEfficiencyVSpos_st2_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "PreFilter_ClusterEfficiencyVSpos_st2_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "PreFilter_ClusterEfficiencyVSpos_st2_minqual6"
-            }
-        },
-        "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
-            "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
-        },
-        "output": {
-            "file_name": "02_preFilter_efficiencyVSpos_st2"
-        }
-    }, 
-
-    "preFilter_efficiencyVSpos_st3": {
-        "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "PreFilter_ClusterEfficiencyVSpos_st3_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "PreFilter_ClusterEfficiencyVSpos_st3_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "PreFilter_ClusterEfficiencyVSpos_st3_minqual6"
-            }
-        },
-        "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
-            "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
-        },
-        "output": {
-            "file_name": "02_preFilter_efficiencyVSpos_st3"
-        }
-    }, 
-
-    "preFilter_efficiencyVSpos_st4": {
-        "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "PreFilter_ClusterEfficiencyVSpos_st4_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "PreFilter_ClusterEfficiencyVSpos_st4_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "PreFilter_ClusterEfficiencyVSpos_st4_minqual6"
-            }
-        },
-        "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
-            "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
-        },
-        "output": {
-            "file_name": "02_preFilter_efficiencyVSpos_st4"
-        }
-    }, 
-
-    "preFilter_efficiencyVSphi_st1": {
-        "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "PreFilter_ClusterEfficiencyVSphi_st1_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "PreFilter_ClusterEfficiencyVSphi_st1_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "PreFilter_ClusterEfficiencyVSphi_st1_minqual6"
-            }
-        },
-        "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
-            "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
-        },
-        "output": {
-            "file_name": "03_preFilter_efficiencyVSphi_st1"
-        }
-    }, 
-
-    "preFilter_efficiencyVSphi_st2": {
-        "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "PreFilter_ClusterEfficiencyVSphi_st2_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "PreFilter_ClusterEfficiencyVSphi_st2_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "PreFilter_ClusterEfficiencyVSphi_st2_minqual6"
-            }
-        },
-        "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
-            "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
-        },
-        "output": {
-            "file_name": "03_preFilter_efficiencyVSphi_st2"
-        }
-    }, 
-
-    "preFilter_efficiencyVSphi_st3": {
-        "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "PreFilter_ClusterEfficiencyVSphi_st3_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "PreFilter_ClusterEfficiencyVSphi_st3_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "PreFilter_ClusterEfficiencyVSphi_st3_minqual6"
-            }
-        },
-        "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
-            "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
-        },
-        "output": {
-            "file_name": "03_preFilter_efficiencyVSphi_st3"
-        }
-    }, 
-
-    "preFilter_efficiencyVSphi_st4": {
-        "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "PreFilter_ClusterEfficiencyVSphi_st4_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "PreFilter_ClusterEfficiencyVSphi_st4_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "PreFilter_ClusterEfficiencyVSphi_st4_minqual6"
-            }
-        },
-        "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
-            "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
-        },
-        "output": {
-            "file_name": "03_preFilter_efficiencyVSphi_st4"
-        }
-    }, 
-
-    "preFilter_efficiencyVSeta_st1": {
-        "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "PreFilter_ClusterEfficiencyVSeta_st1_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "PreFilter_ClusterEfficiencyVSeta_st1_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "PreFilter_ClusterEfficiencyVSeta_st1_minqual6"
-            }
-        },
-        "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
-            "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
-        },
-        "output": {
-            "file_name": "04_preFilter_efficiencyVSeta_st1"
+            "file_name": "01_PreFilter_efficiencyVSpT_st4"
         }
     },
 
-    "preFilter_efficiencyVSeta_st2": {
+    "PreFilter_efficiencyVSpos_st1": {
+        "base": "base_pos",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "PreFilter_ClusterEfficiencyVSeta_st2_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "PreFilter_ClusterEfficiencyVSeta_st2_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "PreFilter_ClusterEfficiencyVSeta_st2_minqual6"
-            }
+            "1 all qualities": {"plot_name": "PreFilter_ClusterEfficiencyVSpos_st1_minqual0" },
+            "quality >= 3": {"plot_name": "PreFilter_ClusterEfficiencyVSpos_st1_minqual3" },
+            "quality >= 6": {"plot_name": "PreFilter_ClusterEfficiencyVSpos_st1_minqual6"}
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
-            "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
+            "legend_title": "Efficiency  -  MB1"
         },
         "output": {
-            "file_name": "04_preFilter_efficiencyVSeta_st2"
+            "file_name": "02_PreFilter_efficiencyVSpos_st1"
+        }
+    }, 
+
+    "PreFilter_efficiencyVSpos_st2": {
+        "base": "base_pos",
+        "inputs": {
+            "1 all qualities": {"plot_name": "PreFilter_ClusterEfficiencyVSpos_st2_minqual0" },
+            "quality >= 3": {"plot_name": "PreFilter_ClusterEfficiencyVSpos_st2_minqual3" },
+            "quality >= 6": {"plot_name": "PreFilter_ClusterEfficiencyVSpos_st2_minqual6"}
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB2"
+        },
+        "output": {
+            "file_name": "02_PreFilter_efficiencyVSpos_st2"
         }
     },
 
-    "preFilter_efficiencyVSeta_st3": {
+    "PreFilter_efficiencyVSpos_st3": {
+        "base": "base_pos",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "PreFilter_ClusterEfficiencyVSeta_st3_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "PreFilter_ClusterEfficiencyVSeta_st3_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "PreFilter_ClusterEfficiencyVSeta_st3_minqual6"
-            }
+            "1 all qualities": {"plot_name": "PreFilter_ClusterEfficiencyVSpos_st3_minqual0" },
+            "quality >= 3": {"plot_name": "PreFilter_ClusterEfficiencyVSpos_st3_minqual3" },
+            "quality >= 6": {"plot_name": "PreFilter_ClusterEfficiencyVSpos_st3_minqual6"}
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
+            "legend_title": "Efficiency  -  MB3"
+        },
+        "output": {
+            "file_name": "02_PreFilter_efficiencyVSpos_st3"
+        }
+    }, 
+
+    "PreFilter_efficiencyVSpos_st4": {
+        "base": "base_pos",
+        "inputs": {
+            "1 all qualities": {"plot_name": "PreFilter_ClusterEfficiencyVSpos_st4_minqual0" },
+            "quality >= 3": {"plot_name": "PreFilter_ClusterEfficiencyVSpos_st4_minqual3" },
+            "quality >= 6": {"plot_name": "PreFilter_ClusterEfficiencyVSpos_st4_minqual6"}
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB4"
+        },
+        "output": {
+            "file_name": "02_PreFilter_efficiencyVSpos_st4"
+        }
+    }, 
+
+    "PreFilter_efficiencyVSphi_st1": {
+        "base" : "base_phi",
+        "inputs": {
+            "1 all qualities": {"plot_name": "PreFilter_ClusterEfficiencyVSphi_st1_minqual0"},
+            "quality >= 3": {"plot_name": "PreFilter_ClusterEfficiencyVSphi_st1_minqual3"},
+            "quality >= 6": {"plot_name": "PreFilter_ClusterEfficiencyVSphi_st1_minqual6"}
+        },
+        "plot": {
             "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
         },
         "output": {
-            "file_name": "04_preFilter_efficiencyVSeta_st3"
+            "file_name": "03_PreFilter_efficiencyVSphi_st1"
+        }
+    }, 
+
+    "PreFilter_efficiencyVSphi_st2": {
+        "base" : "base_phi",
+        "inputs": {
+            "1 all qualities": {"plot_name": "PreFilter_ClusterEfficiencyVSphi_st2_minqual0"},
+            "quality >= 3": {"plot_name": "PreFilter_ClusterEfficiencyVSphi_st2_minqual3"},
+            "quality >= 6": {"plot_name": "PreFilter_ClusterEfficiencyVSphi_st2_minqual6"}
+        },
+        "plot": {
+            "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
+        },
+        "output": {
+            "file_name": "03_PreFilter_efficiencyVSphi_st2"
+        }
+    }, 
+
+    "PreFilter_efficiencyVSphi_st3": {
+        "base" : "base_phi",
+        "inputs": {
+            "1 all qualities": {"plot_name": "PreFilter_ClusterEfficiencyVSphi_st3_minqual0"},
+            "quality >= 3": {"plot_name": "PreFilter_ClusterEfficiencyVSphi_st3_minqual3"},
+            "quality >= 6": {"plot_name": "PreFilter_ClusterEfficiencyVSphi_st3_minqual6"}
+        },
+        "plot": {
+            "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
+        },
+        "output": {
+            "file_name": "03_PreFilter_efficiencyVSphi_st3"
+        }
+    }, 
+
+    "PreFilter_efficiencyVSphi_st4": {
+        "base" : "base_phi",
+        "inputs": {
+            "1 all qualities": {"plot_name": "PreFilter_ClusterEfficiencyVSphi_st4_minqual0"},
+            "quality >= 3": {"plot_name": "PreFilter_ClusterEfficiencyVSphi_st4_minqual3"},
+            "quality >= 6": {"plot_name": "PreFilter_ClusterEfficiencyVSphi_st4_minqual6"}
+        },
+        "plot": {
+            "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
+        },
+        "output": {
+            "file_name": "03_PreFilter_efficiencyVSphi_st4"
+        }
+    }, 
+
+    "PreFilter_efficiencyVSeta_st1": {
+        "base" : "base_eta",
+        "inputs": {
+            "1 all qualities": { "plot_name": "PreFilter_ClusterEfficiencyVSeta_st1_minqual0" },
+            "quality >= 3": { "plot_name": "PreFilter_ClusterEfficiencyVSeta_st1_minqual3" },
+            "quality >= 6": { "plot_name": "PreFilter_ClusterEfficiencyVSeta_st1_minqual6"}
+        },
+        "plot": {
+            "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
+        },
+        "output": {
+            "file_name": "04_PreFilter_efficiencyVSeta_st1"
         }
     },
 
-    "preFilter_efficiencyVSeta_st4": {
+    "PreFilter_efficiencyVSeta_st2": {
+        "base" : "base_eta",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "PreFilter_ClusterEfficiencyVSeta_st4_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "PreFilter_ClusterEfficiencyVSeta_st4_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "PreFilter_ClusterEfficiencyVSeta_st4_minqual6"
-            }
+            "1 all qualities": { "plot_name": "PreFilter_ClusterEfficiencyVSeta_st2_minqual0" },
+            "quality >= 3": { "plot_name": "PreFilter_ClusterEfficiencyVSeta_st2_minqual3" },
+            "quality >= 6": { "plot_name": "PreFilter_ClusterEfficiencyVSeta_st2_minqual6"}
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
             "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
         },
         "output": {
-            "file_name": "04_preFilter_efficiencyVSeta_st4"
+            "file_name": "04_PreFilter_efficiencyVSeta_st2"
+        }
+    },
+
+    "PreFilter_efficiencyVSeta_st3": {
+        "base" : "base_eta",
+        "inputs": {
+            "1 all qualities": { "plot_name": "PreFilter_ClusterEfficiencyVSeta_st3_minqual0" },
+            "quality >= 3": { "plot_name": "PreFilter_ClusterEfficiencyVSeta_st3_minqual3" },
+            "quality >= 6": { "plot_name": "PreFilter_ClusterEfficiencyVSeta_st3_minqual6"}
+        },
+        "plot": {
+            "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
+        },
+        "output": {
+            "file_name": "04_PreFilter_efficiencyVSeta_st3"
+        }
+    },
+
+    "PreFilter_efficiencyVSeta_st4": {
+        "base" : "base_eta",
+        "inputs": {
+            "1 all qualities": { "plot_name": "PreFilter_ClusterEfficiencyVSeta_st4_minqual0" },
+            "quality >= 3": { "plot_name": "PreFilter_ClusterEfficiencyVSeta_st4_minqual3" },
+            "quality >= 6": { "plot_name": "PreFilter_ClusterEfficiencyVSeta_st4_minqual6"}
+        },
+        "plot": {
+            "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
+        },
+        "output": {
+            "file_name": "04_PreFilter_efficiencyVSeta_st4"
+        }
+    },
+
+    "PreFilter_efficiencyVSsegxLoc_st1": {
+        "base" : "base_xLoc",
+        "inputs": {
+            "1 all qualities": { "plot_name": "PreFilter_ClusterEfficiencyVSsegxLoc_st1_minqual0"},
+            "quality >= 3": {"plot_name": "PreFilter_ClusterEfficiencyVSsegxLoc_st1_minqual3" },
+            "quality >= 6": {"plot_name": "PreFilter_ClusterEfficiencyVSsegxLoc_st1_minqual6"}
+        },
+        "plot": {
+            "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
+        },
+        "output": {
+            "file_name": "05_PreFilter_efficiencyVSsegxLoc_st1"
         }
     }, 
 
-    "preFilter_efficiencyVSsegxLoc_st1": {
+    "PreFilter_efficiencyVSsegxLoc_st2": {
+        "base" : "base_xLoc",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "PreFilter_ClusterEfficiencyVSsegxLoc_st1_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "PreFilter_ClusterEfficiencyVSsegxLoc_st1_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "PreFilter_ClusterEfficiencyVSsegxLoc_st1_minqual6"
-            }
+            "1 all qualities": { "plot_name": "PreFilter_ClusterEfficiencyVSsegxLoc_st2_minqual0"},
+            "quality >= 3": {"plot_name": "PreFilter_ClusterEfficiencyVSsegxLoc_st2_minqual3" },
+            "quality >= 6": {"plot_name": "PreFilter_ClusterEfficiencyVSsegxLoc_st2_minqual6"}
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
             "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
         },
         "output": {
-            "file_name": "05_preFilter_efficiencyVSsegxLoc_st1"
+            "file_name": "05_PreFilter_efficiencyVSsegxLoc_st2"
         }
     }, 
 
-    "preFilter_efficiencyVSsegxLoc_st2": {
+    "PreFilter_efficiencyVSsegxLoc_st3": {
+        "base" : "base_xLoc",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "PreFilter_ClusterEfficiencyVSsegxLoc_st2_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "PreFilter_ClusterEfficiencyVSsegxLoc_st2_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "PreFilter_ClusterEfficiencyVSsegxLoc_st2_minqual6"
-            }
+            "1 all qualities": { "plot_name": "PreFilter_ClusterEfficiencyVSsegxLoc_st3_minqual0"},
+            "quality >= 3": {"plot_name": "PreFilter_ClusterEfficiencyVSsegxLoc_st3_minqual3" },
+            "quality >= 6": {"plot_name": "PreFilter_ClusterEfficiencyVSsegxLoc_st3_minqual6"}
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
             "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
         },
         "output": {
-            "file_name": "05_preFilter_efficiencyVSsegxLoc_st2"
+            "file_name": "05_PreFilter_efficiencyVSsegxLoc_st3"
         }
     }, 
 
-    "preFilter_efficiencyVSsegxLoc_st3": {
+    "PreFilter_efficiencyVSsegxLoc_st4": {
+        "base" : "base_xLoc",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "PreFilter_ClusterEfficiencyVSsegxLoc_st3_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "PreFilter_ClusterEfficiencyVSsegxLoc_st3_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "PreFilter_ClusterEfficiencyVSsegxLoc_st3_minqual6"
-            }
+            "1 all qualities": { "plot_name": "PreFilter_ClusterEfficiencyVSsegxLoc_st4_minqual0"},
+            "quality >= 3": {"plot_name": "PreFilter_ClusterEfficiencyVSsegxLoc_st4_minqual3" },
+            "quality >= 6": {"plot_name": "PreFilter_ClusterEfficiencyVSsegxLoc_st4_minqual6"}
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
             "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
         },
         "output": {
-            "file_name": "05_preFilter_efficiencyVSsegxLoc_st3"
+            "file_name": "05_PreFilter_efficiencyVSsegxLoc_st4"
         }
     }, 
 
-    "preFilter_efficiencyVSsegxLoc_st4": {
+    "PreFilter_efficiencyVSsegDirLoc_st1": {
+        "base" : "base_dirLoc",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "PreFilter_ClusterEfficiencyVSsegxLoc_st4_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "PreFilter_ClusterEfficiencyVSsegxLoc_st4_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "PreFilter_ClusterEfficiencyVSsegxLoc_st4_minqual6"
-            }
+            "1 all qualities": { "plot_name": "PreFilter_ClusterEfficiencyVSsegDirLoc_st1_minqual0" },
+            "quality >= 3": {"plot_name": "PreFilter_ClusterEfficiencyVSsegDirLoc_st1_minqual3"},
+            "quality >= 6": {"plot_name": "PreFilter_ClusterEfficiencyVSsegDirLoc_st1_minqual6"}
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
             "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
         },
         "output": {
-            "file_name": "05_preFilter_efficiencyVSsegxLoc_st4"
+            "file_name": "06_PreFilter_efficiencyVSsegDirLoc_st1"
         }
     }, 
 
-    "preFilter_efficiencyVSsegDirLoc_st1": {
+    "PreFilter_efficiencyVSsegDirLoc_st2": {
+        "base" : "base_dirLoc",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "PreFilter_ClusterEfficiencyVSsegDirLoc_st1_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "PreFilter_ClusterEfficiencyVSsegDirLoc_st1_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "PreFilter_ClusterEfficiencyVSsegDirLoc_st1_minqual6"
-            }
+            "1 all qualities": { "plot_name": "PreFilter_ClusterEfficiencyVSsegDirLoc_st2_minqual0" },
+            "quality >= 3": {"plot_name": "PreFilter_ClusterEfficiencyVSsegDirLoc_st2_minqual3"},
+            "quality >= 6": {"plot_name": "PreFilter_ClusterEfficiencyVSsegDirLoc_st2_minqual6"}
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
             "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
         },
         "output": {
-            "file_name": "06_preFilter_efficiencyVSsegDirLoc_st1"
+            "file_name": "06_PreFilter_efficiencyVSsegDirLoc_st2"
         }
     }, 
 
-    "preFilter_efficiencyVSsegDirLoc_st2": {
+    "PreFilter_efficiencyVSsegDirLoc_st3": {
+        "base" : "base_dirLoc",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "PreFilter_ClusterEfficiencyVSsegDirLoc_st2_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "PreFilter_ClusterEfficiencyVSsegDirLoc_st2_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "PreFilter_ClusterEfficiencyVSsegDirLoc_st2_minqual6"
-            }
+            "1 all qualities": { "plot_name": "PreFilter_ClusterEfficiencyVSsegDirLoc_st3_minqual0" },
+            "quality >= 3": {"plot_name": "PreFilter_ClusterEfficiencyVSsegDirLoc_st3_minqual3"},
+            "quality >= 6": {"plot_name": "PreFilter_ClusterEfficiencyVSsegDirLoc_st3_minqual6"}
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
             "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
         },
         "output": {
-            "file_name": "06_preFilter_efficiencyVSsegDirLoc_st2"
+            "file_name": "06_PreFilter_efficiencyVSsegDirLoc_st3"
         }
     }, 
 
-    "preFilter_efficiencyVSsegDirLoc_st3": {
+    "PreFilter_efficiencyVSsegDirLoc_st4": {
+        "base" : "base_dirLoc",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "PreFilter_ClusterEfficiencyVSsegDirLoc_st3_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "PreFilter_ClusterEfficiencyVSsegDirLoc_st3_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "PreFilter_ClusterEfficiencyVSsegDirLoc_st3_minqual6"
-            }
+            "1 all qualities": { "plot_name": "PreFilter_ClusterEfficiencyVSsegDirLoc_st4_minqual0" },
+            "quality >= 3": {"plot_name": "PreFilter_ClusterEfficiencyVSsegDirLoc_st4_minqual3"},
+            "quality >= 6": {"plot_name": "PreFilter_ClusterEfficiencyVSsegDirLoc_st4_minqual6"}
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
             "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
         },
         "output": {
-            "file_name": "06_preFilter_efficiencyVSsegDirLoc_st3"
+            "file_name": "06_PreFilter_efficiencyVSsegDirLoc_st4"
         }
     }, 
 
-    "preFilter_efficiencyVSsegDirLoc_st4": {
-        "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "PreFilter_ClusterEfficiencyVSsegDirLoc_st4_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "PreFilter_ClusterEfficiencyVSsegDirLoc_st4_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "PreFilter_ClusterEfficiencyVSsegDirLoc_st4_minqual6"
-            }
-        },
-        "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
-            "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
-        },
-        "output": {
-            "file_name": "06_preFilter_efficiencyVSsegDirLoc_st4"
-        }
-    }, 
+
+
 
 
     "LQFilter_efficiencyVSpT_st1": {
+        "base" : "base_pt",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "LQFilter_ClusterEfficiencyVSpT_st1_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "LQFilter_ClusterEfficiencyVSpT_st1_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "LQFilter_ClusterEfficiencyVSpT_st1_minqual6"
-            }
+            "1 all qualities": { "plot_name": "LQFilter_ClusterEfficiencyVSpT_st1_minqual0"},
+            "quality >= 3": {"plot_name": "LQFilter_ClusterEfficiencyVSpT_st1_minqual3"},
+            "quality >= 6": {"plot_name": "LQFilter_ClusterEfficiencyVSpT_st1_minqual6"}
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
             "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
         },
         "output": {
@@ -626,23 +379,13 @@
     }, 
 
     "LQFilter_efficiencyVSpT_st2": {
+        "base" : "base_pt",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "LQFilter_ClusterEfficiencyVSpT_st2_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "LQFilter_ClusterEfficiencyVSpT_st2_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "LQFilter_ClusterEfficiencyVSpT_st2_minqual6"
-            }
+            "1 all qualities": { "plot_name": "LQFilter_ClusterEfficiencyVSpT_st2_minqual0"},
+            "quality >= 3": {"plot_name": "LQFilter_ClusterEfficiencyVSpT_st2_minqual3"},
+            "quality >= 6": {"plot_name": "LQFilter_ClusterEfficiencyVSpT_st2_minqual6"}
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
             "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
         },
         "output": {
@@ -651,23 +394,13 @@
     }, 
 
     "LQFilter_efficiencyVSpT_st3": {
+        "base" : "base_pt",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "LQFilter_ClusterEfficiencyVSpT_st3_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "LQFilter_ClusterEfficiencyVSpT_st3_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "LQFilter_ClusterEfficiencyVSpT_st3_minqual6"
-            }
+            "1 all qualities": { "plot_name": "LQFilter_ClusterEfficiencyVSpT_st3_minqual0"},
+            "quality >= 3": {"plot_name": "LQFilter_ClusterEfficiencyVSpT_st3_minqual3"},
+            "quality >= 6": {"plot_name": "LQFilter_ClusterEfficiencyVSpT_st3_minqual6"}
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
             "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
         },
         "output": {
@@ -676,23 +409,13 @@
     }, 
 
     "LQFilter_efficiencyVSpT_st4": {
+        "base" : "base_pt",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "LQFilter_ClusterEfficiencyVSpT_st4_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "LQFilter_ClusterEfficiencyVSpT_st4_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "LQFilter_ClusterEfficiencyVSpT_st4_minqual6"
-            }
+            "1 all qualities": { "plot_name": "LQFilter_ClusterEfficiencyVSpT_st4_minqual0"},
+            "quality >= 3": {"plot_name": "LQFilter_ClusterEfficiencyVSpT_st4_minqual3"},
+            "quality >= 6": {"plot_name": "LQFilter_ClusterEfficiencyVSpT_st4_minqual6"}
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
             "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
         },
         "output": {
@@ -701,24 +424,14 @@
     }, 
 
     "LQFilter_efficiencyVSpos_st1": {
+        "base": "base_pos",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "LQFilter_ClusterEfficiencyVSpos_st1_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "LQFilter_ClusterEfficiencyVSpos_st1_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "LQFilter_ClusterEfficiencyVSpos_st1_minqual6"
-            }
+            "1 all qualities": {"plot_name": "LQFilter_ClusterEfficiencyVSpos_st1_minqual0" },
+            "quality >= 3": {"plot_name": "LQFilter_ClusterEfficiencyVSpos_st1_minqual3" },
+            "quality >= 6": {"plot_name": "LQFilter_ClusterEfficiencyVSpos_st1_minqual6"}
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
-            "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
+            "legend_title": "Efficiency  -  MB1"
         },
         "output": {
             "file_name": "02_LQFilter_efficiencyVSpos_st1"
@@ -726,24 +439,14 @@
     }, 
 
     "LQFilter_efficiencyVSpos_st2": {
+        "base": "base_pos",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "LQFilter_ClusterEfficiencyVSpos_st2_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "LQFilter_ClusterEfficiencyVSpos_st2_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "LQFilter_ClusterEfficiencyVSpos_st2_minqual6"
-            }
+            "1 all qualities": {"plot_name": "LQFilter_ClusterEfficiencyVSpos_st2_minqual0" },
+            "quality >= 3": {"plot_name": "LQFilter_ClusterEfficiencyVSpos_st2_minqual3" },
+            "quality >= 6": {"plot_name": "LQFilter_ClusterEfficiencyVSpos_st2_minqual6"}
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
-            "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
+            "legend_title": "Efficiency  -  MB2"
         },
         "output": {
             "file_name": "02_LQFilter_efficiencyVSpos_st2"
@@ -751,49 +454,29 @@
     }, 
 
     "LQFilter_efficiencyVSpos_st3": {
+        "base": "base_pos",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "LQFilter_ClusterEfficiencyVSpos_st3_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "LQFilter_ClusterEfficiencyVSpos_st3_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "LQFilter_ClusterEfficiencyVSpos_st3_minqual6"
-            }
+            "1 all qualities": {"plot_name": "LQFilter_ClusterEfficiencyVSpos_st3_minqual0" },
+            "quality >= 3": {"plot_name": "LQFilter_ClusterEfficiencyVSpos_st3_minqual3" },
+            "quality >= 6": {"plot_name": "LQFilter_ClusterEfficiencyVSpos_st3_minqual6"}
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
-            "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
+            "legend_title": "Efficiency  -  MB3"
         },
         "output": {
             "file_name": "02_LQFilter_efficiencyVSpos_st3"
         }
-    }, 
-
+    },     
+    
     "LQFilter_efficiencyVSpos_st4": {
+        "base": "base_pos",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "LQFilter_ClusterEfficiencyVSpos_st4_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "LQFilter_ClusterEfficiencyVSpos_st4_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "LQFilter_ClusterEfficiencyVSpos_st4_minqual6"
-            }
+            "1 all qualities": {"plot_name": "LQFilter_ClusterEfficiencyVSpos_st4_minqual0" },
+            "quality >= 3": {"plot_name": "LQFilter_ClusterEfficiencyVSpos_st4_minqual3" },
+            "quality >= 6": {"plot_name": "LQFilter_ClusterEfficiencyVSpos_st4_minqual6"}
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
-            "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
+            "legend_title": "Efficiency  -  MB4"
         },
         "output": {
             "file_name": "02_LQFilter_efficiencyVSpos_st4"
@@ -801,23 +484,13 @@
     }, 
 
     "LQFilter_efficiencyVSphi_st1": {
+        "base" : "base_phi",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "LQFilter_ClusterEfficiencyVSphi_st1_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "LQFilter_ClusterEfficiencyVSphi_st1_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "LQFilter_ClusterEfficiencyVSphi_st1_minqual6"
-            }
+            "1 all qualities": {"plot_name": "LQFilter_ClusterEfficiencyVSphi_st1_minqual0"},
+            "quality >= 3": {"plot_name": "LQFilter_ClusterEfficiencyVSphi_st1_minqual3"},
+            "quality >= 6": {"plot_name": "LQFilter_ClusterEfficiencyVSphi_st1_minqual6"}
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
             "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
         },
         "output": {
@@ -826,23 +499,13 @@
     }, 
 
     "LQFilter_efficiencyVSphi_st2": {
+        "base" : "base_phi",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "LQFilter_ClusterEfficiencyVSphi_st2_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "LQFilter_ClusterEfficiencyVSphi_st2_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "LQFilter_ClusterEfficiencyVSphi_st2_minqual6"
-            }
+            "1 all qualities": {"plot_name": "LQFilter_ClusterEfficiencyVSphi_st2_minqual0"},
+            "quality >= 3": {"plot_name": "LQFilter_ClusterEfficiencyVSphi_st2_minqual3"},
+            "quality >= 6": {"plot_name": "LQFilter_ClusterEfficiencyVSphi_st2_minqual6"}
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
             "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
         },
         "output": {
@@ -851,23 +514,13 @@
     }, 
 
     "LQFilter_efficiencyVSphi_st3": {
+        "base" : "base_phi",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "LQFilter_ClusterEfficiencyVSphi_st3_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "LQFilter_ClusterEfficiencyVSphi_st3_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "LQFilter_ClusterEfficiencyVSphi_st3_minqual6"
-            }
+            "1 all qualities": {"plot_name": "LQFilter_ClusterEfficiencyVSphi_st3_minqual0"},
+            "quality >= 3": {"plot_name": "LQFilter_ClusterEfficiencyVSphi_st3_minqual3"},
+            "quality >= 6": {"plot_name": "LQFilter_ClusterEfficiencyVSphi_st3_minqual6"}
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
             "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
         },
         "output": {
@@ -876,23 +529,13 @@
     }, 
 
     "LQFilter_efficiencyVSphi_st4": {
+        "base" : "base_phi",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "LQFilter_ClusterEfficiencyVSphi_st4_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "LQFilter_ClusterEfficiencyVSphi_st4_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "LQFilter_ClusterEfficiencyVSphi_st4_minqual6"
-            }
+            "1 all qualities": {"plot_name": "LQFilter_ClusterEfficiencyVSphi_st4_minqual0"},
+            "quality >= 3": {"plot_name": "LQFilter_ClusterEfficiencyVSphi_st4_minqual3"},
+            "quality >= 6": {"plot_name": "LQFilter_ClusterEfficiencyVSphi_st4_minqual6"}
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
             "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
         },
         "output": {
@@ -901,23 +544,13 @@
     }, 
 
     "LQFilter_efficiencyVSeta_st1": {
+        "base" : "base_eta",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "LQFilter_ClusterEfficiencyVSeta_st1_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "LQFilter_ClusterEfficiencyVSeta_st1_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "LQFilter_ClusterEfficiencyVSeta_st1_minqual6"
-            }
+            "1 all qualities": { "plot_name": "LQFilter_ClusterEfficiencyVSeta_st1_minqual0" },
+            "quality >= 3": { "plot_name": "LQFilter_ClusterEfficiencyVSeta_st1_minqual3" },
+            "quality >= 6": { "plot_name": "LQFilter_ClusterEfficiencyVSeta_st1_minqual6"}
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
             "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
         },
         "output": {
@@ -926,23 +559,13 @@
     },
 
     "LQFilter_efficiencyVSeta_st2": {
+        "base" : "base_eta",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "LQFilter_ClusterEfficiencyVSeta_st2_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "LQFilter_ClusterEfficiencyVSeta_st2_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "LQFilter_ClusterEfficiencyVSeta_st2_minqual6"
-            }
+            "1 all qualities": { "plot_name": "LQFilter_ClusterEfficiencyVSeta_st2_minqual0" },
+            "quality >= 3": { "plot_name": "LQFilter_ClusterEfficiencyVSeta_st2_minqual3" },
+            "quality >= 6": { "plot_name": "LQFilter_ClusterEfficiencyVSeta_st2_minqual6"}
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
             "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
         },
         "output": {
@@ -951,23 +574,13 @@
     },
 
     "LQFilter_efficiencyVSeta_st3": {
+        "base" : "base_eta",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "LQFilter_ClusterEfficiencyVSeta_st3_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "LQFilter_ClusterEfficiencyVSeta_st3_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "LQFilter_ClusterEfficiencyVSeta_st3_minqual6"
-            }
+            "1 all qualities": { "plot_name": "LQFilter_ClusterEfficiencyVSeta_st3_minqual0" },
+            "quality >= 3": { "plot_name": "LQFilter_ClusterEfficiencyVSeta_st3_minqual3" },
+            "quality >= 6": { "plot_name": "LQFilter_ClusterEfficiencyVSeta_st3_minqual6"}
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
             "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
         },
         "output": {
@@ -976,48 +589,28 @@
     },
 
     "LQFilter_efficiencyVSeta_st4": {
+        "base" : "base_eta",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "LQFilter_ClusterEfficiencyVSeta_st4_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "LQFilter_ClusterEfficiencyVSeta_st4_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "LQFilter_ClusterEfficiencyVSeta_st4_minqual6"
-            }
+            "1 all qualities": { "plot_name": "LQFilter_ClusterEfficiencyVSeta_st4_minqual0" },
+            "quality >= 3": { "plot_name": "LQFilter_ClusterEfficiencyVSeta_st4_minqual3" },
+            "quality >= 6": { "plot_name": "LQFilter_ClusterEfficiencyVSeta_st4_minqual6"}
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
             "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
         },
         "output": {
             "file_name": "04_LQFilter_efficiencyVSeta_st4"
         }
-    }, 
+    },
 
     "LQFilter_efficiencyVSsegxLoc_st1": {
+        "base" : "base_xLoc",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "LQFilter_ClusterEfficiencyVSsegxLoc_st1_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "LQFilter_ClusterEfficiencyVSsegxLoc_st1_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "LQFilter_ClusterEfficiencyVSsegxLoc_st1_minqual6"
-            }
+            "1 all qualities": { "plot_name": "LQFilter_ClusterEfficiencyVSsegxLoc_st1_minqual0"},
+            "quality >= 3": {"plot_name": "LQFilter_ClusterEfficiencyVSsegxLoc_st1_minqual3" },
+            "quality >= 6": {"plot_name": "LQFilter_ClusterEfficiencyVSsegxLoc_st1_minqual6"}
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
             "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
         },
         "output": {
@@ -1026,23 +619,13 @@
     }, 
 
     "LQFilter_efficiencyVSsegxLoc_st2": {
+        "base" : "base_xLoc",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "LQFilter_ClusterEfficiencyVSsegxLoc_st2_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "LQFilter_ClusterEfficiencyVSsegxLoc_st2_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "LQFilter_ClusterEfficiencyVSsegxLoc_st2_minqual6"
-            }
+            "1 all qualities": { "plot_name": "LQFilter_ClusterEfficiencyVSsegxLoc_st2_minqual0"},
+            "quality >= 3": {"plot_name": "LQFilter_ClusterEfficiencyVSsegxLoc_st2_minqual3" },
+            "quality >= 6": {"plot_name": "LQFilter_ClusterEfficiencyVSsegxLoc_st2_minqual6"}
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
             "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
         },
         "output": {
@@ -1051,23 +634,13 @@
     }, 
 
     "LQFilter_efficiencyVSsegxLoc_st3": {
+        "base" : "base_xLoc",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "LQFilter_ClusterEfficiencyVSsegxLoc_st3_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "LQFilter_ClusterEfficiencyVSsegxLoc_st3_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "LQFilter_ClusterEfficiencyVSsegxLoc_st3_minqual6"
-            }
+            "1 all qualities": { "plot_name": "LQFilter_ClusterEfficiencyVSsegxLoc_st3_minqual0"},
+            "quality >= 3": {"plot_name": "LQFilter_ClusterEfficiencyVSsegxLoc_st3_minqual3" },
+            "quality >= 6": {"plot_name": "LQFilter_ClusterEfficiencyVSsegxLoc_st3_minqual6"}
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
             "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
         },
         "output": {
@@ -1076,23 +649,13 @@
     }, 
 
     "LQFilter_efficiencyVSsegxLoc_st4": {
+        "base" : "base_xLoc",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "LQFilter_ClusterEfficiencyVSsegxLoc_st4_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "LQFilter_ClusterEfficiencyVSsegxLoc_st4_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "LQFilter_ClusterEfficiencyVSsegxLoc_st4_minqual6"
-            }
+            "1 all qualities": { "plot_name": "LQFilter_ClusterEfficiencyVSsegxLoc_st4_minqual0"},
+            "quality >= 3": {"plot_name": "LQFilter_ClusterEfficiencyVSsegxLoc_st4_minqual3" },
+            "quality >= 6": {"plot_name": "LQFilter_ClusterEfficiencyVSsegxLoc_st4_minqual6"}
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
             "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
         },
         "output": {
@@ -1101,23 +664,13 @@
     }, 
 
     "LQFilter_efficiencyVSsegDirLoc_st1": {
+        "base" : "base_dirLoc",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "LQFilter_ClusterEfficiencyVSsegDirLoc_st1_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "LQFilter_ClusterEfficiencyVSsegDirLoc_st1_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "LQFilter_ClusterEfficiencyVSsegDirLoc_st1_minqual6"
-            }
+            "1 all qualities": { "plot_name": "LQFilter_ClusterEfficiencyVSsegDirLoc_st1_minqual0" },
+            "quality >= 3": {"plot_name": "LQFilter_ClusterEfficiencyVSsegDirLoc_st1_minqual3"},
+            "quality >= 6": {"plot_name": "LQFilter_ClusterEfficiencyVSsegDirLoc_st1_minqual6"}
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
             "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
         },
         "output": {
@@ -1126,23 +679,13 @@
     }, 
 
     "LQFilter_efficiencyVSsegDirLoc_st2": {
+        "base" : "base_dirLoc",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "LQFilter_ClusterEfficiencyVSsegDirLoc_st2_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "LQFilter_ClusterEfficiencyVSsegDirLoc_st2_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "LQFilter_ClusterEfficiencyVSsegDirLoc_st2_minqual6"
-            }
+            "1 all qualities": { "plot_name": "LQFilter_ClusterEfficiencyVSsegDirLoc_st2_minqual0" },
+            "quality >= 3": {"plot_name": "LQFilter_ClusterEfficiencyVSsegDirLoc_st2_minqual3"},
+            "quality >= 6": {"plot_name": "LQFilter_ClusterEfficiencyVSsegDirLoc_st2_minqual6"}
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
             "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
         },
         "output": {
@@ -1151,23 +694,13 @@
     }, 
 
     "LQFilter_efficiencyVSsegDirLoc_st3": {
+        "base" : "base_dirLoc",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "LQFilter_ClusterEfficiencyVSsegDirLoc_st3_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "LQFilter_ClusterEfficiencyVSsegDirLoc_st3_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "LQFilter_ClusterEfficiencyVSsegDirLoc_st3_minqual6"
-            }
+            "1 all qualities": { "plot_name": "LQFilter_ClusterEfficiencyVSsegDirLoc_st3_minqual0" },
+            "quality >= 3": {"plot_name": "LQFilter_ClusterEfficiencyVSsegDirLoc_st3_minqual3"},
+            "quality >= 6": {"plot_name": "LQFilter_ClusterEfficiencyVSsegDirLoc_st3_minqual6"}
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
             "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
         },
         "output": {
@@ -1176,23 +709,13 @@
     }, 
 
     "LQFilter_efficiencyVSsegDirLoc_st4": {
+        "base" : "base_dirLoc",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "LQFilter_ClusterEfficiencyVSsegDirLoc_st4_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "LQFilter_ClusterEfficiencyVSsegDirLoc_st4_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "LQFilter_ClusterEfficiencyVSsegDirLoc_st4_minqual6"
-            }
+            "1 all qualities": { "plot_name": "LQFilter_ClusterEfficiencyVSsegDirLoc_st4_minqual0" },
+            "quality >= 3": {"plot_name": "LQFilter_ClusterEfficiencyVSsegDirLoc_st4_minqual3"},
+            "quality >= 6": {"plot_name": "LQFilter_ClusterEfficiencyVSsegDirLoc_st4_minqual6"}
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
             "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
         },
         "output": {
@@ -1200,24 +723,18 @@
         }
     }, 
 
+
+
+
+
     "HQFilter_efficiencyVSpT_st1": {
+        "base" : "base_pt",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "HQFilter_ClusterEfficiencyVSpT_st1_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "HQFilter_ClusterEfficiencyVSpT_st1_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "HQFilter_ClusterEfficiencyVSpT_st1_minqual6"
-            }
+            "1 all qualities": { "plot_name": "HQFilter_ClusterEfficiencyVSpT_st1_minqual0"},
+            "quality >= 3": {"plot_name": "HQFilter_ClusterEfficiencyVSpT_st1_minqual3"},
+            "quality >= 6": {"plot_name": "HQFilter_ClusterEfficiencyVSpT_st1_minqual6"}
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
             "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
         },
         "output": {
@@ -1226,23 +743,13 @@
     }, 
 
     "HQFilter_efficiencyVSpT_st2": {
+        "base" : "base_pt",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "HQFilter_ClusterEfficiencyVSpT_st2_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "HQFilter_ClusterEfficiencyVSpT_st2_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "HQFilter_ClusterEfficiencyVSpT_st2_minqual6"
-            }
+            "1 all qualities": { "plot_name": "HQFilter_ClusterEfficiencyVSpT_st2_minqual0"},
+            "quality >= 3": {"plot_name": "HQFilter_ClusterEfficiencyVSpT_st2_minqual3"},
+            "quality >= 6": {"plot_name": "HQFilter_ClusterEfficiencyVSpT_st2_minqual6"}
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
             "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
         },
         "output": {
@@ -1251,23 +758,13 @@
     }, 
 
     "HQFilter_efficiencyVSpT_st3": {
+        "base" : "base_pt",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "HQFilter_ClusterEfficiencyVSpT_st3_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "HQFilter_ClusterEfficiencyVSpT_st3_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "HQFilter_ClusterEfficiencyVSpT_st3_minqual6"
-            }
+            "1 all qualities": { "plot_name": "HQFilter_ClusterEfficiencyVSpT_st3_minqual0"},
+            "quality >= 3": {"plot_name": "HQFilter_ClusterEfficiencyVSpT_st3_minqual3"},
+            "quality >= 6": {"plot_name": "HQFilter_ClusterEfficiencyVSpT_st3_minqual6"}
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
             "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
         },
         "output": {
@@ -1276,23 +773,13 @@
     }, 
 
     "HQFilter_efficiencyVSpT_st4": {
+        "base" : "base_pt",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "HQFilter_ClusterEfficiencyVSpT_st4_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "HQFilter_ClusterEfficiencyVSpT_st4_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "HQFilter_ClusterEfficiencyVSpT_st4_minqual6"
-            }
+            "1 all qualities": { "plot_name": "HQFilter_ClusterEfficiencyVSpT_st4_minqual0"},
+            "quality >= 3": {"plot_name": "HQFilter_ClusterEfficiencyVSpT_st4_minqual3"},
+            "quality >= 6": {"plot_name": "HQFilter_ClusterEfficiencyVSpT_st4_minqual6"}
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
             "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
         },
         "output": {
@@ -1301,24 +788,14 @@
     }, 
 
     "HQFilter_efficiencyVSpos_st1": {
+        "base": "base_pos",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "HQFilter_ClusterEfficiencyVSpos_st1_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "HQFilter_ClusterEfficiencyVSpos_st1_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "HQFilter_ClusterEfficiencyVSpos_st1_minqual6"
-            }
+            "1 all qualities": {"plot_name": "HQFilter_ClusterEfficiencyVSpos_st1_minqual0" },
+            "quality >= 3": {"plot_name": "HQFilter_ClusterEfficiencyVSpos_st1_minqual3" },
+            "quality >= 6": {"plot_name": "HQFilter_ClusterEfficiencyVSpos_st1_minqual6"}
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
-            "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
+            "legend_title": "Efficiency  -  MB1"
         },
         "output": {
             "file_name": "02_HQFilter_efficiencyVSpos_st1"
@@ -1326,24 +803,14 @@
     }, 
 
     "HQFilter_efficiencyVSpos_st2": {
+        "base": "base_pos",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "HQFilter_ClusterEfficiencyVSpos_st2_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "HQFilter_ClusterEfficiencyVSpos_st2_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "HQFilter_ClusterEfficiencyVSpos_st2_minqual6"
-            }
+            "1 all qualities": {"plot_name": "HQFilter_ClusterEfficiencyVSpos_st2_minqual0" },
+            "quality >= 3": {"plot_name": "HQFilter_ClusterEfficiencyVSpos_st2_minqual3" },
+            "quality >= 6": {"plot_name": "HQFilter_ClusterEfficiencyVSpos_st2_minqual6"}
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
-            "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
+            "legend_title": "Efficiency  -  MB2"
         },
         "output": {
             "file_name": "02_HQFilter_efficiencyVSpos_st2"
@@ -1351,24 +818,14 @@
     }, 
 
     "HQFilter_efficiencyVSpos_st3": {
+        "base": "base_pos",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "HQFilter_ClusterEfficiencyVSpos_st3_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "HQFilter_ClusterEfficiencyVSpos_st3_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "HQFilter_ClusterEfficiencyVSpos_st3_minqual6"
-            }
+            "1 all qualities": {"plot_name": "HQFilter_ClusterEfficiencyVSpos_st3_minqual0" },
+            "quality >= 3": {"plot_name": "HQFilter_ClusterEfficiencyVSpos_st3_minqual3" },
+            "quality >= 6": {"plot_name": "HQFilter_ClusterEfficiencyVSpos_st3_minqual6"}
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
-            "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
+            "legend_title": "Efficiency  -  MB3"
         },
         "output": {
             "file_name": "02_HQFilter_efficiencyVSpos_st3"
@@ -1376,24 +833,14 @@
     }, 
 
     "HQFilter_efficiencyVSpos_st4": {
+        "base": "base_pos",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "HQFilter_ClusterEfficiencyVSpos_st4_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "HQFilter_ClusterEfficiencyVSpos_st4_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "HQFilter_ClusterEfficiencyVSpos_st4_minqual6"
-            }
+            "1 all qualities": {"plot_name": "HQFilter_ClusterEfficiencyVSpos_st4_minqual0" },
+            "quality >= 3": {"plot_name": "HQFilter_ClusterEfficiencyVSpos_st4_minqual3" },
+            "quality >= 6": {"plot_name": "HQFilter_ClusterEfficiencyVSpos_st4_minqual6"}
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
-            "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
+            "legend_title": "Efficiency  -  MB4"
         },
         "output": {
             "file_name": "02_HQFilter_efficiencyVSpos_st4"
@@ -1401,23 +848,13 @@
     }, 
 
     "HQFilter_efficiencyVSphi_st1": {
+        "base" : "base_phi",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "HQFilter_ClusterEfficiencyVSphi_st1_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "HQFilter_ClusterEfficiencyVSphi_st1_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "HQFilter_ClusterEfficiencyVSphi_st1_minqual6"
-            }
+            "1 all qualities": {"plot_name": "HQFilter_ClusterEfficiencyVSphi_st1_minqual0"},
+            "quality >= 3": {"plot_name": "HQFilter_ClusterEfficiencyVSphi_st1_minqual3"},
+            "quality >= 6": {"plot_name": "HQFilter_ClusterEfficiencyVSphi_st1_minqual6"}
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
             "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
         },
         "output": {
@@ -1426,23 +863,13 @@
     }, 
 
     "HQFilter_efficiencyVSphi_st2": {
+        "base" : "base_phi",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "HQFilter_ClusterEfficiencyVSphi_st2_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "HQFilter_ClusterEfficiencyVSphi_st2_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "HQFilter_ClusterEfficiencyVSphi_st2_minqual6"
-            }
+            "1 all qualities": {"plot_name": "HQFilter_ClusterEfficiencyVSphi_st2_minqual0"},
+            "quality >= 3": {"plot_name": "HQFilter_ClusterEfficiencyVSphi_st2_minqual3"},
+            "quality >= 6": {"plot_name": "HQFilter_ClusterEfficiencyVSphi_st2_minqual6"}
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
             "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
         },
         "output": {
@@ -1451,23 +878,13 @@
     }, 
 
     "HQFilter_efficiencyVSphi_st3": {
+        "base" : "base_phi",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "HQFilter_ClusterEfficiencyVSphi_st3_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "HQFilter_ClusterEfficiencyVSphi_st3_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "HQFilter_ClusterEfficiencyVSphi_st3_minqual6"
-            }
+            "1 all qualities": {"plot_name": "HQFilter_ClusterEfficiencyVSphi_st3_minqual0"},
+            "quality >= 3": {"plot_name": "HQFilter_ClusterEfficiencyVSphi_st3_minqual3"},
+            "quality >= 6": {"plot_name": "HQFilter_ClusterEfficiencyVSphi_st3_minqual6"}
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
             "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
         },
         "output": {
@@ -1476,23 +893,13 @@
     }, 
 
     "HQFilter_efficiencyVSphi_st4": {
+        "base" : "base_phi",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "HQFilter_ClusterEfficiencyVSphi_st4_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "HQFilter_ClusterEfficiencyVSphi_st4_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "HQFilter_ClusterEfficiencyVSphi_st4_minqual6"
-            }
+            "1 all qualities": {"plot_name": "HQFilter_ClusterEfficiencyVSphi_st4_minqual0"},
+            "quality >= 3": {"plot_name": "HQFilter_ClusterEfficiencyVSphi_st4_minqual3"},
+            "quality >= 6": {"plot_name": "HQFilter_ClusterEfficiencyVSphi_st4_minqual6"}
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
             "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
         },
         "output": {
@@ -1501,23 +908,13 @@
     }, 
 
     "HQFilter_efficiencyVSeta_st1": {
+        "base" : "base_eta",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "HQFilter_ClusterEfficiencyVSeta_st1_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "HQFilter_ClusterEfficiencyVSeta_st1_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "HQFilter_ClusterEfficiencyVSeta_st1_minqual6"
-            }
+            "1 all qualities": { "plot_name": "HQFilter_ClusterEfficiencyVSeta_st1_minqual0" },
+            "quality >= 3": { "plot_name": "HQFilter_ClusterEfficiencyVSeta_st1_minqual3" },
+            "quality >= 6": { "plot_name": "HQFilter_ClusterEfficiencyVSeta_st1_minqual6"}
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
             "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
         },
         "output": {
@@ -1526,23 +923,13 @@
     },
 
     "HQFilter_efficiencyVSeta_st2": {
+        "base" : "base_eta",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "HQFilter_ClusterEfficiencyVSeta_st2_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "HQFilter_ClusterEfficiencyVSeta_st2_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "HQFilter_ClusterEfficiencyVSeta_st2_minqual6"
-            }
+            "1 all qualities": { "plot_name": "HQFilter_ClusterEfficiencyVSeta_st2_minqual0" },
+            "quality >= 3": { "plot_name": "HQFilter_ClusterEfficiencyVSeta_st2_minqual3" },
+            "quality >= 6": { "plot_name": "HQFilter_ClusterEfficiencyVSeta_st2_minqual6"}
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
             "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
         },
         "output": {
@@ -1551,23 +938,13 @@
     },
 
     "HQFilter_efficiencyVSeta_st3": {
+        "base" : "base_eta",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "HQFilter_ClusterEfficiencyVSeta_st3_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "HQFilter_ClusterEfficiencyVSeta_st3_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "HQFilter_ClusterEfficiencyVSeta_st3_minqual6"
-            }
+            "1 all qualities": { "plot_name": "HQFilter_ClusterEfficiencyVSeta_st3_minqual0" },
+            "quality >= 3": { "plot_name": "HQFilter_ClusterEfficiencyVSeta_st3_minqual3" },
+            "quality >= 6": { "plot_name": "HQFilter_ClusterEfficiencyVSeta_st3_minqual6"}
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
             "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
         },
         "output": {
@@ -1576,48 +953,28 @@
     },
 
     "HQFilter_efficiencyVSeta_st4": {
+        "base" : "base_eta",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "HQFilter_ClusterEfficiencyVSeta_st4_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "HQFilter_ClusterEfficiencyVSeta_st4_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "HQFilter_ClusterEfficiencyVSeta_st4_minqual6"
-            }
+            "1 all qualities": { "plot_name": "HQFilter_ClusterEfficiencyVSeta_st4_minqual0" },
+            "quality >= 3": { "plot_name": "HQFilter_ClusterEfficiencyVSeta_st4_minqual3" },
+            "quality >= 6": { "plot_name": "HQFilter_ClusterEfficiencyVSeta_st4_minqual6"}
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
             "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
         },
         "output": {
             "file_name": "04_HQFilter_efficiencyVSeta_st4"
         }
-    }, 
+    },
 
     "HQFilter_efficiencyVSsegxLoc_st1": {
+        "base" : "base_xLoc",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "HQFilter_ClusterEfficiencyVSsegxLoc_st1_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "HQFilter_ClusterEfficiencyVSsegxLoc_st1_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "HQFilter_ClusterEfficiencyVSsegxLoc_st1_minqual6"
-            }
+            "1 all qualities": { "plot_name": "HQFilter_ClusterEfficiencyVSsegxLoc_st1_minqual0"},
+            "quality >= 3": {"plot_name": "HQFilter_ClusterEfficiencyVSsegxLoc_st1_minqual3" },
+            "quality >= 6": {"plot_name": "HQFilter_ClusterEfficiencyVSsegxLoc_st1_minqual6"}
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
             "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
         },
         "output": {
@@ -1626,23 +983,13 @@
     }, 
 
     "HQFilter_efficiencyVSsegxLoc_st2": {
+        "base" : "base_xLoc",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "HQFilter_ClusterEfficiencyVSsegxLoc_st2_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "HQFilter_ClusterEfficiencyVSsegxLoc_st2_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "HQFilter_ClusterEfficiencyVSsegxLoc_st2_minqual6"
-            }
+            "1 all qualities": { "plot_name": "HQFilter_ClusterEfficiencyVSsegxLoc_st2_minqual0"},
+            "quality >= 3": {"plot_name": "HQFilter_ClusterEfficiencyVSsegxLoc_st2_minqual3" },
+            "quality >= 6": {"plot_name": "HQFilter_ClusterEfficiencyVSsegxLoc_st2_minqual6"}
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
             "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
         },
         "output": {
@@ -1651,23 +998,13 @@
     }, 
 
     "HQFilter_efficiencyVSsegxLoc_st3": {
+        "base" : "base_xLoc",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "HQFilter_ClusterEfficiencyVSsegxLoc_st3_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "HQFilter_ClusterEfficiencyVSsegxLoc_st3_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "HQFilter_ClusterEfficiencyVSsegxLoc_st3_minqual6"
-            }
+            "1 all qualities": { "plot_name": "HQFilter_ClusterEfficiencyVSsegxLoc_st3_minqual0"},
+            "quality >= 3": {"plot_name": "HQFilter_ClusterEfficiencyVSsegxLoc_st3_minqual3" },
+            "quality >= 6": {"plot_name": "HQFilter_ClusterEfficiencyVSsegxLoc_st3_minqual6"}
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
             "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
         },
         "output": {
@@ -1676,23 +1013,13 @@
     }, 
 
     "HQFilter_efficiencyVSsegxLoc_st4": {
+        "base" : "base_xLoc",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "HQFilter_ClusterEfficiencyVSsegxLoc_st4_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "HQFilter_ClusterEfficiencyVSsegxLoc_st4_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "HQFilter_ClusterEfficiencyVSsegxLoc_st4_minqual6"
-            }
+            "1 all qualities": { "plot_name": "HQFilter_ClusterEfficiencyVSsegxLoc_st4_minqual0"},
+            "quality >= 3": {"plot_name": "HQFilter_ClusterEfficiencyVSsegxLoc_st4_minqual3" },
+            "quality >= 6": {"plot_name": "HQFilter_ClusterEfficiencyVSsegxLoc_st4_minqual6"}
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
             "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
         },
         "output": {
@@ -1701,48 +1028,28 @@
     }, 
 
     "HQFilter_efficiencyVSsegDirLoc_st1": {
+        "base" : "base_dirLoc",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "HQFilter_ClusterEfficiencyVSsegDirLoc_st1_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "HQFilter_ClusterEfficiencyVSsegDirLoc_st1_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "HQFilter_ClusterEfficiencyVSsegDirLoc_st1_minqual6"
-            }
+            "1 all qualities": { "plot_name": "HQFilter_ClusterEfficiencyVSsegDirLoc_st1_minqual0" },
+            "quality >= 3": {"plot_name": "HQFilter_ClusterEfficiencyVSsegDirLoc_st1_minqual3"},
+            "quality >= 6": {"plot_name": "HQFilter_ClusterEfficiencyVSsegDirLoc_st1_minqual6"}
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
             "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
         },
         "output": {
             "file_name": "06_HQFilter_efficiencyVSsegDirLoc_st1"
         }
-    }, 
+    },
 
     "HQFilter_efficiencyVSsegDirLoc_st2": {
+        "base" : "base_dirLoc",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "HQFilter_ClusterEfficiencyVSsegDirLoc_st2_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "HQFilter_ClusterEfficiencyVSsegDirLoc_st2_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "HQFilter_ClusterEfficiencyVSsegDirLoc_st2_minqual6"
-            }
+            "1 all qualities": { "plot_name": "HQFilter_ClusterEfficiencyVSsegDirLoc_st2_minqual0" },
+            "quality >= 3": {"plot_name": "HQFilter_ClusterEfficiencyVSsegDirLoc_st2_minqual3"},
+            "quality >= 6": {"plot_name": "HQFilter_ClusterEfficiencyVSsegDirLoc_st2_minqual6"}
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
             "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
         },
         "output": {
@@ -1751,53 +1058,32 @@
     }, 
 
     "HQFilter_efficiencyVSsegDirLoc_st3": {
+        "base" : "base_dirLoc",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "HQFilter_ClusterEfficiencyVSsegDirLoc_st3_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "HQFilter_ClusterEfficiencyVSsegDirLoc_st3_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "HQFilter_ClusterEfficiencyVSsegDirLoc_st3_minqual6"
-            }
+            "1 all qualities": { "plot_name": "HQFilter_ClusterEfficiencyVSsegDirLoc_st3_minqual0" },
+            "quality >= 3": {"plot_name": "HQFilter_ClusterEfficiencyVSsegDirLoc_st3_minqual3"},
+            "quality >= 6": {"plot_name": "HQFilter_ClusterEfficiencyVSsegDirLoc_st3_minqual6"}
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
             "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
         },
         "output": {
             "file_name": "06_HQFilter_efficiencyVSsegDirLoc_st3"
         }
-    }, 
+    },
 
     "HQFilter_efficiencyVSsegDirLoc_st4": {
+        "base" : "base_dirLoc",
         "inputs": {
-            "1 all qualities": {
-                "legend_entry": "all qualities",
-                "plot_name": "HQFilter_ClusterEfficiencyVSsegDirLoc_st4_minqual0"
-            },
-            "quality >= 3": {
-                "legend_entry": "quality >= 3",
-                "plot_name": "HQFilter_ClusterEfficiencyVSsegDirLoc_st4_minqual3"
-            },
-            "quality >= 6": {
-                "legend_entry": "quality >= 6",
-                "plot_name": "HQFilter_ClusterEfficiencyVSsegDirLoc_st4_minqual6"
-            }
+            "1 all qualities": { "plot_name": "HQFilter_ClusterEfficiencyVSsegDirLoc_st4_minqual0" },
+            "quality >= 3": {"plot_name": "HQFilter_ClusterEfficiencyVSsegDirLoc_st4_minqual3"},
+            "quality >= 6": {"plot_name": "HQFilter_ClusterEfficiencyVSsegDirLoc_st4_minqual6"}
         },
         "plot": {
-            "x": [ 0.0, 100.0, "muon p_{T} (GeV)"],
-            "y": [ 0.0, 1.05, "trigger efficiency" ],
             "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
         },
         "output": {
             "file_name": "06_HQFilter_efficiencyVSsegDirLoc_st4"
         }
     }
-
 }

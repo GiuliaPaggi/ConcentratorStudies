@@ -40,7 +40,7 @@ class Options :
 
 
 if __name__ == '__main__':
-    option = "gridByWheelcleanEmptyBinsgridtext"
+    option = "gridByWheelcleanEmptyBinstext"
 
     options = Options()
     options.assign(option)
