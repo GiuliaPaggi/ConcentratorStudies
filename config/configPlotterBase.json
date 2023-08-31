@@ -30,7 +30,7 @@
             "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
         },
         "output": {
-            "directory": "plots/",
+            "directory": "plots/Eff1D/",
             "file_name": "",
             "file_types": [ "png", "pdf" ]
         }
@@ -48,7 +48,7 @@
             "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
         },
         "output": {
-            "directory": "plots/",
+            "directory": "plots/Eff1D/",
             "file_name": "",
             "file_types": [ "png", "pdf" ]
         }
@@ -84,7 +84,7 @@
             "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
         },
         "output": {
-            "directory": "plots/",
+            "directory": "plots/Eff1D/",
             "file_name": "",
             "file_types": [ "png", "pdf" ]
         }
@@ -102,14 +102,14 @@
             "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
         },
         "output": {
-            "directory": "plots/",
+            "directory": "plots/Eff1D/",
             "file_name": "",
             "file_types": [ "png", "pdf" ]
         }
     },
     "base_dirLoc": {
         "plot": { 
-            "x": [ -1.25, 1.25, "segment dirLoc (cm)" ],
+            "x": [ -1.25, 1.25, "segment dirLoc (rad)" ],
             "y": [ 0.0, 1.5, "Efficiency" ],
             "option": "",
             "legend_title": "",
@@ -120,7 +120,7 @@
             "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
         },
         "output": {
-            "directory": "plots/",
+            "directory": "plots/Eff1D/",
             "file_name": "",
             "file_types": [ "png", "pdf" ]
         }
@@ -136,10 +136,28 @@
             "logo": [ "CMS", "Work in progress" ],
             "colors": [ 1, 2, 4, 3, 5, 6, 7 ],
             "markers": [ 20, 23, 22, 21, 24, 25, 26 ],
-            "legend_range": [ 0.49, 0.73, 0.85, 0.85 ]
+            "legend_range": [ 0.49, 0.72, 0.85, 0.84 ]
         }, 
         "output": {
-            "directory": "plots/",
+            "directory": "plots/Eff2D/",
+            "file_name": "",
+            "file_types": [ "png", "pdf" ]
+        }
+    }, 
+    "ghost_pt": {
+        "plot": {
+            "x": [ 0.0, 100.0, "muon p_{T} (GeV/c)" ],
+            "y": [ 0.0, 0.25, "Ghost Fraction" ],
+            "option": "",
+            "legend_title": "",
+            "caption": "Phase-2 Simulation",
+            "logo": [ "CMS", "Work in progress" ],
+            "colors": [ 1, 2, 4, 3, 5, 6, 7 ],
+            "markers": [ 20, 23, 22, 21, 24, 25, 26 ],
+            "legend_range": [ 0.49, 0.67, 0.85, 0.80 ]
+        },
+        "output": {
+            "directory": "plots/Ghosts/",
             "file_name": "",
             "file_types": [ "png", "pdf" ]
         }
