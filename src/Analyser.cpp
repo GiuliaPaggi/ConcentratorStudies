@@ -9,6 +9,7 @@
 #include <TLegend.h>
 #include <TMath.h>
 #include <TStyle.h>
+#include <TProfile.h>
 #include <TProfile2D.h>
 #include <TLorentzVector.h>
 
@@ -68,6 +69,36 @@ void Analyser::FillEfficiency2D(const std::string &typeStr, const std::string &v
   bool eff = (std::abs(BXTP - CORRECT_BX) < 1) && qualTP >= qual;
 
   m_effs[Form("%s_ClusterEfficiencyVS%s_st%d_minqual%d", type, var, st, qual)]->Fill(eff, valueToFillx, valueToFilly);
+}
+
+void Analyser::FillGhostRatio(const std::string &typeStr, const std::string &varStr, const int &st, const int &qual, const double &valueToFill, const Cluster &cluster){
+  const auto type{typeStr.c_str()};
+  const auto var{varStr.c_str()};
+
+  double qualTP = cluster.bestTPQuality();
+  bool eff = cluster.hasGhosts();
+  bool ITeff = cluster.itSize();
+  bool OOTeff = cluster.ootSize();
+  if ( qualTP >= qual ) {
+    m_effs[Form("%s_GhostFractionVS%s_st%d_minqual%d", type, var, st, qual)]->Fill(eff, valueToFill);
+    m_effs[Form("%s_ITGhostFractionVS%s_st%d_minqual%d", type, var, st, qual)]->Fill(ITeff, valueToFill);
+    m_effs[Form("%s_OOTGhostFractionVS%s_st%d_minqual%d", type, var, st, qual)]->Fill(OOTeff, valueToFill);
+  }
+}
+
+void Analyser::FillGhostProfile(const std::string &typeStr, const std::string &varStr, const int &st, const int &qual, const double &valueToFill, const Cluster &cluster){
+  const auto type{typeStr.c_str()};
+  const auto var{varStr.c_str()};
+
+  const double ITghost = cluster.itSize();
+  const double OOTghost = cluster.ootSize();
+
+  double qualTP = cluster.bestTPQuality();
+  if ( cluster.hasGhosts() && qualTP >= qual ) {
+    m_plots[Form("%s_GhostDistributionVS%s_st%d_minqual%d", type, var, st, qual)]->Fill(valueToFill, ITghost + OOTghost);
+    m_plots[Form("%s_ITGhostDistributionVS%s_st%d_minqual%d", type, var, st, qual)]->Fill(valueToFill, ITghost);
+    m_plots[Form("%s_OOTGhostDistributionVS%s_st%d_minqual%d", type, var, st, qual)]->Fill(valueToFill, OOTghost);
+  }
 }
 
 void Analyser::DefinePlot() {
@@ -152,6 +183,15 @@ void Analyser::DefinePlot() {
         m_effs[Form("%s_ClusterEfficiencyVSeta_st%d_minqual%d", type, st, q)] = new TEfficiency(Form("%s_ClusterEfficiencyVSeta_st%d_minqual%d", type, st, q), Form("%s_ClusterEfficiencyVSeta_st%d_minqual%d; eta; Efficiency", type, st, q), 50, -1, 1);
         m_effs[Form("%s_ClusterEfficiencyVSsegxLoc_st%d_minqual%d", type, st, q)] = new TEfficiency(Form("%s_ClusterEfficiencyVSsegxLoc_st%d_minqual%d", type, st, q), Form("%s_ClusterEfficiencyVSsegxLoc_st%d_minqual%d; bestSeg_xLoc (cm); Efficiency", type, st, q), 100, -220, 220);
         m_effs[Form("%s_ClusterEfficiencyVSsegDirLoc_st%d_minqual%d", type, st, q)] = new TEfficiency(Form("%s_ClusterEfficiencyVSsegDirLoc_st%d_minqual%d", type, st, q), Form("%s_ClusterEfficiencyVSsegDirLoc_st%d_minqual%d; bestSeg_dirLoc; Efficieny", type, st, q), 40, -TMath::Pi(), TMath::Pi()); 
+        
+        m_effs[Form("%s_GhostFractionVSpT_st%d_minqual%d", type, st, q)] = new TEfficiency(Form("%s_GhostFractionVSpT_st%d_minqual%d", type, st, q), Form("%s_GhostFractionVSpT_st%d_minqual%d; pT(GeV); Fraction of events with ghosts", type, st, q), 50, MU::MIN_PT, 100);
+        m_effs[Form("%s_ITGhostFractionVSpT_st%d_minqual%d", type, st, q)] = new TEfficiency(Form("%s_ITGhostFractionVSpT_st%d_minqual%d", type, st, q), Form("%s_ITGhostFractionVSpT_st%d_minqual%d; pT(GeV); Fraction of events with in-time ghosts", type, st, q), 50, MU::MIN_PT, 100);
+        m_effs[Form("%s_OOTGhostFractionVSpT_st%d_minqual%d", type, st, q)] = new TEfficiency(Form("%s_OOTGhostFractionVSpT_st%d_minqual%d", type, st, q), Form("%s_OOTGhostFractionVSpT_st%d_minqual%d; pT(GeV); Fraction of events with out-of-time ghosts", type, st, q), 50, MU::MIN_PT, 100);
+
+        m_plots[Form("%s_GhostDistributionVSpT_st%d_minqual%d", type, st, q)] = new TProfile(Form("%s_GhostDistributionVSpT_st%d_minqual%d", type, st, q), Form("%s_GhostDistributionVSpT_st%d_minqual%d; pT(GeV); Average # ghosts", type, st, q), 50, MU::MIN_PT, 100);
+        m_plots[Form("%s_ITGhostDistributionVSpT_st%d_minqual%d", type, st, q)] = new TProfile(Form("%s_ITGhostDistributionVSpT_st%d_minqual%d", type, st, q), Form("%s_ITGhostDistributionVSpT_st%d_minqual%d; pT(GeV); Average # in-time ghosts", type, st, q), 50, MU::MIN_PT, 100);
+        m_plots[Form("%s_OOTGhostDistributionVSpT_st%d_minqual%d", type, st, q)] = new TProfile(Form("%s_OOTGhostDistributionVSpT_st%d_minqual%d", type, st, q), Form("%s_OOTGhostDistributionVSpT_st%d_minqual%d; pT(GeV); Average # out-of-time ghosts", type, st, q), 50, MU::MIN_PT, 100);
+      
       }
 
       m_effs[Form("%s_Eff_SegMatch_st%d", type, st)] =
@@ -208,7 +248,7 @@ void Analyser::ClusterAnalisis(const std::vector<Cluster> &clusters, const std::
     int bestQ{cluster.bestTPQuality()};
     int ootSize{cluster.ootSize()};
     int itSize{cluster.itSize()};
-
+    
     m_plots[Form("%s_Q_Best", type)]->Fill(bestQ);
     m_plots[Form("%s_ITGhosts", type)]->Fill(itSize);
     m_plots[Form("%s_OoTGhosts", type)]->Fill(ootSize);
@@ -249,6 +289,7 @@ void Analyser::ClusterAnalisis(const std::vector<Cluster> &clusters, const std::
           m_plots[Form("%s_BX_LowQ_matched", type)]->Fill(ghost.BX);
         }
       }
+    
     }
 
     if (cluster.muMatched && bestSeg.nPhiHits >= 4) {      
@@ -262,6 +303,8 @@ void Analyser::ClusterAnalisis(const std::vector<Cluster> &clusters, const std::
             FillEfficiency(type, "eta", st, qual, mu_eta->at(muon), cluster);
             FillEfficiency(type, "segxLoc", st, qual, bestSeg.xLoc, cluster);
             FillEfficiency(type, "segDirLoc", st, qual, dirLoc, cluster);
+            FillGhostRatio(type, "pT", st, qual, mu_pt->at(muon), cluster);
+            FillGhostProfile(type, "pT", st, qual, mu_pt->at(muon), cluster);
         }
     }
 
@@ -328,7 +371,7 @@ std::vector<Cluster> MissingClusters(std::vector<Cluster> FirstCLVector, std::ve
 void Analyser::Loop() {
   Geometry geom{};
 
-  TFile outputFile("results/outputFile.root", "RECREATE");
+  TFile outputFile("results/outputFile_DoubleMuon_FlatPt-1To100_200PU_noRPC.root", "RECREATE");
   outputFile.cd();
 
   tags.push_back("PreFilter");
