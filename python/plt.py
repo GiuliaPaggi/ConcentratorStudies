@@ -260,6 +260,19 @@ class Plotter:
             histo.GetYaxis().SetLabelSize(20)
             histo.GetYaxis().SetTitleOffset(1.5)
 
+
+            if axis_x.label == 'position' and histo.GetXaxis().GetNbins() <= 21:
+                for i_bin in range(1, histo.GetXaxis().GetNbins()+1):
+                    histo.GetXaxis().SetBinLabel(i_bin, "MB"+str(int(i_bin/5)+1)+"WH"+str((i_bin%5)-2))
+
+            histo.GetXaxis().SetLabelSize(12)
+            histo.GetYaxis().SetLabelSize(22)
+            histo.GetYaxis().SetTitleFont(63)
+            histo.GetYaxis().SetLabelFont(43)
+            histo.GetYaxis().SetTitleSize(22)
+            histo.GetYaxis().SetLabelSize(20)
+            histo.GetYaxis().SetTitleOffset(1.5)
+
             if axis_y.label == 'wheel' and histo.GetYaxis().GetNbins() == 5:
                 for i_bin in range(1, histo.GetYaxis().GetNbins()+1):
                     histo.GetYaxis().SetBinLabel(i_bin, str(i_bin - 3))

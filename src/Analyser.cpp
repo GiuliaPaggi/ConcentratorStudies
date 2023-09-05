@@ -101,6 +101,22 @@ void Analyser::FillGhostProfile(const std::string &typeStr, const std::string &v
   }
 }
 
+void Analyser::FillBackground(const std::string &typeStr, const int &st, const int &qual, const double &valueToFill, const Cluster &cluster){
+  const auto type{typeStr.c_str()};
+  
+  const double ITtps = cluster.itSize()+1;
+  const double OOTtps = cluster.ootSize();
+  if (cluster.bestTPQuality() >= qual){
+    m_plots[Form("%s_ITBackground_st%d_minqual%d", type, st, qual)]->Fill(valueToFill, ITtps);
+    m_plots[Form("%s_OOTBackground_st%d_minqual%d", type, st, qual)]->Fill(valueToFill, OOTtps);
+  }
+  if (ITtps+OOTtps-1 > 0){
+    const int bin = st*5+(cluster.wheel-2); //station*5+(wheel-2)
+    m_plots[Form("%s_ITBackgroundDistribution", type)]->Fill(bin, ITtps);
+    m_plots[Form("%s_OOTBackgroundDistribution", type)]->Fill(bin, OOTtps);
+  }
+}
+
 void Analyser::DefinePlot() {
   Geometry geom{};
 
@@ -147,6 +163,10 @@ void Analyser::DefinePlot() {
     m_plots[Form("%s_ClusterSize", type)] =
         new TH1I(Form("%s_ClusterSize", type), Form("%s_ClusterSize; # TPs in cluster; Entries", type), 21, -.5, 20.5);
 
+    m_plots[Form("%s_ITBackgroundDistribution", type)] = new TProfile(Form("%s_ITBackgroundDistribution", type), Form("%s_ITBackgroundDistribution", type), 20, 0, 21);
+    m_plots[Form("%s_OOTBackgroundDistribution", type)] = new TProfile(Form("%s_OOTBackgroundDistribution", type), Form("%s_OOTBackgroundDistribution", type), 20, 0, 21);
+
+
     m_2Dplots[Form("%s_Q_OoTGhosts", type)] =
         new TH2D(Form("%s_Q_OoTGhosts", type), Form("%s_Q_OoTGhosts;High Quality;Out of time Ghost Quality", type), 10,
                  0, 10, 10, 0, 10);
@@ -166,6 +186,8 @@ void Analyser::DefinePlot() {
           Form("%s_xLoc_ITGhost_st%d", type, st), Form("%s_xLoc_ITGhost_st%d; xLoc; Entries", type, st), 100, -220, 220);
       m_plots[Form("%s_xLoc_OoTGhost_st%d", type, st)] = new TH1D(
           Form("%s_xLoc_OoTGhost_st%d", type, st), Form("%s_xLoc_OoTGhost_st%d; xLoc; Entries", type, st), 100, -220, 220);
+
+
       m_2Dplots[Form("%s_N_Cluster_st%d", type, st)] = new TH2I(
           Form("%s_N_Cluster_st%d", type, st), Form("%s_N_Cluster_st%d", type, st), 14, -0.5, 13.5, 7, -3.5, 3.5);
       m_2Dplots[Form("%s_N_Digi_st%d", type, st)] =
@@ -173,6 +195,7 @@ void Analyser::DefinePlot() {
       m_2Dplots[Form("%s_TPs_LocalDirectionvsPosition_st%d", type, st)] =
           new TH2D(Form("%s_TPs_LocalDirectionvsPosition_st%d", type, st),
                    Form("AllTPs_LocalDirectionvsPosition_st%d", st), 200, -200, 200, 11, -1, 1);
+
 
       for (auto q : QUAL_PLOT){
         m_effs[Form("%s_ClusterEfficiencyVSpos_st%d_minqual%i", type, st, q)] =
@@ -191,7 +214,10 @@ void Analyser::DefinePlot() {
         m_plots[Form("%s_GhostDistributionVSpT_st%d_minqual%d", type, st, q)] = new TProfile(Form("%s_GhostDistributionVSpT_st%d_minqual%d", type, st, q), Form("%s_GhostDistributionVSpT_st%d_minqual%d; pT(GeV); Average # ghosts", type, st, q), 50, MU::MIN_PT, 100);
         m_plots[Form("%s_ITGhostDistributionVSpT_st%d_minqual%d", type, st, q)] = new TProfile(Form("%s_ITGhostDistributionVSpT_st%d_minqual%d", type, st, q), Form("%s_ITGhostDistributionVSpT_st%d_minqual%d; pT(GeV); Average # in-time ghosts", type, st, q), 50, MU::MIN_PT, 100);
         m_plots[Form("%s_OOTGhostDistributionVSpT_st%d_minqual%d", type, st, q)] = new TProfile(Form("%s_OOTGhostDistributionVSpT_st%d_minqual%d", type, st, q), Form("%s_OOTGhostDistributionVSpT_st%d_minqual%d; pT(GeV); Average # out-of-time ghosts", type, st, q), 50, MU::MIN_PT, 100);
-      
+
+        m_plots[Form("%s_ITBackground_st%d_minqual%d", type, st, q)] = new TH1F(Form("%s_ITBackground_st%d_minqual%d", type, st, q), Form("%s_ITBackground_st%d_minqual%d; xLoc (cm); Entries", type, st, q), 100, -220, 220);      
+        m_plots[Form("%s_OOTBackground_st%d_minqual%d", type, st, q)] = new TH1F(Form("%s_OOTBackground_st%d_minqual%d", type, st, q), Form("%s_OOTBackground_st%d_minqual%d; xLoc (cm); Entries", type, st, q), 100, -220, 220);      
+
       }
 
       m_effs[Form("%s_Eff_SegMatch_st%d", type, st)] =
@@ -307,6 +333,15 @@ void Analyser::ClusterAnalisis(const std::vector<Cluster> &clusters, const std::
             FillGhostProfile(type, "pT", st, qual, mu_pt->at(muon), cluster);
         }
     }
+    
+    // ########## Study background #############
+    
+    if (!cluster.muMatched){
+      double xLoc = cluster.bestTP().xLoc;
+      for (auto qual : QUAL_PLOT){
+        FillBackground(type, st, qual, xLoc, cluster);
+      }
+    }
 
     // ########## Study segment matching #############
     m_effs[Form("%s_Eff_SegMatch_st%d", type, st)]->Fill(cluster.foundSeg, sec, wh);
@@ -371,7 +406,7 @@ std::vector<Cluster> MissingClusters(std::vector<Cluster> FirstCLVector, std::ve
 void Analyser::Loop() {
   Geometry geom{};
 
-  TFile outputFile("results/outputFile_DoubleMuon_FlatPt-1To100_200PU_noRPC.root", "RECREATE");
+  TFile outputFile("results/outputFile_DoubleMuon_FlatPt-1To100_noPU_noRPC.root", "RECREATE");
   outputFile.cd();
 
   tags.push_back("PreFilter");

@@ -30,6 +30,7 @@ class Analyser : public AnalyserBase {
   void FillEfficiency2D(const std::string &, const std::string &, const int &, const int &, const double &, const double &, const Cluster &);
   void FillGhostRatio(const std::string &typeStr, const std::string &varStr, const int &st, const int &qual, const double &valueToFill, const Cluster &cluster);
   void FillGhostProfile(const std::string &typeStr, const std::string &varStr, const int &st, const int &qual, const double &valueToFill, const Cluster &cluster);
+  void FillBackground(const std::string &typeStr, const int &st, const int &qual, const double &valueToFill, const Cluster &cluster);
 
  public:
   Analyser(std::string file) : AnalyserBase{file} {}
