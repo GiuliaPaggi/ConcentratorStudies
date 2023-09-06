@@ -263,9 +263,24 @@ class Plotter:
 
             if axis_x.label == 'position' and histo.GetXaxis().GetNbins() <= 21:
                 for i_bin in range(1, histo.GetXaxis().GetNbins()+1):
-                    histo.GetXaxis().SetBinLabel(i_bin, "MB"+str(int(i_bin/5)+1)+"WH"+str((i_bin%5)-2))
-
-            histo.GetXaxis().SetLabelSize(12)
+                    histo.GetXaxis().SetBinLabel(i_bin, "WH"+str(((i_bin-1)%5)-2))          #"MB"+str(int((i_bin-1)/5)+1)+
+                    histo.GetXaxis().SetTitle(" ")
+                    #line = TLine()
+                    #for y in range(1, 4):
+                    #    x = (y*5)+.3
+                    #    line.DrawLine(x , 0.0, x, 3.0)
+                    latex = TLatex()
+                    latex.SetNDC()
+                    latex.SetTextFont(62)
+                    latex.SetTextSize(0.028)
+                    latex.SetTextAlign(11)
+                    latex.DrawLatex(0.15, 0.15, "MB1")
+                    latex.DrawLatex(0.35, 0.15, "MB2")
+                    latex.DrawLatex(0.55, 0.15, "MB3")
+                    latex.DrawLatex(0.75, 0.15, "MB4")
+                    histo.GetXaxis().LabelsOption('v')
+                    histo.GetXaxis().SetLabelSize(18)
+            
             histo.GetYaxis().SetLabelSize(22)
             histo.GetYaxis().SetTitleFont(63)
             histo.GetYaxis().SetLabelFont(43)
