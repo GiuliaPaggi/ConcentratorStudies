@@ -104,17 +104,21 @@ void Analyser::FillGhostProfile(const std::string &typeStr, const std::string &v
 void Analyser::FillBackground(const std::string &typeStr, const int &st, const int &qual, const double &valueToFill, const Cluster &cluster){
   const auto type{typeStr.c_str()};
   
-  const double ITtps = cluster.itSize()+1;
+  const double ITtps = cluster.itSize();
   const double OOTtps = cluster.ootSize();
   if (cluster.bestTPQuality() >= qual){
-    m_plots[Form("%s_ITBackground_st%d_minqual%d", type, st, qual)]->Fill(valueToFill, ITtps);
+    m_plots[Form("%s_ITBackground_st%d_minqual%d", type, st, qual)]->Fill(valueToFill, ITtps+1);
     m_plots[Form("%s_OOTBackground_st%d_minqual%d", type, st, qual)]->Fill(valueToFill, OOTtps);
   }
-  if (ITtps+OOTtps-1 > 0){
+  if (ITtps+OOTtps > 0){
     const int bin = st*5+(cluster.wheel-2); //station*5+(wheel-2)
     m_plots[Form("%s_ITBackgroundDistribution", type)]->Fill(bin, ITtps);
     m_plots[Form("%s_OOTBackgroundDistribution", type)]->Fill(bin, OOTtps);
+    if (cluster.bestTPQuality() < 0) {
+      m_plots[Form("%s_NoBestTPBackgroundDistribution", type)]->Fill(bin, OOTtps);
+    }    
   }
+
 }
 
 void Analyser::DefinePlot() {
@@ -163,8 +167,10 @@ void Analyser::DefinePlot() {
     m_plots[Form("%s_ClusterSize", type)] =
         new TH1I(Form("%s_ClusterSize", type), Form("%s_ClusterSize; # TPs in cluster; Entries", type), 21, -.5, 20.5);
 
+    m_plots[Form("%s_BackgroundDistribution", type)] = new TProfile(Form("%s_BackgroundDistribution", type), Form("%s_BackgroundDistribution", type), 20, 0, 21);
     m_plots[Form("%s_ITBackgroundDistribution", type)] = new TProfile(Form("%s_ITBackgroundDistribution", type), Form("%s_ITBackgroundDistribution", type), 20, 0, 21);
     m_plots[Form("%s_OOTBackgroundDistribution", type)] = new TProfile(Form("%s_OOTBackgroundDistribution", type), Form("%s_OOTBackgroundDistribution", type), 20, 0, 21);
+    m_plots[Form("%s_NoBestTPBackgroundDistribution", type)] = new TProfile(Form("%s_NoBestTPBackgroundDistribution", type), Form("%s_NoBestTPBackgroundDistribution", type), 20, 0, 21);
 
 
     m_2Dplots[Form("%s_Q_OoTGhosts", type)] =
