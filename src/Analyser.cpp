@@ -114,6 +114,11 @@ void Analyser::FillBackground(const std::string &typeStr, const int &st, const i
     const int bin = st*5+(cluster.wheel-2); //station*5+(wheel-2)
     m_plots[Form("%s_ITBackgroundDistribution", type)]->Fill(bin, ITtps);
     m_plots[Form("%s_OOTBackgroundDistribution", type)]->Fill(bin, OOTtps);
+    if (ITtps > 0 ) m_plots[Form("%s_ITOnlyBackgroundDistribution", type)]->Fill(bin, ITtps);
+    if (OOTtps > 0 ) {
+      m_plots[Form("%s_OOTOnlyBackgroundDistribution", type)]->Fill(bin, OOTtps);
+      m_plots[Form("%s_OOTWithITBackgroundDistribution", type)]->Fill(bin, ITtps);
+    }
     if (cluster.bestTPQuality() < 0) {
       m_plots[Form("%s_NoBestTPBackgroundDistribution", type)]->Fill(bin, OOTtps);
     }    
@@ -142,11 +147,11 @@ void Analyser::DefinePlot() {
     const auto type{tag.c_str()};
     m_plots[Form("%s_N_DigiPerCluster", type)] = new TH1D(
         Form("%s_N_DigiPerCluster", type), Form("%s_N_DigiPerCluster; # digi in cluster; Entries", type), 50, 0, 50);
-    m_plots[Form("%s_N_Ghost", type)] = new TH1I(Form("%s_N_Ghost", type), Form("%s_N_Ghost", type), 20, 0, 20);
+    m_plots[Form("%s_N_Ghosts", type)] = new TH1I(Form("%s_N_Ghosts", type), Form("%s_N_Ghosts", type), 20, 0, 20);
     m_plots[Form("%s_Q_Best", type)] = new TH1I(Form("%s_Q_Best", type), Form("%s_Q_Best", type), 10, 0, 10);
     m_plots[Form("%s_Q_Ghost", type)] = new TH1I(Form("%s_Q_Ghost", type), Form("%s_Q_Ghost", type), 10, 0, 10);
-    m_plots[Form("%s_OoTGhosts", type)] = new TH1D(Form("%s_OoTGhosts", type), Form("%s_OoTGhosts", type), 20, 0, 20);
-    m_plots[Form("%s_ITGhosts", type)] = new TH1D(Form("%s_ITGhosts", type), Form("%s_ITGhosts", type), 20, 0, 20);
+    m_plots[Form("%s_OOTGhosts", type)] = new TH1I(Form("%s_OOTGhosts", type), Form("%s_OOTGhosts", type), 20, 0, 20);
+    m_plots[Form("%s_ITGhosts", type)] = new TH1I(Form("%s_ITGhosts", type), Form("%s_ITGhosts", type), 20, 0, 20);
     m_plots[Form("%s_BX_ITGhosts", type)] =
         new TH1I(Form("%s_BX_ITGhosts", type), Form("%s_BX_ITGhosts", type), 24, BX_MIN, BX_MAX);
     m_plots[Form("%s_BX_OoTGhosts", type)] =
@@ -171,7 +176,11 @@ void Analyser::DefinePlot() {
     m_plots[Form("%s_ITBackgroundDistribution", type)] = new TProfile(Form("%s_ITBackgroundDistribution", type), Form("%s_ITBackgroundDistribution", type), 20, 0, 21);
     m_plots[Form("%s_OOTBackgroundDistribution", type)] = new TProfile(Form("%s_OOTBackgroundDistribution", type), Form("%s_OOTBackgroundDistribution", type), 20, 0, 21);
     m_plots[Form("%s_NoBestTPBackgroundDistribution", type)] = new TProfile(Form("%s_NoBestTPBackgroundDistribution", type), Form("%s_NoBestTPBackgroundDistribution", type), 20, 0, 21);
-
+    
+    m_plots[Form("%s_ITOnlyBackgroundDistribution", type)] = new TProfile(Form("%s_ITOnlyBackgroundDistribution", type), Form("%s_ITOnlyBackgroundDistribution", type), 20, 0, 21);
+    m_plots[Form("%s_OOTOnlyBackgroundDistribution", type)] = new TProfile(Form("%s_OOTOnlyBackgroundDistribution", type), Form("%s_OOTOnlyBackgroundDistribution", type), 20, 0, 21);
+    m_plots[Form("%s_OOTWithITBackgroundDistribution", type)] = new TProfile(Form("%s_OOTWithITBackgroundDistribution", type), Form("%s_OOTWithITBackgroundDistribution", type), 20, 0, 21);
+    
 
     m_2Dplots[Form("%s_Q_OoTGhosts", type)] =
         new TH2D(Form("%s_Q_OoTGhosts", type), Form("%s_Q_OoTGhosts;High Quality;Out of time Ghost Quality", type), 10,
@@ -220,7 +229,7 @@ void Analyser::DefinePlot() {
         m_plots[Form("%s_GhostDistributionVSpT_st%d_minqual%d", type, st, q)] = new TProfile(Form("%s_GhostDistributionVSpT_st%d_minqual%d", type, st, q), Form("%s_GhostDistributionVSpT_st%d_minqual%d; pT(GeV); Average # ghosts", type, st, q), 50, MU::MIN_PT, 100);
         m_plots[Form("%s_ITGhostDistributionVSpT_st%d_minqual%d", type, st, q)] = new TProfile(Form("%s_ITGhostDistributionVSpT_st%d_minqual%d", type, st, q), Form("%s_ITGhostDistributionVSpT_st%d_minqual%d; pT(GeV); Average # in-time ghosts", type, st, q), 50, MU::MIN_PT, 100);
         m_plots[Form("%s_OOTGhostDistributionVSpT_st%d_minqual%d", type, st, q)] = new TProfile(Form("%s_OOTGhostDistributionVSpT_st%d_minqual%d", type, st, q), Form("%s_OOTGhostDistributionVSpT_st%d_minqual%d; pT(GeV); Average # out-of-time ghosts", type, st, q), 50, MU::MIN_PT, 100);
-
+        
         m_plots[Form("%s_ITBackground_st%d_minqual%d", type, st, q)] = new TH1F(Form("%s_ITBackground_st%d_minqual%d", type, st, q), Form("%s_ITBackground_st%d_minqual%d; xLoc (cm); Entries", type, st, q), 100, -220, 220);      
         m_plots[Form("%s_OOTBackground_st%d_minqual%d", type, st, q)] = new TH1F(Form("%s_OOTBackground_st%d_minqual%d", type, st, q), Form("%s_OOTBackground_st%d_minqual%d; xLoc (cm); Entries", type, st, q), 100, -220, 220);      
 
@@ -283,8 +292,8 @@ void Analyser::ClusterAnalisis(const std::vector<Cluster> &clusters, const std::
     
     m_plots[Form("%s_Q_Best", type)]->Fill(bestQ);
     m_plots[Form("%s_ITGhosts", type)]->Fill(itSize);
-    m_plots[Form("%s_OoTGhosts", type)]->Fill(ootSize);
-    m_plots[Form("%s_N_Ghost", type)]->Fill(ootSize + itSize);
+    m_plots[Form("%s_OOTGhosts", type)]->Fill(ootSize);
+    m_plots[Form("%s_N_Ghosts", type)]->Fill(ootSize + itSize);
     m_counters[Form("%s_nTPs", type)] += cluster.tpClusterSize();
 
     if (bestQ == 1) m_plots[Form("%s_x_LowBestQ_st%d", type, st)]->Fill(bestTP.xLoc);
@@ -412,7 +421,7 @@ std::vector<Cluster> MissingClusters(std::vector<Cluster> FirstCLVector, std::ve
 void Analyser::Loop() {
   Geometry geom{};
 
-  TFile outputFile("results/outputFile_DoubleMuon_FlatPt-1To100_noPU_noRPC.root", "RECREATE");
+  TFile outputFile("results/outputFile_DoubleMuon_FlatPt-1To100_200PU_noRPC.root", "RECREATE");
   outputFile.cd();
 
   tags.push_back("PreFilter");

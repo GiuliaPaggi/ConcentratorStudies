@@ -2788,5 +2788,574 @@
             "directory": "plots/Ghosts/",
             "file_name" : "13_OOT GhostDistributionVSpT_st4_minqual6"
         }
+    }, 
+
+
+    "NGhost": {
+        "base" :"base", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_N_Ghosts"},
+            "LQFilter" : { "plot_name" : "LQFilter_N_Ghosts"},
+            "HQFilter" : { "plot_name" : "HQFilter_N_Ghosts"}
+        },
+        "plot" : {
+            "x": [ 0.0, 10.0, "# Ghost per cluster" ],
+            "y": [ 0.0, 300000.0, "Entries" ],
+            "option": "logY"
+        }, 
+        "output" : {
+            "directory": "plots/Ghosts/",
+            "file_name" : "13_N_Ghosts"
+        }
+    }, 
+
+    "ITGhosts": {
+        "base" :"base", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ITGhosts"},
+            "LQFilter" : { "plot_name" : "LQFilter_ITGhosts"},
+            "HQFilter" : { "plot_name" : "HQFilter_ITGhosts"}
+        },
+        "plot" : {
+            "x": [ 0.0, 10.0, "# Ghost per cluster" ],
+            "y": [ 0.0, 300000.0, "Entries" ],
+            "option": "logY"
+        }, 
+        "output" : {
+            "directory": "plots/Ghosts/",
+            "file_name" : "13_ITGhosts"
+        }
+    }, 
+
+    "OOTGhosts": {
+        "base" :"base", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_OOTGhosts"},
+            "LQFilter" : { "plot_name" : "LQFilter_OOTGhosts"},
+            "HQFilter" : { "plot_name" : "HQFilter_OOTGhosts"}
+        },
+        "plot" : {
+            "x": [ 0.0, 10.0, "# Ghost per cluster" ],
+            "y": [ 0.0, 300000.0, "Entries" ], 
+            "option": "logY"
+        }, 
+        "output" : {
+            "directory": "plots/Ghosts/",
+            "file_name" : "13_OOTGhosts"
+        }
+    },
+
+
+
+
+
+
+    "ITBackground_st1_minqual0": {
+        "base" :"base_xLoc", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ITBackground_st1_minqual0"},
+            "LQFilter" : { "plot_name" : "LQFilter_ITBackground_st1_minqual0"},
+            "HQFilter" : { "plot_name" : "HQFilter_ITBackground_st1_minqual0"}
+        },
+        "plot" : {
+            "y": [ 0.0, 3000, "# TPs" ],
+            "legend_title": "MB1 - qual > 0"
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_ITBackground_st1_minqual0"
+        }
+    }, 
+
+    "ITBackground_st1_minqual3": {
+        "base" :"base_xLoc", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ITBackground_st1_minqual3"},
+            "LQFilter" : { "plot_name" : "LQFilter_ITBackground_st1_minqual3"},
+            "HQFilter" : { "plot_name" : "HQFilter_ITBackground_st1_minqual3"}
+        },
+        "plot" : {
+            "y": [ 0.0, 3000, "# TPs" ],
+            "legend_title": "MB1 - qual > 3"
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_ITBackground_st1_minqual3"
+        }
+    }, 
+
+    "ITBackground_st1_minqual6": {
+        "base" :"base_xLoc", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ITBackground_st1_minqual6"},
+            "LQFilter" : { "plot_name" : "LQFilter_ITBackground_st1_minqual6"},
+            "HQFilter" : { "plot_name" : "HQFilter_ITBackground_st1_minqual6"}
+        },
+        "plot" : {
+            "y": [ 0.0, 3000, "# TPs" ],
+            "legend_title": "MB1 - qual > 6"
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_ITBackground_st1_minqual6"
+        }
+    }, 
+
+    "ITBackground_st2_minqual0": {
+        "base" :"base_xLoc", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ITBackground_st2_minqual0"},
+            "LQFilter" : { "plot_name" : "LQFilter_ITBackground_st2_minqual0"},
+            "HQFilter" : { "plot_name" : "HQFilter_ITBackground_st2_minqual0"}
+        },
+        "plot" : {
+            "y": [ 0.0, 1000, "# TPs" ],
+            "legend_title": "MB2 - qual > 0"
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_ITBackground_st2_minqual0"
+        }
+    }, 
+
+    "ITBackground_st2_minqual3": {
+        "base" :"base_xLoc", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ITBackground_st2_minqual3"},
+            "LQFilter" : { "plot_name" : "LQFilter_ITBackground_st2_minqual3"},
+            "HQFilter" : { "plot_name" : "HQFilter_ITBackground_st2_minqual3"}
+        },
+        "plot" : {
+            "y": [ 0.0, 3000, "# TPs" ],
+            "legend_title": "MB1 - qual > 3"
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_ITBackground_st2_minqual3"
+        }
+    }, 
+
+    "ITBackground_st2_minqual6": {
+        "base" :"base_xLoc", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ITBackground_st2_minqual6"},
+            "LQFilter" : { "plot_name" : "LQFilter_ITBackground_st2_minqual6"},
+            "HQFilter" : { "plot_name" : "HQFilter_ITBackground_st2_minqual6"}
+        },
+        "plot" : {
+            "y": [ 0.0, 3000, "# TPs" ],
+            "legend_title": "MB2 - qual > 6"
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_ITBackground_st2_minqual6"
+        }
+    }, 
+
+    "ITBackground_st3_minqual0": {
+        "base" :"base_xLoc", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ITBackground_st3_minqual0"},
+            "LQFilter" : { "plot_name" : "LQFilter_ITBackground_st3_minqual0"},
+            "HQFilter" : { "plot_name" : "HQFilter_ITBackground_st3_minqual0"}
+        },
+        "plot" : {
+            "y": [ 0.0, 500, "# TPs" ],
+            "legend_title": "MB3 - qual > 0"
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_ITBackground_st3_minqual0"
+        }
+    }, 
+    
+    "ITBackground_st3_minqual3": {
+        "base" :"base_xLoc", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ITBackground_st3_minqual3"},
+            "LQFilter" : { "plot_name" : "LQFilter_ITBackground_st3_minqual3"},
+            "HQFilter" : { "plot_name" : "HQFilter_ITBackground_st3_minqual3"}
+        },
+        "plot" : {
+            "y": [ 0.0, 500, "# TPs" ],
+            "legend_title": "MB3 - qual > 3"
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_ITBackground_st3_minqual3"
+        }
+    }, 
+
+    "ITBackground_st3_minqual6": {
+        "base" :"base_xLoc", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ITBackground_st3_minqual6"},
+            "LQFilter" : { "plot_name" : "LQFilter_ITBackground_st3_minqual6"},
+            "HQFilter" : { "plot_name" : "HQFilter_ITBackground_st3_minqual6"}
+        },
+        "plot" : {
+            "y": [ 0.0, 500, "# TPs" ],
+            "legend_title": "MB3 - qual > 6"
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_ITBackground_st3_minqual6"
+        }
+    }, 
+
+    "ITBackground_st4_minqual0": {
+        "base" :"base_xLoc", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ITBackground_st4_minqual0"},
+            "LQFilter" : { "plot_name" : "LQFilter_ITBackground_st4_minqual0"},
+            "HQFilter" : { "plot_name" : "HQFilter_ITBackground_st4_minqual0"}
+        },
+        "plot" : {
+            "y": [ 0.0, 500, "# TPs" ],
+            "legend_title": "MB4 - qual > 0"
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_ITBackground_st4_minqual0"
+        }
+    }, 
+
+    "ITBackground_st4_minqual3": {
+        "base" :"base_xLoc", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ITBackground_st4_minqual3"},
+            "LQFilter" : { "plot_name" : "LQFilter_ITBackground_st4_minqual3"},
+            "HQFilter" : { "plot_name" : "HQFilter_ITBackground_st4_minqual3"}
+        },
+        "plot" : {
+            "y": [ 0.0, 500, "# TPs" ],
+            "legend_title": "MB4 - qual > 3"
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_ITBackground_st4_minqual3"
+        }
+    }, 
+
+    "ITBackground_st4_minqual6": {
+        "base" :"base_xLoc", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ITBackground_st4_minqual6"},
+            "LQFilter" : { "plot_name" : "LQFilter_ITBackground_st4_minqual6"},
+            "HQFilter" : { "plot_name" : "HQFilter_ITBackground_st4_minqual6"}
+        },
+        "plot" : {
+            "y": [ 0.0, 500, "# TPs" ],
+            "legend_title": "MB4 - qual > 6"
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_ITBackground_st4_minqual6"
+        }
+    }, 
+
+
+    "OOTBackground_st1_minqual0": {
+        "base" :"base_xLoc", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_OOTBackground_st1_minqual0"},
+            "LQFilter" : { "plot_name" : "LQFilter_OOTBackground_st1_minqual0"},
+            "HQFilter" : { "plot_name" : "HQFilter_OOTBackground_st1_minqual0"}
+        },
+        "plot" : {
+            "y": [ 0.0, 2000, "# TPs" ],
+            "legend_title": "MB1 - qual > 0"
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_OOTBackground_st1_minqual0"
+        }
+    }, 
+
+    "OOTBackground_st1_minqual3": {
+        "base" :"base_xLoc", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_OOTBackground_st1_minqual3"},
+            "LQFilter" : { "plot_name" : "LQFilter_OOTBackground_st1_minqual3"},
+            "HQFilter" : { "plot_name" : "HQFilter_OOTBackground_st1_minqual3"}
+        },
+        "plot" : {
+            "y": [ 0.0, 300, "# TPs" ],
+            "legend_title": "MB1 - qual > 3"
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_OOTBackground_st1_minqual3"
+        }
+    }, 
+
+    "OOTBackground_st1_minqual6": {
+        "base" :"base_xLoc", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_OOTBackground_st1_minqual6"},
+            "LQFilter" : { "plot_name" : "LQFilter_OOTBackground_st1_minqual6"},
+            "HQFilter" : { "plot_name" : "HQFilter_OOTBackground_st1_minqual6"}
+        },
+        "plot" : {
+            "y": [ 0.0, 200, "# TPs" ],
+            "legend_title": "MB1 - qual > 6"
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_OOTBackground_st1_minqual6"
+        }
+    }, 
+
+    "OOTBackground_st2_minqual0": {
+        "base" :"base_xLoc", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_OOTBackground_st2_minqual0"},
+            "LQFilter" : { "plot_name" : "LQFilter_OOTBackground_st2_minqual0"},
+            "HQFilter" : { "plot_name" : "HQFilter_OOTBackground_st2_minqual0"}
+        },
+        "plot" : {
+            "y": [ 0.0, 500, "# TPs" ],
+            "legend_title": "MB2 - qual > 0"
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_OOTBackground_st2_minqual0"
+        }
+    }, 
+
+    "OOTBackground_st2_minqual3": {
+        "base" :"base_xLoc", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_OOTBackground_st2_minqual3"},
+            "LQFilter" : { "plot_name" : "LQFilter_OOTBackground_st2_minqual3"},
+            "HQFilter" : { "plot_name" : "HQFilter_OOTBackground_st2_minqual3"}
+        },
+        "plot" : {
+            "y": [ 0.0, 200, "# TPs" ],
+            "legend_title": "MB2 - qual > 3"
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_OOTBackground_st2_minqual3"
+        }
+    }, 
+
+    "OOTBackground_st2_minqual6": {
+        "base" :"base_xLoc", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_OOTBackground_st2_minqual6"},
+            "LQFilter" : { "plot_name" : "LQFilter_OOTBackground_st2_minqual6"},
+            "HQFilter" : { "plot_name" : "HQFilter_OOTBackground_st2_minqual6"}
+        },
+        "plot" : {
+            "y": [ 0.0, 150, "# TPs" ],
+            "legend_title": "MB2 - qual > 6"
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_OOTBackground_st2_minqual6"
+        }
+    }, 
+
+    "OOTBackground_st3_minqual0": {
+        "base" :"base_xLoc", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_OOTBackground_st3_minqual0"},
+            "LQFilter" : { "plot_name" : "LQFilter_OOTBackground_st3_minqual0"},
+            "HQFilter" : { "plot_name" : "HQFilter_OOTBackground_st3_minqual0"}
+        },
+        "plot" : {
+            "y": [ 0.0, 250, "# TPs" ],
+            "legend_title": "MB3 - qual > 0"
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_OOTBackground_st3_minqual0"
+        }
+    }, 
+
+    "OOTBackground_st3_minqual3": {
+        "base" :"base_xLoc", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_OOTBackground_st3_minqual3"},
+            "LQFilter" : { "plot_name" : "LQFilter_OOTBackground_st3_minqual3"},
+            "HQFilter" : { "plot_name" : "HQFilter_OOTBackground_st3_minqual3"}
+        },
+        "plot" : {
+            "y": [ 0.0, 150, "# TPs" ],
+            "legend_title": "MB3 - qual > 3"
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_OOTBackground_st3_minqual3"
+        }
+    }, 
+
+    "OOTBackground_st3_minqual6": {
+        "base" :"base_xLoc", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_OOTBackground_st3_minqual6"},
+            "LQFilter" : { "plot_name" : "LQFilter_OOTBackground_st3_minqual6"},
+            "HQFilter" : { "plot_name" : "HQFilter_OOTBackground_st3_minqual6"}
+        },
+        "plot" : {
+            "y": [ 0.0, 50, "# TPs" ],
+            "legend_title": "MB3 - qual > 6"
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_OOTBackground_st3_minqual6"
+        }
+    }, 
+
+    "OOTBackground_st4_minqual0": {
+        "base" :"base_xLoc", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_OOTBackground_st4_minqual0"},
+            "LQFilter" : { "plot_name" : "LQFilter_OOTBackground_st4_minqual0"},
+            "HQFilter" : { "plot_name" : "HQFilter_OOTBackground_st4_minqual0"}
+        },
+        "plot" : {
+            "y": [ 0.0, 200, "# TPs" ],
+            "legend_title": "MB4 - qual > 0"
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_OOTBackground_st4_minqual0"
+        }
+    }, 
+
+    "OOTBackground_st4_minqual3": {
+        "base" :"base_xLoc", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_OOTBackground_st4_minqual3"},
+            "LQFilter" : { "plot_name" : "LQFilter_OOTBackground_st4_minqual3"},
+            "HQFilter" : { "plot_name" : "HQFilter_OOTBackground_st4_minqual3"}
+        },
+        "plot" : {
+            "y": [ 0.0, 100, "# TPs" ],
+            "legend_title": "MB4 - qual > 3"
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_OOTBackground_st4_minqual3"
+        }
+    }, 
+
+    "OOTBackground_st4_minqual6": {
+        "base" :"base_xLoc", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_OOTBackground_st4_minqual6"},
+            "LQFilter" : { "plot_name" : "LQFilter_OOTBackground_st4_minqual6"},
+            "HQFilter" : { "plot_name" : "HQFilter_OOTBackground_st4_minqual6"}
+        },
+        "plot" : {
+            "y": [ 0.0, 50, "# TPs" ],
+            "legend_title": "MB4 - qual > 6"
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_OOTBackground_st4_minqual6"
+        }
+    }, 
+
+
+
+    "ITBackgroundDistribution": {
+        "base" :"bkg_dist", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ITBackgroundDistribution"},
+            "LQFilter" : { "plot_name" : "LQFilter_ITBackgroundDistribution"},
+            "HQFilter" : { "plot_name" : "HQFilter_ITBackgroundDistribution"}
+        },
+        "plot" : {
+            "y": [ 0.0, 1.5, "# TPs" ]
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_ITBackgroundDistribution"
+        }
+    },
+
+    "OOTBackgroundDistribution": {
+        "base" :"bkg_dist", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_OOTBackgroundDistribution"},
+            "LQFilter" : { "plot_name" : "LQFilter_OOTBackgroundDistribution"},
+            "HQFilter" : { "plot_name" : "HQFilter_OOTBackgroundDistribution"}
+        },
+        "plot" : {
+            "y": [ 0.0, 4.5, "# TPs" ]
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_OOTBackgroundDistribution"
+        }
+    }, 
+
+    "ITOnlyBackgroundDistribution": {
+        "base" :"bkg_dist", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ITOnlyBackgroundDistribution"},
+            "LQFilter" : { "plot_name" : "LQFilter_ITOnlyBackgroundDistribution"},
+            "HQFilter" : { "plot_name" : "HQFilter_ITOnlyBackgroundDistribution"}
+        },
+        "plot" : {
+            "y": [ 0.0, 3.5, "# TPs" ]
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_ITOnlyBackgroundDistribution"
+        }
+    }, 
+
+    "OOTWithITBackgroundDistribution": {
+        "base" :"bkg_dist", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_OOTWithITBackgroundDistribution"},
+            "LQFilter" : { "plot_name" : "LQFilter_OOTWithITBackgroundDistribution"},
+            "HQFilter" : { "plot_name" : "HQFilter_OOTWithITBackgroundDistribution"}
+        },
+        "plot" : {
+            "y": [ 0.0, 1.0, "# TPs" ]
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_OOTWithITBackgroundDistribution"
+        }
+    }, 
+
+    "OOTOnlyBackgroundDistribution": {
+        "base" :"bkg_dist", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_OOTOnlyBackgroundDistribution"},
+            "LQFilter" : { "plot_name" : "LQFilter_OOTOnlyBackgroundDistribution"},
+            "HQFilter" : { "plot_name" : "HQFilter_OOTOnlyBackgroundDistribution"}
+        },
+        "plot" : {
+            "y": [ 0.0, 4.5, "# TPs" ]
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_OOTOnlyBackgroundDistribution"
+        }
+    }, 
+
+    "NoBestTPBackgroundDistribution": {
+        "base" :"bkg_dist", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_NoBestTPBackgroundDistribution"},
+            "LQFilter" : { "plot_name" : "LQFilter_NoBestTPBackgroundDistribution"},
+            "HQFilter" : { "plot_name" : "HQFilter_NoBestTPBackgroundDistribution"}
+        },
+        "plot" : {
+            "y": [ 0.0, 4.5, "# TPs" ]
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_NoBestTPBackgroundDistribution"
+        }
     }
+
+
 }

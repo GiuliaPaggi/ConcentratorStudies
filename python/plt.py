@@ -146,7 +146,7 @@ class Plotter:
                 else:
                     histo.SetLineStyle(7)
 
-            VALID_PLOT_CLASSES = ["TH1F", "TH2F", "TProfile", "TEfficiency1D", "TEfficiency2D"]
+            VALID_PLOT_CLASSES = ["TH1I", "TH1D", "TH1F", "TH2F", "TProfile", "TEfficiency1D", "TEfficiency2D"]
             if h_class not in VALID_PLOT_CLASSES:
                 raise ValueError(f"h_class: {h_class} not in {VALID_PLOT_CLASSES}")
 
@@ -171,7 +171,7 @@ class Plotter:
             if axis_x:
                 histo.GetXaxis().SetRangeUser(axis_x.min, axis_x.max)
 
-            if h_class == "TH1F":
+            if h_class == "TH1F" or h_class == "TH1D" or h_class == "TH1I":
                 if options.scale:
                     histo.Scale(1.0/histo.Integral())
                 y_range = [0.0, histo.GetMaximum() * 1.5]

@@ -135,7 +135,7 @@ class Input:
     Handle plot information
     """
     name: str = ''
-    file_name: str = 'results/outputFile_DoubleMuon_FlatPt-1To100_200PU_noRPC.root'
+    file_name: str = 'results/outputFile.root'
     folder: str = ''
     plot_name: str = ''
 
