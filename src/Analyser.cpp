@@ -40,12 +40,19 @@ double T_MIN{BX_MIN * 25};
 double T_MAX{BX_MAX * 25};
 
 namespace MU {
-const double MAX_ETA{0.8};
-const double MIN_PT{5.0};
+const double MAX_ETA{1.4};
+const double MIN_PT{1.5};
 const double MAX_GEN_DR{0.25};
 const double MASS{105.7};
-const double X_CUT{5.0}; //cm
+const double X_CUT{10.0}; //cm
 }  // namespace MU
+
+namespace EFF {
+const double MAX_ETA{0.8};
+const double MIN_PT{5.0};
+}  
+
+
 
 const std::array<int, 3> QUAL_PLOT{0, 3, 6};
 
@@ -104,16 +111,16 @@ void Analyser::FillGhostProfile(const std::string &typeStr, const std::string &v
 void Analyser::FillBackground(const std::string &typeStr, const int &st, const int &qual, const double &valueToFill, const Cluster &cluster){
   const auto type{typeStr.c_str()};
   
-  const double ITtps = cluster.itSize();
+  double ITtps = cluster.itSize();
+  if (cluster.foundTP) ITtps+=1;
   const double OOTtps = cluster.ootSize();
   if (cluster.bestTPQuality() >= qual){
-    m_plots[Form("%s_ITBackground_st%d_minqual%d", type, st, qual)]->Fill(valueToFill, ITtps+1);
+    m_plots[Form("%s_ITBackground_st%d_minqual%d", type, st, qual)]->Fill(valueToFill, ITtps);
     m_plots[Form("%s_OOTBackground_st%d_minqual%d", type, st, qual)]->Fill(valueToFill, OOTtps);
   }
+  /*
   if (ITtps+OOTtps > 0){
     const int bin = st*5+(cluster.wheel-2); //station*5+(wheel-2)
-    m_plots[Form("%s_ITBackgroundDistribution", type)]->Fill(bin, ITtps);
-    m_plots[Form("%s_OOTBackgroundDistribution", type)]->Fill(bin, OOTtps);
     if (ITtps > 0 ) m_plots[Form("%s_ITOnlyBackgroundDistribution", type)]->Fill(bin, ITtps);
     if (OOTtps > 0 ) {
       m_plots[Form("%s_OOTOnlyBackgroundDistribution", type)]->Fill(bin, OOTtps);
@@ -122,12 +129,14 @@ void Analyser::FillBackground(const std::string &typeStr, const int &st, const i
     if (cluster.bestTPQuality() < 0) {
       m_plots[Form("%s_NoBestTPBackgroundDistribution", type)]->Fill(bin, OOTtps);
     }    
-  }
+  }*/
 
 }
 
 void Analyser::DefinePlot() {
   Geometry geom{};
+
+  m_counters["%noGoodMuTPS"] = 0;
 
   m_plots["DigiSL"] = new TH1D("DigiSL", "DigiSL", 6, -0.5, 5.5);
   m_plots["t0_LowQuality"] = new TH1D("t0_LowQuality", "t0_LowQuality; t0 (ns); Entries", 100, T_MIN, T_MAX);
@@ -142,6 +151,15 @@ void Analyser::DefinePlot() {
   m_plots["PtGoodMu"] = new TH1D("PtGoodMu", "PtGoodMu; pT (GeV); Entries", 200, .5, 100.5);
   m_plots["PhiGoodMu"] = new TH1D("PhiGoodMu", "PhiGoodMu; phi(rad); Entries", 50, -TMath::Pi(), TMath::Pi());
   m_plots["EtaGoodMu"] = new TH1D("EtaGoodMu", "EtaGoodMu; eta; Entries", 50, -1, 1);
+  //prefiring
+  m_plots["FirstTpBX"] = new TH1I("FirstTpBX", "FirstTpBX", 5, -2, 2);
+
+  //background
+  for (int sector = 1; sector < 13; ++sector){
+    m_plots[Form("Cluster_withMuMatchedinsec_%d", sector)] = new TH1D(Form("Cluster_withMuMatchedinsec_%d", sector), Form("Cluster_withMuMatchedinsec_%d; sector, entries", sector), 13, 0, 13);
+    m_plots[Form("ProfileCluster_withMuMatchedinsec_%d", sector)] = new TProfile(Form("ProfileCluster_withMuMatchedinsec_%d", sector), Form("ProfileCluster_withMuMatchedinsec_%d; sector, entries", sector), 13, 0, 13);
+  }
+  
 
   for (auto tag : tags) {
     const auto type{tag.c_str()};
@@ -181,6 +199,9 @@ void Analyser::DefinePlot() {
     m_plots[Form("%s_OOTOnlyBackgroundDistribution", type)] = new TProfile(Form("%s_OOTOnlyBackgroundDistribution", type), Form("%s_OOTOnlyBackgroundDistribution", type), 20, 0, 21);
     m_plots[Form("%s_OOTWithITBackgroundDistribution", type)] = new TProfile(Form("%s_OOTWithITBackgroundDistribution", type), Form("%s_OOTWithITBackgroundDistribution", type), 20, 0, 21);
     
+    //bkg plots
+    m_plots[Form("%s_Q_Bkg", type)] = new TH1I(Form("%s_Q_Bkg", type), Form("%s_Q_Bkg", type), 10, 0, 10);
+    m_plots[Form("%s_N_bkg", type)] = new TH1I(Form("%s_N_bkg", type), Form("%s_N_bkg", type), 20, 0, 20);
 
     m_2Dplots[Form("%s_Q_OoTGhosts", type)] =
         new TH2D(Form("%s_Q_OoTGhosts", type), Form("%s_Q_OoTGhosts;High Quality;Out of time Ghost Quality", type), 10,
@@ -193,6 +214,9 @@ void Analyser::DefinePlot() {
     m_counters[Form("%s_ooTHQCount", type)] = 0;
     m_counters[Form("%s_nClusters", type)] = 0;
     m_counters[Form("%s_nTPs", type)] = 0;
+    m_counters[Form("%s_nBackgroundClusters", type)] = 0;
+    m_counters[Form("%s_nBackgroundClusters2", type)] = 0;
+
 
     for (const auto st : geom.STATIONS) {
       m_plots[Form("%s_x_LowBestQ_st%d", type, st)] = new TH1D(
@@ -202,6 +226,8 @@ void Analyser::DefinePlot() {
       m_plots[Form("%s_xLoc_OoTGhost_st%d", type, st)] = new TH1D(
           Form("%s_xLoc_OoTGhost_st%d", type, st), Form("%s_xLoc_OoTGhost_st%d; xLoc; Entries", type, st), 100, -220, 220);
 
+      m_plots[Form("%s_BackgroundResidual_st%d", type, st)] = new TH1D(Form("%s_BackgroundResidual_st%d", type, st), Form("%s_BackgroundResidual_st%d; bkg.xLoc - signal.xLoc; Entries", type, st), 100, -220, 220);
+      m_plots[Form("%s_q8position_st%d", type, st)] = new TH1D(Form("%s_q8position_st%d", type, st), Form("%s_q8position_st%d; xLoc; Entries", type, st), 100, -220, 220);
 
       m_2Dplots[Form("%s_N_Cluster_st%d", type, st)] = new TH2I(
           Form("%s_N_Cluster_st%d", type, st), Form("%s_N_Cluster_st%d", type, st), 14, -0.5, 13.5, 7, -3.5, 3.5);
@@ -252,7 +278,10 @@ void Analyser::DefinePlot() {
 
   for (const auto st : geom.STATIONS) {
     m_plots[Form("Res_MuMatched_st%d", st)] = new TH1D(
-        Form("Res_MuMatched_st%d", st), Form("Res_MuMatched; cluster.bestTP().xLoc - mu.xLoc; Entries"), 101, -10, 10);
+        Form("Res_MuMatched_st%d", st), Form("Res_MuMatched; cluster.bestTP().xLoc - mu.xLoc; Entries"), 200, -220, 220);
+
+    m_plots[Form("Res_Mu_st%d", st)] = new TH1D(
+        Form("Res_Mu_st%d", st), Form("Res_Mu; cluster.bestTP().xLoc - mu.xLoc; Entries"), 200, -220, 220);
 
     m_2Dplots[Form("N_MuMatch_st%d", st)] =
         new TH2I(Form("N_MuMatch_st%d", st), Form("N_MuMatch_st%d; sector ; wheel", st), 14, -0.5, 13.5, 7, -3.5, 3.5);
@@ -335,28 +364,41 @@ void Analyser::ClusterAnalisis(const std::vector<Cluster> &clusters, const std::
 
     if (cluster.muMatched && bestSeg.nPhiHits >= 4) {      
       int muon = cluster.MuIndex();
+      double muEta = mu_eta->at(muon);
+      double muPt = mu_pt->at(muon);
+      if (std::abs(muEta) > EFF::MAX_ETA || muPt < EFF::MIN_PT) continue;
       double bestSegIndex = cluster.bestSegIndex();
       double dirLoc = std::atan( seg_dirLoc_x->at(bestSegIndex) / seg_dirLoc_z->at(bestSegIndex));
         for (auto qual : QUAL_PLOT){
             FillEfficiency2D(type, "pos", st, qual, sec, wh, cluster);
-            FillEfficiency(type, "pT", st, qual, mu_pt->at(muon), cluster);
+            FillEfficiency(type, "pT", st, qual,muPt, cluster);
             FillEfficiency(type, "phi", st, qual, mu_phi->at(muon), cluster);
-            FillEfficiency(type, "eta", st, qual, mu_eta->at(muon), cluster);
+            FillEfficiency(type, "eta", st, qual, muEta, cluster);
             FillEfficiency(type, "segxLoc", st, qual, bestSeg.xLoc, cluster);
             FillEfficiency(type, "segDirLoc", st, qual, dirLoc, cluster);
-            FillGhostRatio(type, "pT", st, qual, mu_pt->at(muon), cluster);
-            FillGhostProfile(type, "pT", st, qual, mu_pt->at(muon), cluster);
+            FillGhostRatio(type, "pT", st, qual, muPt, cluster);
+            FillGhostProfile(type, "pT", st, qual, muPt, cluster);
         }
+      for (auto const &otherclusters : clusters){
+        if (otherclusters.muMatched) continue;
+        if (otherclusters == cluster) continue;
+        if (otherclusters.station != st || otherclusters.wheel != wh) continue;
+        m_plots[Form("Cluster_withMuMatchedinsec_%d", sec)]->Fill(otherclusters.sector, otherclusters.tpClusterSize());
+        m_plots[Form("ProfileCluster_withMuMatchedinsec_%d", sec)]->Fill(otherclusters.sector, otherclusters.tpClusterSize());
+        
+      }
+
     }
     
     // ########## Study background #############
     
-    if (!cluster.muMatched){
+    /*if (!cluster.muMatched && cluster.foundTP){
+      ++m_counters[Form("%s_nBackgroundClusters", type)];
       double xLoc = cluster.bestTP().xLoc;
       for (auto qual : QUAL_PLOT){
         FillBackground(type, st, qual, xLoc, cluster);
       }
-    }
+    }*/
 
     // ########## Study segment matching #############
     m_effs[Form("%s_Eff_SegMatch_st%d", type, st)]->Fill(cluster.foundSeg, sec, wh);
@@ -378,6 +420,44 @@ void Analyser::ClusterAnalisis(const std::vector<Cluster> &clusters, const std::
     m_plots["DigiSL"]->Fill(cluster.digiSL());
 
     if (cluster.foundDigi) m_2Dplots[Form("%s_N_Digi_st%d", type, st)]->Fill(sec, wh);
+  }
+}
+
+
+void Analyser::BackgroundAnalisi(const std::vector<Cluster> &clusters, const std::string &typeStr){ 
+  for (auto const &cluster : clusters) {
+    if (cluster.muMatched) continue;
+    if (!cluster.foundTP) continue; 
+
+    auto wh{cluster.wheel};
+    auto sec{cluster.sector};
+    assert(sec < 13);  // if sector == 13 o 14 the program crashes
+    auto st{cluster.station};
+    const auto type{typeStr.c_str()};
+    double xLoc = cluster.bestTP().xLoc;
+
+    for (auto qual : QUAL_PLOT){
+      FillBackground(type, st, qual, xLoc, cluster);
+    }
+
+    ++m_counters[Form("%s_nBackgroundClusters2", type)];    
+
+    m_plots[Form("%s_Q_Bkg", type)]->Fill(cluster.bestTPQuality());
+    /*for (auto const &itTp : cluster.itGhosts()){
+      m_plots[Form("%s_Q_Bkg", type)]->Fill(itTp.quality);
+    }
+    for (auto const &ootTp : cluster.ootGhosts()){
+      m_plots[Form("%s_Q_Bkg", type)]->Fill(ootTp.quality);
+    }*/
+    if (cluster.bestTPQuality()==8) m_plots[Form("%s_q8position_st%d", type, st)]->Fill(xLoc);
+    m_plots[Form("%s_N_bkg", type)] ->Fill(cluster.tpClusterSize());
+
+    for (auto const &otherCluster : clusters) {
+      if (otherCluster.wheel != wh || otherCluster.station != st || otherCluster.sector != sec || otherCluster.muMatched == false) continue;
+      
+      m_plots[Form("%s_BackgroundResidual_st%d", type, st)]->Fill( xLoc - otherCluster.bestTP().xLoc );
+    }
+
   }
 }
 
@@ -421,7 +501,7 @@ std::vector<Cluster> MissingClusters(std::vector<Cluster> FirstCLVector, std::ve
 void Analyser::Loop() {
   Geometry geom{};
 
-  TFile outputFile("results/outputFile_DoubleMuon_FlatPt-1To100_200PU_noRPC.root", "RECREATE");
+  TFile outputFile("results/outputFile_DoubleMuon_FlatPt-1To100_noPU_noRPC.root", "RECREATE");
   outputFile.cd();
 
   tags.push_back("PreFilter");
@@ -457,7 +537,7 @@ void Analyser::Loop() {
                                         ph2TpgPhiEmuAm_phi->at(j), ph2TpgPhiEmuAm_phiB->at(j), ph2TpgPhiEmuAm_BX->at(j),
                                         ph2TpgPhiEmuAm_t0->at(j), ph2TpgPhiEmuAm_posLoc_x->at(j)});
     }
-
+   
     // ########## CREATE Digis std::vector #############
     std::vector<Digi> digis;
     for (std::size_t i = 0; i < digi_nDigis; ++i) {
@@ -479,6 +559,8 @@ void Analyser::Loop() {
     auto clusters = buildClusters(geom, tps, segments, digis, X_CUT, DIGI_CUT);
     int nClusters = clusters.size();
     m_plots["ClusterPerEvent"]->Fill(nClusters);
+
+
     // ########## BUILD cluster with phi matchin information #############
     // tag TPs that match using the extrapolation on a straight line
 
@@ -557,7 +639,13 @@ void Analyser::Loop() {
     int goodMuSize = goodMuons.size();
     m_plots["NGoodMu"]->Fill(goodMuSize);
     if  (goodMuSize > 0) m_plots["GoodMuClusterPerEvent"]->Fill(nClusters); 
-
+    else if (goodMuSize < 1 && nClusters > 0) {
+      int nTPS = 0;
+      for (const auto &cl : clusters ) nTPS+=cl.tpClusterSize();
+      //std::cout << "event with no good muons but "<< nClusters << " clusters with " << nTPS<< std::endl;
+      m_counters["noGoodMuTPS"]+=nTPS;
+    }
+    if (goodMuSize == 0 ) continue;
     // ########## ATTEMPT cluster - muon extrapolation matching #############
     for (auto iMu : goodMuons) {
       double muPhi = mu_phi->at(iMu);
@@ -594,6 +682,8 @@ void Analyser::Loop() {
             if (!cluster.foundTP) std::cout << " Matchato un cluster senza best TP " << std::endl;
           };
 
+          if(wh == muWheel && sec == muSector && st == muStation) m_plots[Form("Res_Mu_st%d", st)]->Fill(cluster.bestTP().xLoc - muX);
+
           m_effs[Form("Eff_MuMatch_st%d", st)]->Fill(cluster.muMatched, sec, wh);
           if (cluster.muMatched) {
             m_plots[Form("Res_MuMatched_st%d", st)]->Fill(
@@ -619,12 +709,18 @@ void Analyser::Loop() {
       }
     }
 
+    //std::cout << "####################################################################" << std::endl;
+    //for (const auto &cl : clusters) {std::cout << cl << std::endl;}
+    //std::cout << "####################################################################" << std::endl;
+
     // ########## RUN SOME ANALYSIS #############
     // ########## CLUSTER ANALYSIS #############
 
     ClusterAnalisis(clusters, tags[0], segments);
     ClusterAnalisis(matchFromLQ_clusters, tags[1], segments);
     ClusterAnalisis(matchFromHQ_clusters, tags[2], segments);
+
+    BackgroundAnalisi(clusters, tags[0]);
 
     std::vector<Cluster> ClusterCut_LQFilter = MissingClusters(matchFromLQ_clusters, clusters, "LQFilter");
     removedLQFilter += ClusterCut_LQFilter.size();
@@ -644,6 +740,7 @@ void Analyser::Loop() {
   for (auto tag : tags) {
     const auto type{tag.c_str()};
     double ghostFraction = m_counters[Form("%s_nClustersGhosts", type)] / m_counters[Form("%s_nClusters", type)];
+    double bkgFraction = m_counters[Form("%s_nBackgroundClusters2", type)] / m_counters[Form("%s_nClusters", type)];
     std::cout << " \nFor " << tag << std::endl;
     std::cout << " Ratio LQ/selected with phi=  " << m_plots[Form("%s_LowQ_matched", type)]->GetEntries() << "/ "
               << m_plots["t0_LowQuality"]->GetEntries() << " = "
@@ -654,10 +751,16 @@ void Analyser::Loop() {
               << m_counters[Form("%s_nClusters", type)] << ") = " << ghostFraction << " made with "
               << m_counters[Form("%s_nTPs", type)] << " TPs" << std::endl;
     std::cout << " HQ out of time clusters: " << m_counters[Form("%s_ooTHQCount", type)] << std::endl;
+
+    std::cout << " Fraction of background cluster (" << m_counters[Form("%s_nBackgroundClusters2", type)] << " / " << m_counters[Form("%s_nBackgroundClusters2", type)] << ") on total ("
+              << m_counters[Form("%s_nClusters", type)] << ") = " << bkgFraction << std::endl;
   }
 
   std::cout << "LQFilter found " << removedLQFilter << " less clusters, HQFilter found " << removedHQFilter
             << " less clusters " << std::endl;
+
+  std::cout << "TPs in bkg because of no muon in event: " << m_counters["noGoodMuTPS"]<< std::endl;
+
 
   outputFile.Write();
   outputFile.Close();

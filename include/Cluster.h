@@ -95,7 +95,8 @@ inline std::ostream& operator<<(std::ostream& os, Cluster const cluster) {
   os << "Cluster in wh " << cluster.wheel << " stat " << cluster.station << " sector " << cluster.sector
      << " has BestTP of quality " << cluster.bestTPQuality() << " in xLoc " << cluster.bestTP().xLoc << " at BX "
      << cluster.bestTP().BX << ", has " << cluster.segClusterSize() << " segments "
-     << " in xLoc " << cluster.bestSeg().xLoc << " and has " << cluster.nDigi() << " digis " << std::endl;
+     << " in xLoc " << cluster.bestSeg().xLoc << " and has " << cluster.nDigi() << " digis " 
+     << " is matched with muon " << cluster.muMatched << std::endl;
   return os;
 }
 

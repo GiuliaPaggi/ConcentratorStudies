@@ -59,16 +59,6 @@ Cluster::Cluster(std::vector<TriggerPrimitive> &tps, std::vector<Segment> &segs,
     foundTP = true;
     clusterX = _bestTP.xLoc;
 
-    if (_bestTP.BX != RIGHT_BX && tps_in_chamber.size() > 1) {
-      std::cout << " la best TP di qualità " << _bestTP.quality << " non è in tempo, è al BX " << _bestTP.BX
-                << " nel resto del cluster ho " << std::endl;
-      for (auto const &T : tps_in_chamber) {
-        if (T.index != _bestTP.index) {
-          std::cout << " TP at BX " << T.BX << " and quality " << T.quality << std::endl;
-        }
-      }
-      std::cout << "------------------------------------------------------------------------" << std::endl;
-    }
   }
 
   if (tps_in_chamber.size() > 0) {
@@ -218,6 +208,9 @@ bool Cluster::matchMu(int muWh, int muStat, int muSec, double muXedge, double mu
       muMatched = true;
       return true;
     }
+    /*else {
+      std::cout << "Trying to match " << *this  << " with muon in wh " << muWh << " station " << muStat << " sector " << muSec << " in xLoc " << muX << std::endl;
+    }*/
   }
   return false;
 }

@@ -31,6 +31,7 @@ class Analyser : public AnalyserBase {
   void FillGhostRatio(const std::string &typeStr, const std::string &varStr, const int &st, const int &qual, const double &valueToFill, const Cluster &cluster);
   void FillGhostProfile(const std::string &typeStr, const std::string &varStr, const int &st, const int &qual, const double &valueToFill, const Cluster &cluster);
   void FillBackground(const std::string &typeStr, const int &st, const int &qual, const double &valueToFill, const Cluster &cluster);
+  void BackgroundAnalisi(const std::vector<Cluster> &cluster, const std::string &typeStr);
 
  public:
   Analyser(std::string file) : AnalyserBase{file} {}
