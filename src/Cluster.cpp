@@ -32,6 +32,11 @@ Cluster::Cluster(std::vector<TriggerPrimitive> &tps, std::vector<Segment> &segs,
            (tp1.BX == RIGHT_BX && tp2.BX == RIGHT_BX && tp1.quality < tp2.quality);
   };
 
+  auto isEarlier = [](TriggerPrimitive const &tp1, TriggerPrimitive const &tp2) { 
+  if (tp1.BX == tp2.BX) return tp1.quality > tp2.quality;    
+  else return tp1.BX < tp2.BX; 
+  };
+
   auto compareSegs = [](Segment &s1, Segment &s2) { return s1.nPhiHits < s2.nPhiHits; };
 
   auto toggleCluster = [](auto &collection, const auto &target) {
@@ -42,6 +47,7 @@ Cluster::Cluster(std::vector<TriggerPrimitive> &tps, std::vector<Segment> &segs,
       }
     }
   };
+
 
   // ########## TPs cluster #############
   std::vector<TriggerPrimitive> tps_in_chamber;
@@ -86,6 +92,13 @@ Cluster::Cluster(std::vector<TriggerPrimitive> &tps, std::vector<Segment> &segs,
     cluster.erase(first_oot, cluster.end());
 
     _itGhosts = std::move(cluster);
+  }
+  
+  // find earliest TP in cluster for timing studies 
+  if (foundTP) {
+    auto earliestOOt{std::min_element(_ootGhosts.begin(), _ootGhosts.end(), isEarlier)};
+    if (earliestOOt != _ootGhosts.end() && earliestOOt->BX < _bestTP.BX ) _earliestTP = *earliestOOt;
+    else _earliestTP = _bestTP;
   }
 
   // ########## Segments cluster #############
@@ -184,6 +197,8 @@ int Cluster::tpClusterSize() const { return _ootGhosts.size() + _itGhosts.size()
 int Cluster::bestTPIndex() const { return _bestTP.index; };
 int Cluster::bestTPQuality() const { return _bestTP.quality; };
 const TriggerPrimitive &Cluster::bestTP() const { return _bestTP; };
+
+double Cluster::earliestTPBX() const { return _earliestTP.BX; };
 
 int Cluster::itCountIf(std::function<bool(TriggerPrimitive const &)> f) const {
   return std::count_if(_itGhosts.begin(), _itGhosts.end(), f);

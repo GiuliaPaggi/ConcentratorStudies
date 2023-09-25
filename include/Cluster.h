@@ -28,6 +28,7 @@ class Cluster {
   TriggerPrimitive _bestTP{};
   std::vector<TriggerPrimitive> _ootGhosts;
   std::vector<TriggerPrimitive> _itGhosts;
+  TriggerPrimitive _earliestTP{};
 
   std::vector<Digi> _digiCluster;
   std::vector<Digi> _matchedDigis;
@@ -63,6 +64,9 @@ class Cluster {
   int bestTPIndex() const;
   int bestTPQuality() const;
   const TriggerPrimitive& bestTP() const;
+
+  //earliest TP in cluster
+  double earliestTPBX() const;
 
   /// Size and vector of segment cluster
   int segClusterSize() const;

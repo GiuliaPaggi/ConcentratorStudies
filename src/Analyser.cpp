@@ -152,7 +152,7 @@ void Analyser::DefinePlot() {
   m_plots["PhiGoodMu"] = new TH1D("PhiGoodMu", "PhiGoodMu; phi(rad); Entries", 50, -TMath::Pi(), TMath::Pi());
   m_plots["EtaGoodMu"] = new TH1D("EtaGoodMu", "EtaGoodMu; eta; Entries", 50, -1, 1);
   //prefiring
-  m_plots["FirstTpBX"] = new TH1I("FirstTpBX", "FirstTpBX", 5, -2, 2);
+  m_plots["FirstTpBX"] = new TH1I("FirstTpBX", "FirstTpBX", 10, CORRECT_BX-5, CORRECT_BX+5);
 
   //background
   for (int sector = 1; sector < 13; ++sector){
@@ -310,6 +310,11 @@ void Analyser::ClusterAnalisis(const std::vector<Cluster> &clusters, const std::
     m_2Dplots[Form("%s_TPs_LocalDirectionvsPosition_st%d", type, st)]->Fill(bestTP.xLoc,
                                                                             bestTP.psi);
     m_plots[Form("%s_ClusterSize", type)]->Fill(cluster.tpClusterSize());
+
+    // ########## Study TP timing #############
+    m_plots["FirstTpBX"] ->Fill(cluster.earliestTPBX()); //NON VA    
+
+    
     // ########## Study TP ghost distribution #############
     if (cluster.foundTP) ++m_counters[Form("%s_nClusters", type)];
     m_counters[Form("%s_ooTHQCount", type)] +=
