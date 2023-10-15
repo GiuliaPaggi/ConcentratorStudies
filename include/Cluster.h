@@ -5,6 +5,8 @@
 #include "include/Segment.h"
 #include "include/TriggerPrimitive.h"
 
+#include <iostream>
+
 // classe cluster-> qualità massima al bx giusto, n di ghost al bx giusto, n
 // ghost al bx sbagliato, accedere a tutti (vettore indici di trigger primitive)
 // parti da prompt

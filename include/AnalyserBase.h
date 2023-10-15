@@ -31,17 +31,16 @@ T getXY(TClonesArray *arr, int x, int y) {
   return static_cast<T>((*((TVectorT<float> *)(arr->At(x))))[y]);
 };
 
-inline std::vector<Cluster> buildClusters(const Geometry &geom, std::vector<TriggerPrimitive> &tps,
-                                          std::vector<Segment> &segs, std::vector<Digi> &digis, double x_cut,
-                                          double digi_cut) {
+inline std::vector<Cluster> buildClusters(std::vector<TriggerPrimitive> &tps, std::vector<Segment> &segs,
+                                          std::vector<Digi> &digis, double x_cut, double digi_cut) {
   std::vector<Cluster> clusters;
   std::vector<TriggerPrimitive> tpsToCluster = tps;
   std::vector<Segment> segToCluster = segs;
   std::vector<Digi> digiToCluster = digis;
 
-  for (const auto wh : geom.WHEELS) {
-    for (const auto sec : geom.SECTORS) {
-      for (const auto st : geom.STATIONS) {
+  for (const auto wh : GEOM.WHEELS) {
+    for (const auto sec : GEOM.SECTORS) {
+      for (const auto st : GEOM.STATIONS) {
         while (true) {
           Cluster cluster{tpsToCluster, segToCluster, digiToCluster, x_cut, digi_cut, wh, sec, st};
           if (cluster.bestTPQuality() > -1 || cluster.bestSegPhiHits() > -1 || cluster.digiSL()) {

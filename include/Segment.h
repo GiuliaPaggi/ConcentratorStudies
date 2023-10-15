@@ -1,15 +1,12 @@
 #ifndef Segment_h
 #define Segment_h
 
-#include "TMath.h"
-
-class Segment {
+#include <vector>
+struct Segment {
  public:
   Segment() = default;
   Segment(int i, int st, int wh, int sec, int nHits, double x);
-  // bool MatchCluster(Cluster cluster, double xCut){};
 
-  // private:
   std::size_t index{9999};
   int station{-1};
   int wheel{-5};
