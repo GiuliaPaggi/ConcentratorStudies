@@ -26,12 +26,12 @@ class Analyser : public AnalyserBase {
 
   void ClusterAnalisis(const std::vector<Cluster> &, const std::string &, const std::vector<Segment> &);
   void DefinePlot();
-  void FillEfficiency(const std::string &, const std::string &, const int &, const int &, const double &, const Cluster &);
-  void FillEfficiency2D(const std::string &, const std::string &, const int &, const int &, const double &, const double &, const Cluster &);
-  void FillGhostRatio(const std::string &typeStr, const std::string &varStr, const int &st, const int &qual, const double &valueToFill, const Cluster &cluster);
-  void FillGhostProfile(const std::string &typeStr, const std::string &varStr, const int &st, const int &qual, const double &valueToFill, const Cluster &cluster);
-  void FillBackground(const std::string &typeStr, const int &st, const int &qual, const double &valueToFill, const Cluster &cluster);
-  void BackgroundAnalisi(const std::vector<Cluster> &cluster, const std::string &typeStr);
+  void FillEfficiency(const std::string &, const std::string &,int, int, double, const Cluster &);
+  void FillEfficiency2D(const std::string &, const std::string &,int, int, double, double, const Cluster &);
+  void FillGhostRatio(const std::string &, const std::string &,int,int, double, const Cluster &);
+  void FillGhostProfile(const std::string &, const std::string &,int,int, double, const Cluster &);
+  void FillBackground(const std::string &,int,int, double, const Cluster &);
+  void BackgroundAnalysis(const std::vector<Cluster> &, const std::string &);
 
  public:
   Analyser(std::string file) : AnalyserBase{file} {}

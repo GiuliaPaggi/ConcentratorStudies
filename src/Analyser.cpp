@@ -54,73 +54,70 @@ const double MIN_PT{5.0};
 
 const std::array<int, 3> QUAL_PLOT{0, 3, 6};
 
-void Analyser::FillEfficiency(const std::string &typeStr, const std::string &varStr, const int &st, const int &qual,
-                              const double &valueToFill, const Cluster &cluster) {
+void Analyser::FillEfficiency(const std::string &typeStr, const std::string &varStr, int st, int qualCut,
+                              double valueToFill, const Cluster &cluster) {
   const auto type{typeStr.c_str()};
   const auto var{varStr.c_str()};
 
-  double BXTP = cluster.bestTP().BX;
-  double qualTP = cluster.bestTPQuality();
-  bool eff = (std::abs(BXTP - CORRECT_BX) < 1) && qualTP >= qual;
+  const int BX = cluster.bestTP().BX;
+  const int qual = cluster.bestTPQuality();
+  const bool eff = (std::abs(BX - CORRECT_BX) < 1) && qual >= qualCut;
 
-  m_effs[Form("%s_ClusterEfficiencyVS%s_st%d_minqual%d", type, var, st, qual)]->Fill(eff, valueToFill);
+  m_effs[Form("%s_ClusterEfficiencyVS%s_st%d_minqual%d", type, var, st, qualCut)]->Fill(eff, valueToFill);
 }
 
-void Analyser::FillEfficiency2D(const std::string &typeStr, const std::string &varStr, const int &st, const int &qual,
-                                const double &valueToFillx, const double &valueToFilly, const Cluster &cluster) {
+void Analyser::FillEfficiency2D(const std::string &typeStr, const std::string &varStr, int st, int qualCut,
+                                double valueToFillx, double valueToFilly, const Cluster &cluster) {
   const auto type{typeStr.c_str()};
   const auto var{varStr.c_str()};
 
-  double BXTP = cluster.bestTP().BX;
-  double qualTP = cluster.bestTPQuality();
-  bool eff = (std::abs(BXTP - CORRECT_BX) < 1) && qualTP >= qual;
+  const int BX = cluster.bestTP().BX;
+  const int qual = cluster.bestTPQuality();
+  const bool eff = (std::abs(BX - CORRECT_BX) < 1) && qual >= qualCut;
 
-  m_effs[Form("%s_ClusterEfficiencyVS%s_st%d_minqual%d", type, var, st, qual)]->Fill(eff, valueToFillx, valueToFilly);
+  m_effs[Form("%s_ClusterEfficiencyVS%s_st%d_minqual%d", type, var, st, qualCut)]->Fill(eff, valueToFillx, valueToFilly);
 }
 
-void Analyser::FillGhostRatio(const std::string &typeStr, const std::string &varStr, const int &st, const int &qual,
-                              const double &valueToFill, const Cluster &cluster) {
+void Analyser::FillGhostRatio(const std::string &typeStr, const std::string &varStr, int st, int qualCut,
+                              double valueToFill, const Cluster &cluster) {
   const auto type{typeStr.c_str()};
   const auto var{varStr.c_str()};
 
-  double qualTP = cluster.bestTPQuality();
-  bool eff = cluster.hasGhosts();
-  bool ITeff = cluster.itSize();
-  bool OOTeff = cluster.ootSize();
-  if (qualTP >= qual) {
-    m_effs[Form("%s_GhostFractionVS%s_st%d_minqual%d", type, var, st, qual)]->Fill(eff, valueToFill);
-    m_effs[Form("%s_ITGhostFractionVS%s_st%d_minqual%d", type, var, st, qual)]->Fill(ITeff, valueToFill);
-    m_effs[Form("%s_OOTGhostFractionVS%s_st%d_minqual%d", type, var, st, qual)]->Fill(OOTeff, valueToFill);
+  const int qual = cluster.bestTPQuality();
+  if (qual >= qualCut) {
+    m_effs[Form("%s_GhostFractionVS%s_st%d_minqual%d", type, var, st, qualCut)]->Fill(cluster.hasGhosts(), valueToFill);
+    m_effs[Form("%s_ITGhostFractionVS%s_st%d_minqual%d", type, var, st, qualCut)]->Fill(cluster.itSize(), valueToFill);
+    m_effs[Form("%s_OOTGhostFractionVS%s_st%d_minqual%d", type, var, st, qualCut)]->Fill(cluster.ootSize(), valueToFill);
   }
 }
 
-void Analyser::FillGhostProfile(const std::string &typeStr, const std::string &varStr, const int &st, const int &qual,
-                                const double &valueToFill, const Cluster &cluster) {
+void Analyser::FillGhostProfile(const std::string &typeStr, const std::string &varStr, int st, int qualCut,
+                                double valueToFill, const Cluster &cluster) {
   const auto type{typeStr.c_str()};
   const auto var{varStr.c_str()};
 
   const double ITghost = cluster.itSize();
   const double OOTghost = cluster.ootSize();
 
-  double qualTP = cluster.bestTPQuality();
-  if (cluster.hasGhosts() && qualTP >= qual) {
-    m_plots[Form("%s_GhostDistributionVS%s_st%d_minqual%d", type, var, st, qual)]->Fill(valueToFill,
+  const int qual = cluster.bestTPQuality();
+  if (cluster.hasGhosts() && qual >= qualCut) {
+    m_plots[Form("%s_GhostDistributionVS%s_st%d_minqual%d", type, var, st, qualCut)]->Fill(valueToFill,
                                                                                         ITghost + OOTghost);
-    m_plots[Form("%s_ITGhostDistributionVS%s_st%d_minqual%d", type, var, st, qual)]->Fill(valueToFill, ITghost);
-    m_plots[Form("%s_OOTGhostDistributionVS%s_st%d_minqual%d", type, var, st, qual)]->Fill(valueToFill, OOTghost);
+    m_plots[Form("%s_ITGhostDistributionVS%s_st%d_minqual%d", type, var, st, qualCut)]->Fill(valueToFill, ITghost);
+    m_plots[Form("%s_OOTGhostDistributionVS%s_st%d_minqual%d", type, var, st, qualCut)]->Fill(valueToFill, OOTghost);
   }
 }
 
-void Analyser::FillBackground(const std::string &typeStr, const int &st, const int &qual, const double &valueToFill,
+void Analyser::FillBackground(const std::string &typeStr, int st, int qualCut, double valueToFill,
                               const Cluster &cluster) {
   const auto type{typeStr.c_str()};
 
-  double ITtps = cluster.itSize();
-  if (cluster.foundTP) ITtps += 1;
-  const double OOTtps = cluster.ootSize();
-  if (cluster.bestTPQuality() >= qual) {
-    m_plots[Form("%s_ITBackground_st%d_minqual%d", type, st, qual)]->Fill(valueToFill, ITtps);
-    m_plots[Form("%s_OOTBackground_st%d_minqual%d", type, st, qual)]->Fill(valueToFill, OOTtps);
+  const int ITtps{cluster.itSize() + (cluster.foundTP ? 1 : 0)};
+  const int OOTtps{cluster.ootSize()};
+
+  if (cluster.bestTPQuality() >= qualCut) {
+    m_plots[Form("%s_ITBackground_st%d_minqual%d", type, st, qualCut)]->Fill(valueToFill, ITtps);
+    m_plots[Form("%s_OOTBackground_st%d_minqual%d", type, st, qualCut)]->Fill(valueToFill, OOTtps);
   }
   /*
   if (ITtps+OOTtps > 0){
@@ -180,12 +177,12 @@ void Analyser::DefinePlot() {
     m_plots[Form("%s_BX_OoTGhosts", type)] =
         new TH1I(Form("%s_BX_OoTGhosts", type), Form("%s_BX_OoTGhosts", type), 25, BX_MIN, BX_MAX);
     m_plots[Form("%s_Res_ITGhosts", type)] =
-        new TH1D(Form("%s_Res_ITGhosts", type), Form("%s_Res_ITGhosts", type), 111, -5.5, 5.5);
+        new TH1D(Form("%s_Res_ITGhosts", type), Form("%s_Res_ITGhosts", type), 110, -10.5, 10.5);
     m_plots[Form("%s_Res_OoTGhosts", type)] =
-        new TH1D(Form("%s_Res_OoTGhosts", type), Form("%s_Res_OoTGhosts", type), 111, -5.5, 5.5);
+        new TH1D(Form("%s_Res_OoTGhosts", type), Form("%s_Res_OoTGhosts", type), 110, -10.5, 10.5);
     m_plots[Form("%s_Res_SegMatched", type)] =
         new TH1D(Form("%s_Res_SegMatched", type),
-                 Form("%s_Res_SegMatched; cluster.bestTP().xLoc - seg.xLoc; Entries", type), 101, -10, 10);
+                 Form("%s_Res_SegMatched; cluster.bestTP().xLoc - seg.xLoc; Entries", type), 110, -10.5, 10.5);
     m_plots[Form("%s_LowQ_matched", type)] =
         new TH1D(Form("%s_LowQ_matched", type), Form("%s_LowQ_matched; t0 (ns); Entries", type), 100, T_MIN, T_MAX);
     m_plots[Form("%s_BX_LowQ_matched", type)] =
@@ -478,7 +475,7 @@ void Analyser::ClusterAnalisis(const std::vector<Cluster> &clusters, const std::
   }
 }
 
-void Analyser::BackgroundAnalisi(const std::vector<Cluster> &clusters, const std::string &typeStr) {
+void Analyser::BackgroundAnalysis(const std::vector<Cluster> &clusters, const std::string &typeStr) {
   for (auto const &cluster : clusters) {
     if (cluster.muMatched) continue;
     if (!cluster.foundTP) continue;
@@ -774,7 +771,7 @@ void Analyser::Loop() {
     ClusterAnalisis(matchFromLQ_clusters, tags[1], segments);
     ClusterAnalisis(matchFromHQ_clusters, tags[2], segments);
 
-    BackgroundAnalisi(clusters, tags[0]);
+    BackgroundAnalysis(clusters, tags[0]);
 
     std::vector<Cluster> ClusterCut_LQFilter = MissingClusters(matchFromLQ_clusters, clusters, "LQFilter");
     removedLQFilter += ClusterCut_LQFilter.size();
