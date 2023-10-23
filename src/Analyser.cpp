@@ -151,8 +151,13 @@ void Analyser::DefinePlot() {
   m_plots["PtGoodMu"] = new TH1D("PtGoodMu", "PtGoodMu; pT (GeV); Entries", 200, .5, 100.5);
   m_plots["PhiGoodMu"] = new TH1D("PhiGoodMu", "PhiGoodMu; phi(rad); Entries", 50, -TMath::Pi(), TMath::Pi());
   m_plots["EtaGoodMu"] = new TH1D("EtaGoodMu", "EtaGoodMu; eta; Entries", 50, -1, 1);
+<<<<<<< Updated upstream
   // prefiring
   m_plots["FirstTpBX"] = new TH1I("FirstTpBX", "FirstTpBX", 10, CORRECT_BX - 5, CORRECT_BX + 5);
+=======
+  //prefiring
+  m_plots["FirstTpBX"] = new TH1I("FirstTpBX", "FirstTpBX", 11, CORRECT_BX-5, CORRECT_BX+5);
+>>>>>>> Stashed changes
 
   // background
   for (int sector = 1; sector < 13; ++sector) {
@@ -225,7 +230,6 @@ void Analyser::DefinePlot() {
     m_counters[Form("%s_nClusters", type)] = 0;
     m_counters[Form("%s_nTPs", type)] = 0;
     m_counters[Form("%s_nBackgroundClusters", type)] = 0;
-    m_counters[Form("%s_nBackgroundClusters2", type)] = 0;
 
     for (const auto st : GEOM.STATIONS) {
       m_plots[Form("%s_x_LowBestQ_st%d", type, st)] = new TH1D(
@@ -363,7 +367,11 @@ void Analyser::ClusterAnalysis(const std::vector<Cluster> &clusters, const std::
     m_plots[Form("%s_ClusterSize", type)]->Fill(cluster.tpClusterSize());
 
     // ########## Study TP timing #############
+<<<<<<< Updated upstream
     m_plots["FirstTpBX"]->Fill(cluster.earliestTPBX());  // NON VA
+=======
+    m_plots["FirstTpBX"] ->Fill(cluster.earliestTPBX()); 
+>>>>>>> Stashed changes
 
     // ########## Study TP ghost distribution #############
     if (cluster.foundTP) ++m_counters[Form("%s_nClusters", type)];
@@ -444,14 +452,35 @@ void Analyser::ClusterAnalysis(const std::vector<Cluster> &clusters, const std::
     }
 
     // ########## Study background #############
+<<<<<<< Updated upstream
 
     /*if (!cluster.muMatched && cluster.foundTP){
+=======
+    
+    if (!cluster.muMatched && cluster.foundTP){
+>>>>>>> Stashed changes
       ++m_counters[Form("%s_nBackgroundClusters", type)];
       double xLoc = cluster.bestTP().xLoc;
       for (auto qual : QUAL_PLOT){
         FillBackground(type, st, qual, xLoc, cluster);
       }
-    }*/
+
+      m_plots[Form("%s_Q_Bkg", type)]->Fill(cluster.bestTPQuality());
+      for (auto const &itTp : cluster.itGhosts()){
+        m_plots[Form("%s_Q_Bkg", type)]->Fill(itTp.quality);
+      }
+      for (auto const &ootTp : cluster.ootGhosts()){
+        m_plots[Form("%s_Q_Bkg", type)]->Fill(ootTp.quality);
+      }
+      if (cluster.bestTPQuality()==8) m_plots[Form("%s_q8position_st%d", type, st)]->Fill(xLoc);
+      m_plots[Form("%s_N_bkg", type)] ->Fill(cluster.tpClusterSize());
+
+      for (auto const &otherCluster : clusters) {
+        if (otherCluster.wheel != wh || otherCluster.station != st || otherCluster.sector != sec || otherCluster.muMatched == false) continue;
+        
+        m_plots[Form("%s_BackgroundResidual_st%d", type, st)]->Fill( xLoc - otherCluster.bestTP().xLoc );
+      }
+    }
 
     // ########## Study segment matching #############
     m_effs[Form("%s_Eff_SegMatch_st%d", type, st)]->Fill(cluster.foundSeg, sec, wh);
@@ -492,17 +521,27 @@ void Analyser::BackgroundAnalysis(const std::vector<Cluster> &clusters, const st
       FillBackground(type, st, qual, xLoc, cluster);
     }
 
+<<<<<<< Updated upstream
     ++m_counters[Form("%s_nBackgroundClusters2", type)];
+=======
+    //++m_counters[Form("%s_nBackgroundClusters2", type)];    
+>>>>>>> Stashed changes
 
     m_plots[Form("%s_Q_Bkg", type)]->Fill(cluster.bestTPQuality());
-    /*for (auto const &itTp : cluster.itGhosts()){
+    for (auto const &itTp : cluster.itGhosts()){
       m_plots[Form("%s_Q_Bkg", type)]->Fill(itTp.quality);
     }
     for (auto const &ootTp : cluster.ootGhosts()){
       m_plots[Form("%s_Q_Bkg", type)]->Fill(ootTp.quality);
+<<<<<<< Updated upstream
     }*/
     if (cluster.bestTPQuality() == 8) m_plots[Form("%s_q8position_st%d", type, st)]->Fill(xLoc);
     m_plots[Form("%s_N_bkg", type)]->Fill(cluster.tpClusterSize());
+=======
+    }
+    if (cluster.bestTPQuality()==8) m_plots[Form("%s_q8position_st%d", type, st)]->Fill(xLoc);
+    m_plots[Form("%s_N_bkg", type)] ->Fill(cluster.tpClusterSize());
+>>>>>>> Stashed changes
 
     for (auto const &otherCluster : clusters) {
       if (otherCluster.wheel != wh || otherCluster.station != st || otherCluster.sector != sec ||
@@ -552,7 +591,14 @@ std::vector<Cluster> MissingClusters(std::vector<Cluster> FirstCLVector, std::ve
 }
 
 void Analyser::Loop() {
+<<<<<<< Updated upstream
   TFile outputFile("results/outputFile_DoubleMuon_FlatPt-1To100_noPU_noRPC.root", "RECREATE");
+=======
+  Geometry geom{};
+  const char *out  = "results/outputFile_";
+  std::string outputFileName=out+AnalyserBase::filename;
+  TFile outputFile(outputFileName); //("results/outputFile_DoubleMuon_FlatPt-1To100_noPU_noRPC.root", "RECREATE");
+>>>>>>> Stashed changes
   outputFile.cd();
 
   DefinePlot();
@@ -747,7 +793,11 @@ void Analyser::Loop() {
     ClusterAnalysis(matchFromLQ_clusters, tags[1], segments);
     ClusterAnalysis(matchFromHQ_clusters, tags[2], segments);
 
+<<<<<<< Updated upstream
     BackgroundAnalysis(clusters, tags[0]);
+=======
+    //BackgroundAnalisi(clusters, tags[0]);
+>>>>>>> Stashed changes
 
     std::vector<Cluster> ClusterCut_LQFilter = MissingClusters(matchFromLQ_clusters, clusters, "LQFilter");
     removedLQFilter += ClusterCut_LQFilter.size();
@@ -767,7 +817,7 @@ void Analyser::Loop() {
   for (auto tag : tags) {
     const auto type{tag.c_str()};
     double ghostFraction = m_counters[Form("%s_nClustersGhosts", type)] / m_counters[Form("%s_nClusters", type)];
-    double bkgFraction = m_counters[Form("%s_nBackgroundClusters2", type)] / m_counters[Form("%s_nClusters", type)];
+    double bkgFraction = m_counters[Form("%s_nBackgroundClusters", type)] / m_counters[Form("%s_nClusters", type)];
     std::cout << " \nFor " << tag << std::endl;
     std::cout << " Ratio LQ/selected with phi=  " << m_plots[Form("%s_LowQ_matched", type)]->GetEntries() << "/ "
               << m_plots["t0_LowQuality"]->GetEntries() << " = "
@@ -779,9 +829,17 @@ void Analyser::Loop() {
               << m_counters[Form("%s_nTPs", type)] << " TPs" << std::endl;
     std::cout << " HQ out of time clusters: " << m_counters[Form("%s_ooTHQCount", type)] << std::endl;
 
+<<<<<<< Updated upstream
     std::cout << " Fraction of background cluster (" << m_counters[Form("%s_nBackgroundClusters2", type)] << " / "
               << m_counters[Form("%s_nBackgroundClusters2", type)] << ") on total ("
+=======
+    std::cout << " Fraction of background cluster (" << m_counters[Form("%s_nBackgroundClusters", type)] << ") on total ("
+>>>>>>> Stashed changes
               << m_counters[Form("%s_nClusters", type)] << ") = " << bkgFraction << std::endl;
+    
+    std::cout << " Fraction of cluster with prefiring TPs (" << m_plots[Form("FirstTpBX")]->GetBinContent(5) << ") with respect to the right BX ("  << m_plots[Form("FirstTpBX")]->GetBinContent(6) << ") = " 
+              <<   m_plots[Form("FirstTpBX")]->GetBinContent(5)/m_plots[Form("FirstTpBX")]->GetBinContent(6) << std::endl;
+
   }
 
   std::cout << "LQFilter found " << removedLQFilter << " less clusters, HQFilter found " << removedHQFilter

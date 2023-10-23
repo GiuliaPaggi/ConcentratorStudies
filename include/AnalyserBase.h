@@ -680,12 +680,13 @@ class AnalyserBase {
   virtual void Loop() = 0;
   virtual Bool_t Notify();
   virtual void Show(Long64_t entry = -1);
+  std::string filename;
 };
 
 #endif
 
 #ifdef AnalyserBase_cxx
-AnalyserBase::AnalyserBase(std::string file_name) : file{file_name.c_str()}, fChain{nullptr} {
+AnalyserBase::AnalyserBase(std::string file_name) : file{file_name.c_str()}, fChain{nullptr}, filename{file_name.c_str()} {
   TTree *tree{};
   file.GetObject("dtNtupleProducer/DTTREE", tree);
   Init(tree);
