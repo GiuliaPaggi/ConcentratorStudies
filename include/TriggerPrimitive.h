@@ -50,8 +50,7 @@ class TriggerPrimitive {
   void checkBX();
 
   // Filter functions
-  bool MatchFromLQ(TriggerPrimitive &TP, double PhiCut, double TimeCut);
-  bool MatchFromHQ(TriggerPrimitive &TP, double PhiCut, double TimeCut);
+  bool Match(TriggerPrimitive &TP, double PhiCut, double TimeCut, const std::vector<int> & quals);
 };
 
 inline bool operator==(TriggerPrimitive const &ltp, TriggerPrimitive const &rtp) { return ltp.index == rtp.index; }

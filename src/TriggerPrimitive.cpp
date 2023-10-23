@@ -44,8 +44,9 @@ void TriggerPrimitive::computeExpectedPhi() {
   computedPhi = true;
 };
 
-bool TriggerPrimitive::MatchFromHQ(TriggerPrimitive &TP, double phicut, double timecut) {
-  if (quality == 1) return false;
+bool TriggerPrimitive::Match(TriggerPrimitive &TP, double phicut, double timecut, const std::vector<int> &quals) {
+  if (std::find(quals.begin(), quals.end(), quality) == quals.end()) return false;
+
   if (TP.index == index) return false;
   if (!computedPhi) computeExpectedPhi();
 
@@ -78,49 +79,6 @@ bool TriggerPrimitive::MatchFromHQ(TriggerPrimitive &TP, double phicut, double t
 
     if (wheel < 0 && TP.wheel <= wheel && TP.wheel != -5 && wheel != 5) {
       if (TP.quality == 1 && Deltat0 < timecut) {
-        TP.hasMatched = true;
-        hasMatched = true;
-        return true;
-      }
-    }
-  }
-  return false;
-};
-
-bool TriggerPrimitive::MatchFromLQ(TriggerPrimitive &TP, double phicut, double timecut) {
-  if (quality > 1) return false;
-  if (TP.index == index) return false;
-  if (!computedPhi) computeExpectedPhi();
-
-  double DeltaPhiExp = 0;
-  std::abs(phiExpected[TP.station] - TP.phi) < TMath::Pi()
-      ? DeltaPhiExp = std::abs(phiExpected[TP.station] - TP.phi)
-      : DeltaPhiExp = std::abs(2 * TMath::Pi() - std::abs(phiExpected[TP.station] - TP.phi));
-
-  double Deltat0 = std::abs(t0 - TP.t0);
-
-  if (DeltaPhiExp < phicut) {
-    TP.matches.push_back(index);  // NELLE QUALITà BASSE METTO L'INDICE DI QUELLA ALTA
-    matches.push_back(TP.index);  // NELLE QUALITà ALTE METTO L'INDICE DI QUELLE CHE MATCHANO
-
-    if (wheel == 0 && std::abs(TP.wheel) < 2) {
-      if (TP.quality > 1 && Deltat0 < timecut) {
-        TP.hasMatched = true;
-        hasMatched = true;
-        return true;
-      }
-    }
-
-    if (wheel > 0 && TP.wheel >= wheel) {
-      if (TP.quality > 1 && Deltat0 < timecut) {
-        TP.hasMatched = true;
-        hasMatched = true;
-        return true;
-      }
-    }
-
-    if (wheel < 0 && TP.wheel <= wheel && TP.wheel != -5 && wheel != 5) {
-      if (TP.quality > 1 && Deltat0 < timecut) {
         TP.hasMatched = true;
         hasMatched = true;
         return true;
