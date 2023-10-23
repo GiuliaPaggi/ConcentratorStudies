@@ -1,4 +1,22 @@
 {
+    "Prefiring": {
+        "base" : "base",
+        "inputs": {
+            "PreFiring": { "plot_name": "FirstTpBX"}
+        },
+        "plot": {
+            "x": [ 15.0, 25.0, "" ],
+            "y": [ 0.0, 650000.0, "" ],
+            "legend_title": "Earliest TP BX",
+            "legend_range": [ 0.69, 0.67, 0.85, 0.80 ]
+            
+        },
+        "output": {
+            "directory": "plots/Timing/",
+            "file_name": "Prefiring"
+        }
+    }, 
+
     "PreFilter_efficiencyVSpT_st1": {
         "base" : "base_pt",
         "inputs": {
@@ -65,7 +83,7 @@
             "all qualities": {"plot_name": "PreFilter_ClusterEfficiencyVSpos_st1_minqual0" }
         },
         "plot": {
-            "legend_title": "Efficiency  -  MB1"
+            "legend_title": "Efficiency  -  MB1 - qual > 0"
         },
         "output": {
             "file_name": "02_PreFilter_efficiencyVSpos_st1_minqual0"
@@ -78,7 +96,7 @@
             "quality >= 3": {"plot_name": "PreFilter_ClusterEfficiencyVSpos_st1_minqual3" }
         },
         "plot": {
-            "legend_title": "Efficiency  -  MB1"
+            "legend_title": "Efficiency  -  MB1 - qual > 3"
         },
         "output": {
             "file_name": "02_PreFilter_efficiencyVSpos_st1_minqual3"
@@ -91,15 +109,12 @@
             "quality >= 6": {"plot_name": "PreFilter_ClusterEfficiencyVSpos_st1_minqual6" }
         },
         "plot": {
-            "legend_title": "Efficiency  -  MB1"
+            "legend_title": "Efficiency  -  MB1 - qual > 6"
         },
         "output": {
             "file_name": "02_PreFilter_efficiencyVSpos_st1_minqual6"
         }
     }, 
-    
-
-
 
     "PreFilter_efficiencyVSpos_st2_minqual0": {
         "base": "base_pos",
@@ -107,15 +122,12 @@
             "all qualities": {"plot_name": "PreFilter_ClusterEfficiencyVSpos_st2_minqual0" }
         },
         "plot": {
-            "legend_title": "Efficiency  -  MB2"
+            "legend_title": "Efficiency  -  MB2 - qual > 0"
         },
         "output": {
             "file_name": "02_PreFilter_efficiencyVSpos_st2_minqual0"
         }
     }, 
-
-
-
 
     "PreFilter_efficiencyVSpos_st2_minqual3": {
         "base": "base_pos",
@@ -123,7 +135,7 @@
             "quality >= 3": {"plot_name": "PreFilter_ClusterEfficiencyVSpos_st2_minqual3" }
         },
         "plot": {
-            "legend_title": "Efficiency  -  MB2"
+            "legend_title": "Efficiency  -  MB2 - qual > 3"
         },
         "output": {
             "file_name": "02_PreFilter_efficiencyVSpos_st2_minqual3"
@@ -136,7 +148,7 @@
             "quality >= 6": {"plot_name": "PreFilter_ClusterEfficiencyVSpos_st2_minqual6" }
         },
         "plot": {
-            "legend_title": "Efficiency  -  MB2"
+            "legend_title": "Efficiency  -  MB2 - qual > 6"
         },
         "output": {
             "file_name": "02_PreFilter_efficiencyVSpos_st2_minqual6"
@@ -149,7 +161,7 @@
             "all qualities": {"plot_name": "PreFilter_ClusterEfficiencyVSpos_st3_minqual0" }
         },
         "plot": {
-            "legend_title": "Efficiency  -  MB3"
+            "legend_title": "Efficiency  -  MB3 - qual > 0"
         },
         "output": {
             "file_name": "02_PreFilter_efficiencyVSpos_st3_minqual0"
@@ -162,7 +174,7 @@
             "quality >= 3": {"plot_name": "PreFilter_ClusterEfficiencyVSpos_st3_minqual3" }
         },
         "plot": {
-            "legend_title": "Efficiency  -  MB3"
+            "legend_title": "Efficiency  -  MB3 - qual > 3"
         },
         "output": {
             "file_name": "02_PreFilter_efficiencyVSpos_st3_minqual3"
@@ -175,7 +187,7 @@
             "quality >= 6": {"plot_name": "PreFilter_ClusterEfficiencyVSpos_st3_minqual6" }
         },
         "plot": {
-            "legend_title": "Efficiency  -  MB3"
+            "legend_title": "Efficiency  -  MB3 - qual > 6"
         },
         "output": {
             "file_name": "02_PreFilter_efficiencyVSpos_st3_minqual6"
@@ -188,7 +200,7 @@
             "all qualities": {"plot_name": "PreFilter_ClusterEfficiencyVSpos_st4_minqual0" }
         },
         "plot": {
-            "legend_title": "Efficiency  -  MB4"
+            "legend_title": "Efficiency  -  MB4 - qual > 0"
         },
         "output": {
             "file_name": "02_PreFilter_efficiencyVSpos_st4_minqual0"
@@ -201,7 +213,7 @@
             "quality >= 3": {"plot_name": "PreFilter_ClusterEfficiencyVSpos_st4_minqual3" }
         },
         "plot": {
-            "legend_title": "Efficiency  -  MB4"
+            "legend_title": "Efficiency  -  MB4 - qual > 3"
         },
         "output": {
             "file_name": "02_PreFilter_efficiencyVSpos_st4_minqual3"
@@ -214,7 +226,7 @@
             "quality >= 6": {"plot_name": "PreFilter_ClusterEfficiencyVSpos_st4_minqual6" }
         },
         "plot": {
-            "legend_title": "Efficiency  -  MB4"
+            "legend_title": "Efficiency  -  MB4 - qual > 6"
         },
         "output": {
             "file_name": "02_PreFilter_efficiencyVSpos_st4_minqual6"
@@ -531,7 +543,7 @@
             "all qualities": {"plot_name": "LQFilter_ClusterEfficiencyVSpos_st1_minqual0" }
         },
         "plot": {
-            "legend_title": "Efficiency  -  MB1"
+            "legend_title": "Efficiency  -  MB1 - qual > 0"
         },
         "output": {
             "file_name": "02_LQFilter_efficiencyVSpos_st1_minqual0"
@@ -544,7 +556,7 @@
             "quality >= 3": {"plot_name": "LQFilter_ClusterEfficiencyVSpos_st1_minqual3" }
         },
         "plot": {
-            "legend_title": "Efficiency  -  MB1"
+            "legend_title": "Efficiency  -  MB1 - qual > 3"
         },
         "output": {
             "file_name": "02_LQFilter_efficiencyVSpos_st1_minqual3"
@@ -557,7 +569,7 @@
             "quality >= 6": {"plot_name": "LQFilter_ClusterEfficiencyVSpos_st1_minqual6" }
         },
         "plot": {
-            "legend_title": "Efficiency  -  MB1"
+            "legend_title": "Efficiency  -  MB1 - qual > 6"
         },
         "output": {
             "file_name": "02_LQFilter_efficiencyVSpos_st1_minqual6"
@@ -570,7 +582,7 @@
             "all qualities": {"plot_name": "LQFilter_ClusterEfficiencyVSpos_st2_minqual0" }
         },
         "plot": {
-            "legend_title": "Efficiency  -  MB2"
+            "legend_title": "Efficiency  -  MB2  - qual > 0"
         },
         "output": {
             "file_name": "02_LQFilter_efficiencyVSpos_st2_minqual0"
@@ -583,7 +595,7 @@
             "quality >= 3": {"plot_name": "LQFilter_ClusterEfficiencyVSpos_st2_minqual3" }
         },
         "plot": {
-            "legend_title": "Efficiency  -  MB2"
+            "legend_title": "Efficiency  -  MB2 - qual > 3"
         },
         "output": {
             "file_name": "02_LQFilter_efficiencyVSpos_st2_minqual3"
@@ -596,7 +608,7 @@
             "quality >= 6": {"plot_name": "LQFilter_ClusterEfficiencyVSpos_st2_minqual6" }
         },
         "plot": {
-            "legend_title": "Efficiency  -  MB2"
+            "legend_title": "Efficiency  -  MB2 - qual > 6"
         },
         "output": {
             "file_name": "02_LQFilter_efficiencyVSpos_st2_minqual6"
@@ -609,7 +621,7 @@
             "all qualities": {"plot_name": "LQFilter_ClusterEfficiencyVSpos_st3_minqual0" }
         },
         "plot": {
-            "legend_title": "Efficiency  -  MB3"
+            "legend_title": "Efficiency  -  MB3 - qual > 0"
         },
         "output": {
             "file_name": "02_LQFilter_efficiencyVSpos_st3_minqual0"
@@ -622,7 +634,7 @@
             "quality >= 3": {"plot_name": "LQFilter_ClusterEfficiencyVSpos_st3_minqual3" }
         },
         "plot": {
-            "legend_title": "Efficiency  -  MB3"
+            "legend_title": "Efficiency  -  MB3 - qual > 3"
         },
         "output": {
             "file_name": "02_LQFilter_efficiencyVSpos_st3_minqual3"
@@ -635,7 +647,7 @@
             "quality >= 6": {"plot_name": "LQFilter_ClusterEfficiencyVSpos_st3_minqual6" }
         },
         "plot": {
-            "legend_title": "Efficiency  -  MB3"
+            "legend_title": "Efficiency  -  MB3 - qual > 6"
         },
         "output": {
             "file_name": "02_LQFilter_efficiencyVSpos_st3_minqual6"
@@ -648,7 +660,7 @@
             "all qualities": {"plot_name": "LQFilter_ClusterEfficiencyVSpos_st4_minqual0" }
         },
         "plot": {
-            "legend_title": "Efficiency  -  MB4"
+            "legend_title": "Efficiency  -  MB4 - qual > 0"
         },
         "output": {
             "file_name": "02_LQFilter_efficiencyVSpos_st4_minqual0"
@@ -661,7 +673,7 @@
             "quality >= 3": {"plot_name": "LQFilter_ClusterEfficiencyVSpos_st4_minqual3" }
         },
         "plot": {
-            "legend_title": "Efficiency  -  MB4"
+            "legend_title": "Efficiency  -  MB4 - qual > 3"
         },
         "output": {
             "file_name": "02_LQFilter_efficiencyVSpos_st4_minqual3"
@@ -674,7 +686,7 @@
             "quality >= 6": {"plot_name": "LQFilter_ClusterEfficiencyVSpos_st4_minqual6" }
         },
         "plot": {
-            "legend_title": "Efficiency  -  MB4"
+            "legend_title": "Efficiency  -  MB4 - qual > 6"
         },
         "output": {
             "file_name": "02_LQFilter_efficiencyVSpos_st4_minqual6"
@@ -991,7 +1003,7 @@
             "all qualities": {"plot_name": "HQFilter_ClusterEfficiencyVSpos_st1_minqual0" }
         },
         "plot": {
-            "legend_title": "Efficiency  -  MB1"
+            "legend_title": "Efficiency  -  MB1 - qual > 0"
         },
         "output": {
             "file_name": "02_HQFilter_efficiencyVSpos_st1_minqual0"
@@ -1004,7 +1016,7 @@
             "quality >= 3": {"plot_name": "HQFilter_ClusterEfficiencyVSpos_st1_minqual3" }
         },
         "plot": {
-            "legend_title": "Efficiency  -  MB1"
+            "legend_title": "Efficiency  -  MB1 - qual > 3"
         },
         "output": {
             "file_name": "02_HQFilter_efficiencyVSpos_st1_minqual3"
@@ -1017,7 +1029,7 @@
             "quality >= 6": {"plot_name": "HQFilter_ClusterEfficiencyVSpos_st1_minqual6" }
         },
         "plot": {
-            "legend_title": "Efficiency  -  MB1"
+            "legend_title": "Efficiency  -  MB1 - qual > 6"
         },
         "output": {
             "file_name": "02_HQFilter_efficiencyVSpos_st1_minqual6"
@@ -1030,7 +1042,7 @@
             "all qualities": {"plot_name": "HQFilter_ClusterEfficiencyVSpos_st2_minqual0" }
         },
         "plot": {
-            "legend_title": "Efficiency  -  MB2"
+            "legend_title": "Efficiency  -  MB2 - qual > 0"
         },
         "output": {
             "file_name": "02_HQFilter_efficiencyVSpos_st2_minqual0"
@@ -1043,7 +1055,7 @@
             "quality >= 3": {"plot_name": "HQFilter_ClusterEfficiencyVSpos_st2_minqual3" }
         },
         "plot": {
-            "legend_title": "Efficiency  -  MB2"
+            "legend_title": "Efficiency  -  MB2 - qual > 3"
         },
         "output": {
             "file_name": "02_HQFilter_efficiencyVSpos_st2_minqual3"
@@ -1056,7 +1068,7 @@
             "quality >= 6": {"plot_name": "HQFilter_ClusterEfficiencyVSpos_st2_minqual6" }
         },
         "plot": {
-            "legend_title": "Efficiency  -  MB2"
+            "legend_title": "Efficiency  -  MB2 - qual > 6"
         },
         "output": {
             "file_name": "02_HQFilter_efficiencyVSpos_st2_minqual6"
@@ -1069,7 +1081,7 @@
             "all qualities": {"plot_name": "HQFilter_ClusterEfficiencyVSpos_st3_minqual0" }
         },
         "plot": {
-            "legend_title": "Efficiency  -  MB3"
+            "legend_title": "Efficiency  -  MB3 - qual > 0"
         },
         "output": {
             "file_name": "02_HQFilter_efficiencyVSpos_st3_minqual0"
@@ -1082,7 +1094,7 @@
             "quality >= 3": {"plot_name": "HQFilter_ClusterEfficiencyVSpos_st3_minqual3" }
         },
         "plot": {
-            "legend_title": "Efficiency  -  MB3"
+            "legend_title": "Efficiency  -  MB3 - qual > 3"
         },
         "output": {
             "file_name": "02_HQFilter_efficiencyVSpos_st3_minqual3"
@@ -1095,7 +1107,7 @@
             "quality >= 6": {"plot_name": "HQFilter_ClusterEfficiencyVSpos_st3_minqual6" }
         },
         "plot": {
-            "legend_title": "Efficiency  -  MB3"
+            "legend_title": "Efficiency  -  MB3 - qual > 6"
         },
         "output": {
             "file_name": "02_HQFilter_efficiencyVSpos_st3_minqual6"
@@ -1108,7 +1120,7 @@
             "all qualities": {"plot_name": "HQFilter_ClusterEfficiencyVSpos_st4_minqual0" }
         },
         "plot": {
-            "legend_title": "Efficiency  -  MB4"
+            "legend_title": "Efficiency  -  MB4 - qual > 0"
         },
         "output": {
             "file_name": "02_HQFilter_efficiencyVSpos_st4_minqual0"
@@ -1121,7 +1133,7 @@
             "quality >= 3": {"plot_name": "HQFilter_ClusterEfficiencyVSpos_st4_minqual3" }
         },
         "plot": {
-            "legend_title": "Efficiency  -  MB4"
+            "legend_title": "Efficiency  -  MB4 - qual > 3"
         },
         "output": {
             "file_name": "02_HQFilter_efficiencyVSpos_st4_minqual3"
@@ -1134,7 +1146,7 @@
             "quality >= 6": {"plot_name": "HQFilter_ClusterEfficiencyVSpos_st4_minqual6" }
         },
         "plot": {
-            "legend_title": "Efficiency  -  MB4"
+            "legend_title": "Efficiency  -  MB4 - qual > 6"
         },
         "output": {
             "file_name": "02_HQFilter_efficiencyVSpos_st4_minqual6"
