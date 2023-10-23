@@ -15,6 +15,7 @@
 
 #include <cassert>
 #include <iostream>
+#include <filesystem> 
 
 #include "include/Geometry.h"
 
@@ -151,6 +152,8 @@ void Analyser::DefinePlot() {
   m_plots["PtGoodMu"] = new TH1D("PtGoodMu", "PtGoodMu; pT (GeV); Entries", 200, .5, 100.5);
   m_plots["PhiGoodMu"] = new TH1D("PhiGoodMu", "PhiGoodMu; phi(rad); Entries", 50, -TMath::Pi(), TMath::Pi());
   m_plots["EtaGoodMu"] = new TH1D("EtaGoodMu", "EtaGoodMu; eta; Entries", 50, -1, 1);
+  //prefiring
+  m_plots["FirstTpBX"] = new TH1I("FirstTpBX", "FirstTpBX", 10, CORRECT_BX-5, CORRECT_BX+5);
 
   // background
   for (int sector = 1; sector < 13; ++sector) {
@@ -223,6 +226,7 @@ void Analyser::DefinePlot() {
     m_counters[Form("%s_nClusters", type)] = 0;
     m_counters[Form("%s_nTPs", type)] = 0;
     m_counters[Form("%s_nBackgroundClusters", type)] = 0;
+    m_counters[Form("%s_nBackgroundClusters2", type)] = 0;
 
     for (const auto st : GEOM.STATIONS) {
       m_plots[Form("%s_x_LowBestQ_st%d", type, st)] = new TH1D(
@@ -442,7 +446,7 @@ void Analyser::ClusterAnalysis(const std::vector<Cluster> &clusters, const std::
 
     // ########## Study background #############
 
-    if (!cluster.muMatched && cluster.foundTP){
+/*    if (!cluster.muMatched && cluster.foundTP){
       ++m_counters[Form("%s_nBackgroundClusters", type)];
       double xLoc = cluster.bestTP().xLoc;
       for (auto qual : QUAL_PLOT){
@@ -464,7 +468,7 @@ void Analyser::ClusterAnalysis(const std::vector<Cluster> &clusters, const std::
         
         m_plots[Form("%s_BackgroundResidual_st%d", type, st)]->Fill( xLoc - otherCluster.bestTP().xLoc );
       }
-    }
+    }*/
 
     // ########## Study segment matching #############
     m_effs[Form("%s_Eff_SegMatch_st%d", type, st)]->Fill(cluster.foundSeg, sec, wh);
@@ -508,12 +512,12 @@ void Analyser::BackgroundAnalysis(const std::vector<Cluster> &clusters, const st
     ++m_counters[Form("%s_nBackgroundClusters2", type)];
 
     m_plots[Form("%s_Q_Bkg", type)]->Fill(cluster.bestTPQuality());
-    for (auto const &itTp : cluster.itGhosts()){
+    /*for (auto const &itTp : cluster.itGhosts()){
       m_plots[Form("%s_Q_Bkg", type)]->Fill(itTp.quality);
     }
     for (auto const &ootTp : cluster.ootGhosts()){
       m_plots[Form("%s_Q_Bkg", type)]->Fill(ootTp.quality);
-    }
+    }*/
     if (cluster.bestTPQuality()==8) m_plots[Form("%s_q8position_st%d", type, st)]->Fill(xLoc);
     m_plots[Form("%s_N_bkg", type)] ->Fill(cluster.tpClusterSize());
 
@@ -567,8 +571,10 @@ std::vector<Cluster> MissingClusters(std::vector<Cluster> FirstCLVector, std::ve
 void Analyser::Loop() {
   Geometry geom{};
   const char *out  = "results/outputFile_";
-  std::string outputFileName=out+AnalyserBase::filename;
-  TFile outputFile(outputFileName); //("results/outputFile_DoubleMuon_FlatPt-1To100_noPU_noRPC.root", "RECREATE");
+  const auto Ntuplename = std::filesystem::path{ AnalyserBase::filename }.filename().string(); 
+  std::string outputFileName=out+Ntuplename;
+  std::cout << "Writing output in " << outputFileName << std::endl;
+  TFile outputFile(outputFileName.c_str(), "RECREATE");  // (outputFileName.c_str(), "RECREATE");
   outputFile.cd();
 
   DefinePlot();
@@ -589,7 +595,7 @@ void Analyser::Loop() {
     if (entry % 100 == 0) std::cout << "Processing event: " << entry << '\r' << std::flush;
 
     if (gen_pdgId->size() < 1 || gen_pt->at(0) < 5.0) continue;
-    
+
     // ########## CREATE TPs std::vector #############
     std::vector<TriggerPrimitive> tps;
 

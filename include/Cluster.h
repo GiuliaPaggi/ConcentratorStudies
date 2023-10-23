@@ -6,6 +6,7 @@
 #include "include/TriggerPrimitive.h"
 
 #include <iostream>
+#include <algorithm>
 
 // classe cluster-> qualità massima al bx giusto, n di ghost al bx giusto, n
 // ghost al bx sbagliato, accedere a tutti (vettore indici di trigger primitive)

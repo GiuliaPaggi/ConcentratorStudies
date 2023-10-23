@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <iostream>
+#include <cmath>
 
 constexpr int RIGHT_BX{20};
 
@@ -63,7 +64,7 @@ Cluster::Cluster(std::vector<TriggerPrimitive> &tps, std::vector<Segment> &segs,
     toggleCluster(tps, _bestTP);
     tps_in_chamber.erase(bestTPIt);
     foundTP = true;
-    clusterX = _bestTP.xLoc
+    clusterX = _bestTP.xLoc;
   }
 
   if (tps_in_chamber.size() > 0) {
