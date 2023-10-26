@@ -3,14 +3,12 @@
 
 #include <vector>
 
-#include "include/Geometry.h"
-
-class Digi {
+struct Digi {
  public:
   Digi() = delete;
-  Digi(const Geometry &geom, int i, int wh, int sec, int st, int sl, int la, int w, double t);
+  Digi(int i, int wh, int sec, int st, int sl, int la, int w, double t);
 
-  std::vector<Digi> findCluster(std::vector<Digi> digis, double cut) const;
+  std::vector<Digi> findCluster(const std::vector<Digi> & digis, double cut) const;
 
   std::size_t index{9999};
   int wheel{-1};

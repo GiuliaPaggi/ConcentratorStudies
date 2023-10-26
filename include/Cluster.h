@@ -5,6 +5,9 @@
 #include "include/Segment.h"
 #include "include/TriggerPrimitive.h"
 
+#include <iostream>
+#include <algorithm>
+
 // classe cluster-> qualità massima al bx giusto, n di ghost al bx giusto, n
 // ghost al bx sbagliato, accedere a tutti (vettore indici di trigger primitive)
 // parti da prompt
@@ -15,7 +18,7 @@ class Cluster {
   int station{-1};  // CB can they be const?
 
   bool muMatched{false};
-  std::array<int, 2> muMatchedIndex;  
+  std::array<int, 2> muMatchedIndex;  // 0 index of mu, 1 index of nmatch
 
   bool foundTP{false};  // CB what do we need out of this?
   bool foundSeg{false};
@@ -28,6 +31,8 @@ class Cluster {
   TriggerPrimitive _bestTP{};
   std::vector<TriggerPrimitive> _ootGhosts;
   std::vector<TriggerPrimitive> _itGhosts;
+  TriggerPrimitive _earliestTP{};
+  TriggerPrimitive _earliestTP_t0{};
 
   std::vector<Digi> _digiCluster;
   std::vector<Digi> _matchedDigis;
@@ -40,7 +45,7 @@ class Cluster {
   Cluster(std::vector<TriggerPrimitive>& tps, std::vector<Segment>& seg, std::vector<Digi>& digis, double xCut,
           double digiCut, int wh, int sec, int st);
 
-  bool matchMu(int muWh, int muStat, int muSec, double muXedge, double muYedge, double muX, int muIndex, int nmu);
+  bool matchMu(int muWh, int muStat, int muSec, double muXedge, double muYedge, double muX, int muIndex, int nmu, double xCut);
 
   /// Size of TP clusters
   int itSize() const;
@@ -64,6 +69,10 @@ class Cluster {
   int bestTPQuality() const;
   const TriggerPrimitive& bestTP() const;
 
+  //earliest TP in cluster
+  double earliestTPBX() const;
+  double earliestTPt0() const;
+
   /// Size and vector of segment cluster
   int segClusterSize() const;
   const std::vector<Segment>& segCluster() const;
@@ -79,6 +88,9 @@ class Cluster {
 
   /// Vector of digis in the cluster
   const std::vector<Digi>& matchedDigi() const;
+
+  //Index of matched Muon
+  int MuIndex() const;
 };
 
 inline bool operator==(Cluster const& lCL, Cluster const& rCL) {
@@ -92,7 +104,8 @@ inline std::ostream& operator<<(std::ostream& os, Cluster const cluster) {
   os << "Cluster in wh " << cluster.wheel << " stat " << cluster.station << " sector " << cluster.sector
      << " has BestTP of quality " << cluster.bestTPQuality() << " in xLoc " << cluster.bestTP().xLoc << " at BX "
      << cluster.bestTP().BX << ", has " << cluster.segClusterSize() << " segments "
-     << " in xLoc " << cluster.bestSeg().xLoc << " and has " << cluster.nDigi() << " digis " << std::endl;
+     << " in xLoc " << cluster.bestSeg().xLoc << " and has " << cluster.nDigi() << " digis " 
+     << " is matched with muon " << cluster.muMatched << std::endl;
   return os;
 }
 

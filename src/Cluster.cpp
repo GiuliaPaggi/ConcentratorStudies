@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <iostream>
+#include <cmath>
 
 constexpr int RIGHT_BX{20};
 
@@ -32,6 +33,16 @@ Cluster::Cluster(std::vector<TriggerPrimitive> &tps, std::vector<Segment> &segs,
            (tp1.BX == RIGHT_BX && tp2.BX == RIGHT_BX && tp1.quality < tp2.quality);
   };
 
+  auto isEarlier = [](TriggerPrimitive const &tp1, TriggerPrimitive const &tp2) { 
+  if (tp1.BX == tp2.BX) return tp1.quality > tp2.quality;    
+  else return tp1.BX < tp2.BX; 
+  };
+
+  auto isEarliert0 = [](TriggerPrimitive const &tp1, TriggerPrimitive const &tp2) { 
+  if (tp1.t0 == tp2.t0) return tp1.quality > tp2.quality;    
+  else return tp1.t0 < tp2.t0; 
+  };
+
   auto compareSegs = [](Segment &s1, Segment &s2) { return s1.nPhiHits < s2.nPhiHits; };
 
   auto toggleCluster = [](auto &collection, const auto &target) {
@@ -42,6 +53,7 @@ Cluster::Cluster(std::vector<TriggerPrimitive> &tps, std::vector<Segment> &segs,
       }
     }
   };
+
 
   // ########## TPs cluster #############
   std::vector<TriggerPrimitive> tps_in_chamber;
@@ -57,17 +69,7 @@ Cluster::Cluster(std::vector<TriggerPrimitive> &tps, std::vector<Segment> &segs,
     toggleCluster(tps, _bestTP);
     tps_in_chamber.erase(bestTPIt);
     foundTP = true;
-
-    if (_bestTP.BX != RIGHT_BX && tps_in_chamber.size() > 1) {
-      std::cout << " la best TP di qualità " << _bestTP.quality << " non è in tempo, è al BX " << _bestTP.BX
-                << " nel resto del cluster ho " << std::endl;
-      for (auto const &T : tps_in_chamber) {
-        if (T.index != _bestTP.index) {
-          std::cout << " TP at BX " << T.BX << " and quality " << T.quality << std::endl;
-        }
-      }
-      std::cout << "------------------------------------------------------------------------" << std::endl;
-    }
+    clusterX = _bestTP.xLoc;
   }
 
   if (tps_in_chamber.size() > 0) {
@@ -95,6 +97,21 @@ Cluster::Cluster(std::vector<TriggerPrimitive> &tps, std::vector<Segment> &segs,
     cluster.erase(first_oot, cluster.end());
 
     _itGhosts = std::move(cluster);
+  }
+  
+  // find earliest TP in cluster for timing studies 
+  if (foundTP) {
+    auto earliestOOt{std::min_element(_ootGhosts.begin(), _ootGhosts.end(), isEarlier)};
+    if (earliestOOt != _ootGhosts.end() && earliestOOt->BX < _bestTP.BX ) _earliestTP = *earliestOOt;
+    else _earliestTP = _bestTP;
+
+    // using t0
+    auto earliestOOt_t0{std::min_element(_ootGhosts.begin(), _ootGhosts.end(), isEarliert0)};
+    if (earliestOOt_t0 != _ootGhosts.end() && earliestOOt_t0->BX < _bestTP.BX ) _earliestTP_t0 = *earliestOOt_t0;
+    else _earliestTP_t0 = _bestTP;
+
+    //if (!(_earliestTP == _earliestTP_t0)) std::cout << "non sono uguali" << std::endl;
+    
   }
 
   // ########## Segments cluster #############
@@ -143,8 +160,8 @@ Cluster::Cluster(std::vector<TriggerPrimitive> &tps, std::vector<Segment> &segs,
     }
 
     std::copy_if(first_sl3, digis_in_chamber.end(), std::back_inserter(_digiCluster), inRangeDigi);
-
-    if (_digiCluster.size() >= 10 + (10 * sl1Cluster)) {
+    int digiClusterSize = _digiCluster.size();
+    if ( digiClusterSize >= (10 + (10 * sl1Cluster))) {
       sl3Cluster = true;
     } else {
       _digiCluster.erase(_digiCluster.begin() + (10 * sl1Cluster), _digiCluster.end());
@@ -194,6 +211,9 @@ int Cluster::bestTPIndex() const { return _bestTP.index; };
 int Cluster::bestTPQuality() const { return _bestTP.quality; };
 const TriggerPrimitive &Cluster::bestTP() const { return _bestTP; };
 
+double Cluster::earliestTPBX() const { return _earliestTP.BX; };
+double Cluster::earliestTPt0() const { return _earliestTP_t0.t0; };
+
 int Cluster::itCountIf(std::function<bool(TriggerPrimitive const &)> f) const {
   return std::count_if(_itGhosts.begin(), _itGhosts.end(), f);
 }
@@ -203,20 +223,23 @@ int Cluster::ootCountIf(std::function<bool(TriggerPrimitive const &)> f) const {
 }
 
 bool Cluster::matchMu(int muWh, int muStat, int muSec, double muXedge, double muYedge, double muX, int muIndex,
-                      int iMu) {
+                      int iMu, double xCut) {
   if (!muMatched && muWh == wheel && muStat == station && muSec == sector && muXedge < -5 && muYedge < -5) {
-    // if the extrapolated segment is within 10 cm from _bestTP
-    if (foundSeg && std::abs(_bestSeg.xLoc - muX) < 10) {
+    // if the extrapolated segment is within xCut from _bestTP
+    if (foundSeg && std::abs(_bestSeg.xLoc - muX) < xCut) {
       muMatchedIndex[0] = iMu;
       muMatchedIndex[1] = muIndex;
       muMatched = true;
       return true;
-    } else if (!foundSeg && std::abs(_bestTP.xLoc - muX) < 10) {
+    } else if (!foundSeg && foundTP && std::abs(_bestTP.xLoc - muX) < xCut) {
       muMatchedIndex[0] = iMu;
       muMatchedIndex[1] = muIndex;
       muMatched = true;
       return true;
     }
+    /*else {
+      std::cout << "Trying to match " << *this  << " with muon in wh " << muWh << " station " << muStat << " sector " << muSec << " in xLoc " << muX << std::endl;
+    }*/
   }
   return false;
 }
@@ -241,4 +264,9 @@ int Cluster::digiSL() const {
     return 3;
   else
     return 0;
+};
+
+int Cluster::MuIndex() const {
+  if (muMatched) return muMatchedIndex[0];
+  else return -1;
 };
