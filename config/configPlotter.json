@@ -1,0 +1,3373 @@
+{
+    "Prefiring": {
+        "base" : "base",
+        "inputs": {
+            "PreFiring": { "plot_name": "FirstTpBX"}
+        },
+        "plot": {
+            "x": [ 15.0, 25.0, "" ],
+            "y": [ 0.0, 650000.0, "" ],
+            "legend_title": "Earliest TP BX",
+            "legend_range": [ 0.69, 0.67, 0.85, 0.80 ]
+            
+        },
+        "output": {
+            "directory": "plots/Timing/",
+            "file_name": "Prefiring"
+        }
+    }, 
+
+    "PreFilter_efficiencyVSpT_st1": {
+        "base" : "base_pt",
+        "inputs": {
+            "all qualities": { "plot_name": "PreFilter_ClusterEfficiencyVSpT_st1_minqual0"},
+            "quality >= 3": { "plot_name": "PreFilter_ClusterEfficiencyVSpT_st1_minqual3"},
+            "quality >= 6": { "plot_name": "PreFilter_ClusterEfficiencyVSpT_st1_minqual6" }
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB1"
+        },
+        "output": {
+            "file_name": "01_PreFilter_efficiencyVSpT_st1"
+        }
+    }, 
+
+    "PreFilter_efficiencyVSpT_st2": {
+        "base" : "base_pt",
+        "inputs": {
+            "all qualities": { "plot_name": "PreFilter_ClusterEfficiencyVSpT_st2_minqual0"},
+            "quality >= 3": { "plot_name": "PreFilter_ClusterEfficiencyVSpT_st2_minqual3"},
+            "quality >= 6": { "plot_name": "PreFilter_ClusterEfficiencyVSpT_st2_minqual6" }
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB2"
+        },
+        "output": {
+            "file_name": "01_PreFilter_efficiencyVSpT_st2"
+        }
+    }, 
+
+    "PreFilter_efficiencyVSpT_st3": {
+        "base" : "base_pt",
+        "inputs": {
+            "all qualities": { "plot_name": "PreFilter_ClusterEfficiencyVSpT_st3_minqual0"},
+            "quality >= 3": { "plot_name": "PreFilter_ClusterEfficiencyVSpT_st3_minqual3"},
+            "quality >= 6": { "plot_name": "PreFilter_ClusterEfficiencyVSpT_st3_minqual6" }
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB3"
+        },
+        "output": {
+            "file_name": "01_PreFilter_efficiencyVSpT_st3"
+        }
+    }, 
+
+    "PreFilter_efficiencyVSpT_st4": {
+        "base" : "base_pt",
+        "inputs": {
+            "all qualities": { "plot_name": "PreFilter_ClusterEfficiencyVSpT_st4_minqual0"},
+            "quality >= 3": { "plot_name": "PreFilter_ClusterEfficiencyVSpT_st4_minqual3"},
+            "quality >= 6": { "plot_name": "PreFilter_ClusterEfficiencyVSpT_st4_minqual6" }
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB4"
+        },
+        "output": {
+            "file_name": "01_PreFilter_efficiencyVSpT_st4"
+        }
+    },
+
+    "PreFilter_efficiencyVSpos_st1_minqual0": {
+        "base": "base_pos",
+        "inputs": {
+            "all qualities": {"plot_name": "PreFilter_ClusterEfficiencyVSpos_st1_minqual0" }
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB1 - qual > 0"
+        },
+        "output": {
+            "file_name": "02_PreFilter_efficiencyVSpos_st1_minqual0"
+        }
+    }, 
+
+    "PreFilter_efficiencyVSpos_st1_minqual3": {
+        "base": "base_pos",
+        "inputs": {
+            "quality >= 3": {"plot_name": "PreFilter_ClusterEfficiencyVSpos_st1_minqual3" }
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB1 - qual > 3"
+        },
+        "output": {
+            "file_name": "02_PreFilter_efficiencyVSpos_st1_minqual3"
+        }
+    }, 
+
+    "PreFilter_efficiencyVSpos_st1_minqual6": {
+        "base": "base_pos",
+        "inputs": {
+            "quality >= 6": {"plot_name": "PreFilter_ClusterEfficiencyVSpos_st1_minqual6" }
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB1 - qual > 6"
+        },
+        "output": {
+            "file_name": "02_PreFilter_efficiencyVSpos_st1_minqual6"
+        }
+    }, 
+
+    "PreFilter_efficiencyVSpos_st2_minqual0": {
+        "base": "base_pos",
+        "inputs": {
+            "all qualities": {"plot_name": "PreFilter_ClusterEfficiencyVSpos_st2_minqual0" }
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB2 - qual > 0"
+        },
+        "output": {
+            "file_name": "02_PreFilter_efficiencyVSpos_st2_minqual0"
+        }
+    }, 
+
+    "PreFilter_efficiencyVSpos_st2_minqual3": {
+        "base": "base_pos",
+        "inputs": {
+            "quality >= 3": {"plot_name": "PreFilter_ClusterEfficiencyVSpos_st2_minqual3" }
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB2 - qual > 3"
+        },
+        "output": {
+            "file_name": "02_PreFilter_efficiencyVSpos_st2_minqual3"
+        }
+    }, 
+
+    "PreFilter_efficiencyVSpos_st2_minqual6": {
+        "base": "base_pos",
+        "inputs": {
+            "quality >= 6": {"plot_name": "PreFilter_ClusterEfficiencyVSpos_st2_minqual6" }
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB2 - qual > 6"
+        },
+        "output": {
+            "file_name": "02_PreFilter_efficiencyVSpos_st2_minqual6"
+        }
+    }, 
+
+    "PreFilter_efficiencyVSpos_st3_minqual0": {
+        "base": "base_pos",
+        "inputs": {
+            "all qualities": {"plot_name": "PreFilter_ClusterEfficiencyVSpos_st3_minqual0" }
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB3 - qual > 0"
+        },
+        "output": {
+            "file_name": "02_PreFilter_efficiencyVSpos_st3_minqual0"
+        }
+    }, 
+
+    "PreFilter_efficiencyVSpos_st3_minqual3": {
+        "base": "base_pos",
+        "inputs": {
+            "quality >= 3": {"plot_name": "PreFilter_ClusterEfficiencyVSpos_st3_minqual3" }
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB3 - qual > 3"
+        },
+        "output": {
+            "file_name": "02_PreFilter_efficiencyVSpos_st3_minqual3"
+        }
+    }, 
+
+    "PreFilter_efficiencyVSpos_st3_minqual6": {
+        "base": "base_pos",
+        "inputs": {
+            "quality >= 6": {"plot_name": "PreFilter_ClusterEfficiencyVSpos_st3_minqual6" }
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB3 - qual > 6"
+        },
+        "output": {
+            "file_name": "02_PreFilter_efficiencyVSpos_st3_minqual6"
+        }
+    }, 
+
+    "PreFilter_efficiencyVSpos_st4_minqual0": {
+        "base": "base_pos",
+        "inputs": {
+            "all qualities": {"plot_name": "PreFilter_ClusterEfficiencyVSpos_st4_minqual0" }
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB4 - qual > 0"
+        },
+        "output": {
+            "file_name": "02_PreFilter_efficiencyVSpos_st4_minqual0"
+        }
+    }, 
+
+    "PreFilter_efficiencyVSpos_st4_minqual3": {
+        "base": "base_pos",
+        "inputs": {
+            "quality >= 3": {"plot_name": "PreFilter_ClusterEfficiencyVSpos_st4_minqual3" }
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB4 - qual > 3"
+        },
+        "output": {
+            "file_name": "02_PreFilter_efficiencyVSpos_st4_minqual3"
+        }
+    }, 
+
+    "PreFilter_efficiencyVSpos_st4_minqual6": {
+        "base": "base_pos",
+        "inputs": {
+            "quality >= 6": {"plot_name": "PreFilter_ClusterEfficiencyVSpos_st4_minqual6" }
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB4 - qual > 6"
+        },
+        "output": {
+            "file_name": "02_PreFilter_efficiencyVSpos_st4_minqual6"
+        }
+    }, 
+
+    "PreFilter_efficiencyVSphi_st1": {
+        "base" : "base_phi",
+        "inputs": {
+            "all qualities": {"plot_name": "PreFilter_ClusterEfficiencyVSphi_st1_minqual0"},
+            "quality >= 3": {"plot_name": "PreFilter_ClusterEfficiencyVSphi_st1_minqual3"},
+            "quality >= 6": {"plot_name": "PreFilter_ClusterEfficiencyVSphi_st1_minqual6"}
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB1"
+        },
+        "output": {
+            "file_name": "03_PreFilter_efficiencyVSphi_st1"
+        }
+    }, 
+
+    "PreFilter_efficiencyVSphi_st2": {
+        "base" : "base_phi",
+        "inputs": {
+            "all qualities": {"plot_name": "PreFilter_ClusterEfficiencyVSphi_st2_minqual0"},
+            "quality >= 3": {"plot_name": "PreFilter_ClusterEfficiencyVSphi_st2_minqual3"},
+            "quality >= 6": {"plot_name": "PreFilter_ClusterEfficiencyVSphi_st2_minqual6"}
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB2"
+        },
+        "output": {
+            "file_name": "03_PreFilter_efficiencyVSphi_st2"
+        }
+    }, 
+
+    "PreFilter_efficiencyVSphi_st3": {
+        "base" : "base_phi",
+        "inputs": {
+            "all qualities": {"plot_name": "PreFilter_ClusterEfficiencyVSphi_st3_minqual0"},
+            "quality >= 3": {"plot_name": "PreFilter_ClusterEfficiencyVSphi_st3_minqual3"},
+            "quality >= 6": {"plot_name": "PreFilter_ClusterEfficiencyVSphi_st3_minqual6"}
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB3"
+        },
+        "output": {
+            "file_name": "03_PreFilter_efficiencyVSphi_st3"
+        }
+    }, 
+
+    "PreFilter_efficiencyVSphi_st4": {
+        "base" : "base_phi",
+        "inputs": {
+            "all qualities": {"plot_name": "PreFilter_ClusterEfficiencyVSphi_st4_minqual0"},
+            "quality >= 3": {"plot_name": "PreFilter_ClusterEfficiencyVSphi_st4_minqual3"},
+            "quality >= 6": {"plot_name": "PreFilter_ClusterEfficiencyVSphi_st4_minqual6"}
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB4"
+        },
+        "output": {
+            "file_name": "03_PreFilter_efficiencyVSphi_st4"
+        }
+    }, 
+
+    "PreFilter_efficiencyVSeta_st1": {
+        "base" : "base_eta",
+        "inputs": {
+            "all qualities": { "plot_name": "PreFilter_ClusterEfficiencyVSeta_st1_minqual0" },
+            "quality >= 3": { "plot_name": "PreFilter_ClusterEfficiencyVSeta_st1_minqual3" },
+            "quality >= 6": { "plot_name": "PreFilter_ClusterEfficiencyVSeta_st1_minqual6"}
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB1"
+        },
+        "output": {
+            "file_name": "04_PreFilter_efficiencyVSeta_st1"
+        }
+    },
+
+    "PreFilter_efficiencyVSeta_st2": {
+        "base" : "base_eta",
+        "inputs": {
+            "all qualities": { "plot_name": "PreFilter_ClusterEfficiencyVSeta_st2_minqual0" },
+            "quality >= 3": { "plot_name": "PreFilter_ClusterEfficiencyVSeta_st2_minqual3" },
+            "quality >= 6": { "plot_name": "PreFilter_ClusterEfficiencyVSeta_st2_minqual6"}
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB2"
+        },
+        "output": {
+            "file_name": "04_PreFilter_efficiencyVSeta_st2"
+        }
+    },
+
+    "PreFilter_efficiencyVSeta_st3": {
+        "base" : "base_eta",
+        "inputs": {
+            "all qualities": { "plot_name": "PreFilter_ClusterEfficiencyVSeta_st3_minqual0" },
+            "quality >= 3": { "plot_name": "PreFilter_ClusterEfficiencyVSeta_st3_minqual3" },
+            "quality >= 6": { "plot_name": "PreFilter_ClusterEfficiencyVSeta_st3_minqual6"}
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB3"
+        },
+        "output": {
+            "file_name": "04_PreFilter_efficiencyVSeta_st3"
+        }
+    },
+
+    "PreFilter_efficiencyVSeta_st4": {
+        "base" : "base_eta",
+        "inputs": {
+            "all qualities": { "plot_name": "PreFilter_ClusterEfficiencyVSeta_st4_minqual0" },
+            "quality >= 3": { "plot_name": "PreFilter_ClusterEfficiencyVSeta_st4_minqual3" },
+            "quality >= 6": { "plot_name": "PreFilter_ClusterEfficiencyVSeta_st4_minqual6"}
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB4"
+        },
+        "output": {
+            "file_name": "04_PreFilter_efficiencyVSeta_st4"
+        }
+    },
+
+    "PreFilter_efficiencyVSsegxLoc_st1": {
+        "base" : "base_xLoc",
+        "inputs": {
+            "all qualities": { "plot_name": "PreFilter_ClusterEfficiencyVSsegxLoc_st1_minqual0"},
+            "quality >= 3": {"plot_name": "PreFilter_ClusterEfficiencyVSsegxLoc_st1_minqual3" },
+            "quality >= 6": {"plot_name": "PreFilter_ClusterEfficiencyVSsegxLoc_st1_minqual6"}
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB1"
+        },
+        "output": {
+            "file_name": "05_PreFilter_efficiencyVSsegxLoc_st1"
+        }
+    }, 
+
+    "PreFilter_efficiencyVSsegxLoc_st2": {
+        "base" : "base_xLoc",
+        "inputs": {
+            "all qualities": { "plot_name": "PreFilter_ClusterEfficiencyVSsegxLoc_st2_minqual0"},
+            "quality >= 3": {"plot_name": "PreFilter_ClusterEfficiencyVSsegxLoc_st2_minqual3" },
+            "quality >= 6": {"plot_name": "PreFilter_ClusterEfficiencyVSsegxLoc_st2_minqual6"}
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB2"
+        },
+        "output": {
+            "file_name": "05_PreFilter_efficiencyVSsegxLoc_st2"
+        }
+    }, 
+
+    "PreFilter_efficiencyVSsegxLoc_st3": {
+        "base" : "base_xLoc",
+        "inputs": {
+            "all qualities": { "plot_name": "PreFilter_ClusterEfficiencyVSsegxLoc_st3_minqual0"},
+            "quality >= 3": {"plot_name": "PreFilter_ClusterEfficiencyVSsegxLoc_st3_minqual3" },
+            "quality >= 6": {"plot_name": "PreFilter_ClusterEfficiencyVSsegxLoc_st3_minqual6"}
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB3"
+        },
+        "output": {
+            "file_name": "05_PreFilter_efficiencyVSsegxLoc_st3"
+        }
+    }, 
+
+    "PreFilter_efficiencyVSsegxLoc_st4": {
+        "base" : "base_xLoc",
+        "inputs": {
+            "all qualities": { "plot_name": "PreFilter_ClusterEfficiencyVSsegxLoc_st4_minqual0"},
+            "quality >= 3": {"plot_name": "PreFilter_ClusterEfficiencyVSsegxLoc_st4_minqual3" },
+            "quality >= 6": {"plot_name": "PreFilter_ClusterEfficiencyVSsegxLoc_st4_minqual6"}
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB4"
+        },
+        "output": {
+            "file_name": "05_PreFilter_efficiencyVSsegxLoc_st4"
+        }
+    }, 
+
+    "PreFilter_efficiencyVSsegDirLoc_st1": {
+        "base" : "base_dirLoc",
+        "inputs": {
+            "all qualities": { "plot_name": "PreFilter_ClusterEfficiencyVSsegDirLoc_st1_minqual0" },
+            "quality >= 3": {"plot_name": "PreFilter_ClusterEfficiencyVSsegDirLoc_st1_minqual3"},
+            "quality >= 6": {"plot_name": "PreFilter_ClusterEfficiencyVSsegDirLoc_st1_minqual6"}
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB1"
+        },
+        "output": {
+            "file_name": "06_PreFilter_efficiencyVSsegDirLoc_st1"
+        }
+    }, 
+
+    "PreFilter_efficiencyVSsegDirLoc_st2": {
+        "base" : "base_dirLoc",
+        "inputs": {
+            "all qualities": { "plot_name": "PreFilter_ClusterEfficiencyVSsegDirLoc_st2_minqual0" },
+            "quality >= 3": {"plot_name": "PreFilter_ClusterEfficiencyVSsegDirLoc_st2_minqual3"},
+            "quality >= 6": {"plot_name": "PreFilter_ClusterEfficiencyVSsegDirLoc_st2_minqual6"}
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB2"
+        },
+        "output": {
+            "file_name": "06_PreFilter_efficiencyVSsegDirLoc_st2"
+        }
+    }, 
+
+    "PreFilter_efficiencyVSsegDirLoc_st3": {
+        "base" : "base_dirLoc",
+        "inputs": {
+            "all qualities": { "plot_name": "PreFilter_ClusterEfficiencyVSsegDirLoc_st3_minqual0" },
+            "quality >= 3": {"plot_name": "PreFilter_ClusterEfficiencyVSsegDirLoc_st3_minqual3"},
+            "quality >= 6": {"plot_name": "PreFilter_ClusterEfficiencyVSsegDirLoc_st3_minqual6"}
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB3"
+        },
+        "output": {
+            "file_name": "06_PreFilter_efficiencyVSsegDirLoc_st3"
+        }
+    }, 
+
+    "PreFilter_efficiencyVSsegDirLoc_st4": {
+        "base" : "base_dirLoc",
+        "inputs": {
+            "all qualities": { "plot_name": "PreFilter_ClusterEfficiencyVSsegDirLoc_st4_minqual0" },
+            "quality >= 3": {"plot_name": "PreFilter_ClusterEfficiencyVSsegDirLoc_st4_minqual3"},
+            "quality >= 6": {"plot_name": "PreFilter_ClusterEfficiencyVSsegDirLoc_st4_minqual6"}
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB4"
+        },
+        "output": {
+            "file_name": "06_PreFilter_efficiencyVSsegDirLoc_st4"
+        }
+    }, 
+
+
+
+
+
+    "LQFilter_efficiencyVSpT_st1": {
+        "base" : "base_pt",
+        "inputs": {
+            "all qualities": { "plot_name": "LQFilter_ClusterEfficiencyVSpT_st1_minqual0"},
+            "quality >= 3": {"plot_name": "LQFilter_ClusterEfficiencyVSpT_st1_minqual3"},
+            "quality >= 6": {"plot_name": "LQFilter_ClusterEfficiencyVSpT_st1_minqual6"}
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB1"
+        },
+        "output": {
+            "file_name": "01_LQFilter_efficiencyVSpT_st1"
+        }
+    }, 
+
+    "LQFilter_efficiencyVSpT_st2": {
+        "base" : "base_pt",
+        "inputs": {
+            "all qualities": { "plot_name": "LQFilter_ClusterEfficiencyVSpT_st2_minqual0"},
+            "quality >= 3": {"plot_name": "LQFilter_ClusterEfficiencyVSpT_st2_minqual3"},
+            "quality >= 6": {"plot_name": "LQFilter_ClusterEfficiencyVSpT_st2_minqual6"}
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB2"
+        },
+        "output": {
+            "file_name": "01_LQFilter_efficiencyVSpT_st2"
+        }
+    }, 
+
+    "LQFilter_efficiencyVSpT_st3": {
+        "base" : "base_pt",
+        "inputs": {
+            "all qualities": { "plot_name": "LQFilter_ClusterEfficiencyVSpT_st3_minqual0"},
+            "quality >= 3": {"plot_name": "LQFilter_ClusterEfficiencyVSpT_st3_minqual3"},
+            "quality >= 6": {"plot_name": "LQFilter_ClusterEfficiencyVSpT_st3_minqual6"}
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB3"
+        },
+        "output": {
+            "file_name": "01_LQFilter_efficiencyVSpT_st3"
+        }
+    }, 
+
+    "LQFilter_efficiencyVSpT_st4": {
+        "base" : "base_pt",
+        "inputs": {
+            "all qualities": { "plot_name": "LQFilter_ClusterEfficiencyVSpT_st4_minqual0"},
+            "quality >= 3": {"plot_name": "LQFilter_ClusterEfficiencyVSpT_st4_minqual3"},
+            "quality >= 6": {"plot_name": "LQFilter_ClusterEfficiencyVSpT_st4_minqual6"}
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB4"
+        },
+        "output": {
+            "file_name": "01_LQFilter_efficiencyVSpT_st4"
+        }
+    }, 
+
+    "LQFilter_efficiencyVSpos_st1_minqual0": {
+        "base": "base_pos",
+        "inputs": {
+            "all qualities": {"plot_name": "LQFilter_ClusterEfficiencyVSpos_st1_minqual0" }
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB1 - qual > 0"
+        },
+        "output": {
+            "file_name": "02_LQFilter_efficiencyVSpos_st1_minqual0"
+        }
+    }, 
+
+    "LQFilter_efficiencyVSpos_st1_minqual3": {
+        "base": "base_pos",
+        "inputs": {
+            "quality >= 3": {"plot_name": "LQFilter_ClusterEfficiencyVSpos_st1_minqual3" }
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB1 - qual > 3"
+        },
+        "output": {
+            "file_name": "02_LQFilter_efficiencyVSpos_st1_minqual3"
+        }
+    }, 
+
+    "LQFilter_efficiencyVSpos_st1_minqual6": {
+        "base": "base_pos",
+        "inputs": {
+            "quality >= 6": {"plot_name": "LQFilter_ClusterEfficiencyVSpos_st1_minqual6" }
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB1 - qual > 6"
+        },
+        "output": {
+            "file_name": "02_LQFilter_efficiencyVSpos_st1_minqual6"
+        }
+    }, 
+
+    "LQFilter_efficiencyVSpos_st2_minqual0": {
+        "base": "base_pos",
+        "inputs": {
+            "all qualities": {"plot_name": "LQFilter_ClusterEfficiencyVSpos_st2_minqual0" }
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB2  - qual > 0"
+        },
+        "output": {
+            "file_name": "02_LQFilter_efficiencyVSpos_st2_minqual0"
+        }
+    }, 
+
+    "LQFilter_efficiencyVSpos_st2_minqual3": {
+        "base": "base_pos",
+        "inputs": {
+            "quality >= 3": {"plot_name": "LQFilter_ClusterEfficiencyVSpos_st2_minqual3" }
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB2 - qual > 3"
+        },
+        "output": {
+            "file_name": "02_LQFilter_efficiencyVSpos_st2_minqual3"
+        }
+    }, 
+
+    "LQFilter_efficiencyVSpos_st2_minqual6": {
+        "base": "base_pos",
+        "inputs": {
+            "quality >= 6": {"plot_name": "LQFilter_ClusterEfficiencyVSpos_st2_minqual6" }
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB2 - qual > 6"
+        },
+        "output": {
+            "file_name": "02_LQFilter_efficiencyVSpos_st2_minqual6"
+        }
+    }, 
+
+    "LQFilter_efficiencyVSpos_st3_minqual0": {
+        "base": "base_pos",
+        "inputs": {
+            "all qualities": {"plot_name": "LQFilter_ClusterEfficiencyVSpos_st3_minqual0" }
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB3 - qual > 0"
+        },
+        "output": {
+            "file_name": "02_LQFilter_efficiencyVSpos_st3_minqual0"
+        }
+    }, 
+
+    "LQFilter_efficiencyVSpos_st3_minqual3": {
+        "base": "base_pos",
+        "inputs": {
+            "quality >= 3": {"plot_name": "LQFilter_ClusterEfficiencyVSpos_st3_minqual3" }
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB3 - qual > 3"
+        },
+        "output": {
+            "file_name": "02_LQFilter_efficiencyVSpos_st3_minqual3"
+        }
+    }, 
+
+    "LQFilter_efficiencyVSpos_st3_minqual6": {
+        "base": "base_pos",
+        "inputs": {
+            "quality >= 6": {"plot_name": "LQFilter_ClusterEfficiencyVSpos_st3_minqual6" }
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB3 - qual > 6"
+        },
+        "output": {
+            "file_name": "02_LQFilter_efficiencyVSpos_st3_minqual6"
+        }
+    }, 
+
+    "LQFilter_efficiencyVSpos_st4_minqual0": {
+        "base": "base_pos",
+        "inputs": {
+            "all qualities": {"plot_name": "LQFilter_ClusterEfficiencyVSpos_st4_minqual0" }
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB4 - qual > 0"
+        },
+        "output": {
+            "file_name": "02_LQFilter_efficiencyVSpos_st4_minqual0"
+        }
+    }, 
+
+    "LQFilter_efficiencyVSpos_st4_minqual3": {
+        "base": "base_pos",
+        "inputs": {
+            "quality >= 3": {"plot_name": "LQFilter_ClusterEfficiencyVSpos_st4_minqual3" }
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB4 - qual > 3"
+        },
+        "output": {
+            "file_name": "02_LQFilter_efficiencyVSpos_st4_minqual3"
+        }
+    }, 
+
+    "LQFilter_efficiencyVSpos_st4_minqual6": {
+        "base": "base_pos",
+        "inputs": {
+            "quality >= 6": {"plot_name": "LQFilter_ClusterEfficiencyVSpos_st4_minqual6" }
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB4 - qual > 6"
+        },
+        "output": {
+            "file_name": "02_LQFilter_efficiencyVSpos_st4_minqual6"
+        }
+    }, 
+
+    "LQFilter_efficiencyVSphi_st1": {
+        "base" : "base_phi",
+        "inputs": {
+            "all qualities": {"plot_name": "LQFilter_ClusterEfficiencyVSphi_st1_minqual0"},
+            "quality >= 3": {"plot_name": "LQFilter_ClusterEfficiencyVSphi_st1_minqual3"},
+            "quality >= 6": {"plot_name": "LQFilter_ClusterEfficiencyVSphi_st1_minqual6"}
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB1"
+        },
+        "output": {
+            "file_name": "03_LQFilter_efficiencyVSphi_st1"
+        }
+    }, 
+
+    "LQFilter_efficiencyVSphi_st2": {
+        "base" : "base_phi",
+        "inputs": {
+            "all qualities": {"plot_name": "LQFilter_ClusterEfficiencyVSphi_st2_minqual0"},
+            "quality >= 3": {"plot_name": "LQFilter_ClusterEfficiencyVSphi_st2_minqual3"},
+            "quality >= 6": {"plot_name": "LQFilter_ClusterEfficiencyVSphi_st2_minqual6"}
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB2"
+        },
+        "output": {
+            "file_name": "03_LQFilter_efficiencyVSphi_st2"
+        }
+    }, 
+
+    "LQFilter_efficiencyVSphi_st3": {
+        "base" : "base_phi",
+        "inputs": {
+            "all qualities": {"plot_name": "LQFilter_ClusterEfficiencyVSphi_st3_minqual0"},
+            "quality >= 3": {"plot_name": "LQFilter_ClusterEfficiencyVSphi_st3_minqual3"},
+            "quality >= 6": {"plot_name": "LQFilter_ClusterEfficiencyVSphi_st3_minqual6"}
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB3"
+        },
+        "output": {
+            "file_name": "03_LQFilter_efficiencyVSphi_st3"
+        }
+    }, 
+
+    "LQFilter_efficiencyVSphi_st4": {
+        "base" : "base_phi",
+        "inputs": {
+            "all qualities": {"plot_name": "LQFilter_ClusterEfficiencyVSphi_st4_minqual0"},
+            "quality >= 3": {"plot_name": "LQFilter_ClusterEfficiencyVSphi_st4_minqual3"},
+            "quality >= 6": {"plot_name": "LQFilter_ClusterEfficiencyVSphi_st4_minqual6"}
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB4"
+        },
+        "output": {
+            "file_name": "03_LQFilter_efficiencyVSphi_st4"
+        }
+    }, 
+
+    "LQFilter_efficiencyVSeta_st1": {
+        "base" : "base_eta",
+        "inputs": {
+            "all qualities": { "plot_name": "LQFilter_ClusterEfficiencyVSeta_st1_minqual0" },
+            "quality >= 3": { "plot_name": "LQFilter_ClusterEfficiencyVSeta_st1_minqual3" },
+            "quality >= 6": { "plot_name": "LQFilter_ClusterEfficiencyVSeta_st1_minqual6"}
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB1"
+        },
+        "output": {
+            "file_name": "04_LQFilter_efficiencyVSeta_st1"
+        }
+    },
+
+    "LQFilter_efficiencyVSeta_st2": {
+        "base" : "base_eta",
+        "inputs": {
+            "all qualities": { "plot_name": "LQFilter_ClusterEfficiencyVSeta_st2_minqual0" },
+            "quality >= 3": { "plot_name": "LQFilter_ClusterEfficiencyVSeta_st2_minqual3" },
+            "quality >= 6": { "plot_name": "LQFilter_ClusterEfficiencyVSeta_st2_minqual6"}
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB2"
+        },
+        "output": {
+            "file_name": "04_LQFilter_efficiencyVSeta_st2"
+        }
+    },
+
+    "LQFilter_efficiencyVSeta_st3": {
+        "base" : "base_eta",
+        "inputs": {
+            "all qualities": { "plot_name": "LQFilter_ClusterEfficiencyVSeta_st3_minqual0" },
+            "quality >= 3": { "plot_name": "LQFilter_ClusterEfficiencyVSeta_st3_minqual3" },
+            "quality >= 6": { "plot_name": "LQFilter_ClusterEfficiencyVSeta_st3_minqual6"}
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB3"
+        },
+        "output": {
+            "file_name": "04_LQFilter_efficiencyVSeta_st3"
+        }
+    },
+
+    "LQFilter_efficiencyVSeta_st4": {
+        "base" : "base_eta",
+        "inputs": {
+            "all qualities": { "plot_name": "LQFilter_ClusterEfficiencyVSeta_st4_minqual0" },
+            "quality >= 3": { "plot_name": "LQFilter_ClusterEfficiencyVSeta_st4_minqual3" },
+            "quality >= 6": { "plot_name": "LQFilter_ClusterEfficiencyVSeta_st4_minqual6"}
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB4"
+        },
+        "output": {
+            "file_name": "04_LQFilter_efficiencyVSeta_st4"
+        }
+    },
+
+    "LQFilter_efficiencyVSsegxLoc_st1": {
+        "base" : "base_xLoc",
+        "inputs": {
+            "all qualities": { "plot_name": "LQFilter_ClusterEfficiencyVSsegxLoc_st1_minqual0"},
+            "quality >= 3": {"plot_name": "LQFilter_ClusterEfficiencyVSsegxLoc_st1_minqual3" },
+            "quality >= 6": {"plot_name": "LQFilter_ClusterEfficiencyVSsegxLoc_st1_minqual6"}
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB1"
+        },
+        "output": {
+            "file_name": "05_LQFilter_efficiencyVSsegxLoc_st1"
+        }
+    }, 
+
+    "LQFilter_efficiencyVSsegxLoc_st2": {
+        "base" : "base_xLoc",
+        "inputs": {
+            "all qualities": { "plot_name": "LQFilter_ClusterEfficiencyVSsegxLoc_st2_minqual0"},
+            "quality >= 3": {"plot_name": "LQFilter_ClusterEfficiencyVSsegxLoc_st2_minqual3" },
+            "quality >= 6": {"plot_name": "LQFilter_ClusterEfficiencyVSsegxLoc_st2_minqual6"}
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB2"
+        },
+        "output": {
+            "file_name": "05_LQFilter_efficiencyVSsegxLoc_st2"
+        }
+    }, 
+
+    "LQFilter_efficiencyVSsegxLoc_st3": {
+        "base" : "base_xLoc",
+        "inputs": {
+            "all qualities": { "plot_name": "LQFilter_ClusterEfficiencyVSsegxLoc_st3_minqual0"},
+            "quality >= 3": {"plot_name": "LQFilter_ClusterEfficiencyVSsegxLoc_st3_minqual3" },
+            "quality >= 6": {"plot_name": "LQFilter_ClusterEfficiencyVSsegxLoc_st3_minqual6"}
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB3"
+        },
+        "output": {
+            "file_name": "05_LQFilter_efficiencyVSsegxLoc_st3"
+        }
+    }, 
+
+    "LQFilter_efficiencyVSsegxLoc_st4": {
+        "base" : "base_xLoc",
+        "inputs": {
+            "all qualities": { "plot_name": "LQFilter_ClusterEfficiencyVSsegxLoc_st4_minqual0"},
+            "quality >= 3": {"plot_name": "LQFilter_ClusterEfficiencyVSsegxLoc_st4_minqual3" },
+            "quality >= 6": {"plot_name": "LQFilter_ClusterEfficiencyVSsegxLoc_st4_minqual6"}
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB4"
+        },
+        "output": {
+            "file_name": "05_LQFilter_efficiencyVSsegxLoc_st4"
+        }
+    }, 
+
+    "LQFilter_efficiencyVSsegDirLoc_st1": {
+        "base" : "base_dirLoc",
+        "inputs": {
+            "all qualities": { "plot_name": "LQFilter_ClusterEfficiencyVSsegDirLoc_st1_minqual0" },
+            "quality >= 3": {"plot_name": "LQFilter_ClusterEfficiencyVSsegDirLoc_st1_minqual3"},
+            "quality >= 6": {"plot_name": "LQFilter_ClusterEfficiencyVSsegDirLoc_st1_minqual6"}
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB1"
+        },
+        "output": {
+            "file_name": "06_LQFilter_efficiencyVSsegDirLoc_st1"
+        }
+    }, 
+
+    "LQFilter_efficiencyVSsegDirLoc_st2": {
+        "base" : "base_dirLoc",
+        "inputs": {
+            "all qualities": { "plot_name": "LQFilter_ClusterEfficiencyVSsegDirLoc_st2_minqual0" },
+            "quality >= 3": {"plot_name": "LQFilter_ClusterEfficiencyVSsegDirLoc_st2_minqual3"},
+            "quality >= 6": {"plot_name": "LQFilter_ClusterEfficiencyVSsegDirLoc_st2_minqual6"}
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB2"
+        },
+        "output": {
+            "file_name": "06_LQFilter_efficiencyVSsegDirLoc_st2"
+        }
+    }, 
+
+    "LQFilter_efficiencyVSsegDirLoc_st3": {
+        "base" : "base_dirLoc",
+        "inputs": {
+            "all qualities": { "plot_name": "LQFilter_ClusterEfficiencyVSsegDirLoc_st3_minqual0" },
+            "quality >= 3": {"plot_name": "LQFilter_ClusterEfficiencyVSsegDirLoc_st3_minqual3"},
+            "quality >= 6": {"plot_name": "LQFilter_ClusterEfficiencyVSsegDirLoc_st3_minqual6"}
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB3"
+        },
+        "output": {
+            "file_name": "06_LQFilter_efficiencyVSsegDirLoc_st3"
+        }
+    }, 
+
+    "LQFilter_efficiencyVSsegDirLoc_st4": {
+        "base" : "base_dirLoc",
+        "inputs": {
+            "all qualities": { "plot_name": "LQFilter_ClusterEfficiencyVSsegDirLoc_st4_minqual0" },
+            "quality >= 3": {"plot_name": "LQFilter_ClusterEfficiencyVSsegDirLoc_st4_minqual3"},
+            "quality >= 6": {"plot_name": "LQFilter_ClusterEfficiencyVSsegDirLoc_st4_minqual6"}
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB4"
+        },
+        "output": {
+            "file_name": "06_LQFilter_efficiencyVSsegDirLoc_st4"
+        }
+    }, 
+
+
+
+
+
+    "HQFilter_efficiencyVSpT_st1": {
+        "base" : "base_pt",
+        "inputs": {
+            "all qualities": { "plot_name": "HQFilter_ClusterEfficiencyVSpT_st1_minqual0"},
+            "quality >= 3": {"plot_name": "HQFilter_ClusterEfficiencyVSpT_st1_minqual3"},
+            "quality >= 6": {"plot_name": "HQFilter_ClusterEfficiencyVSpT_st1_minqual6"}
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB1"
+        },
+        "output": {
+            "file_name": "01_HQFilter_efficiencyVSpT_st1"
+        }
+    }, 
+
+    "HQFilter_efficiencyVSpT_st2": {
+        "base" : "base_pt",
+        "inputs": {
+            "all qualities": { "plot_name": "HQFilter_ClusterEfficiencyVSpT_st2_minqual0"},
+            "quality >= 3": {"plot_name": "HQFilter_ClusterEfficiencyVSpT_st2_minqual3"},
+            "quality >= 6": {"plot_name": "HQFilter_ClusterEfficiencyVSpT_st2_minqual6"}
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB2"
+        },
+        "output": {
+            "file_name": "01_HQFilter_efficiencyVSpT_st2"
+        }
+    }, 
+
+    "HQFilter_efficiencyVSpT_st3": {
+        "base" : "base_pt",
+        "inputs": {
+            "all qualities": { "plot_name": "HQFilter_ClusterEfficiencyVSpT_st3_minqual0"},
+            "quality >= 3": {"plot_name": "HQFilter_ClusterEfficiencyVSpT_st3_minqual3"},
+            "quality >= 6": {"plot_name": "HQFilter_ClusterEfficiencyVSpT_st3_minqual6"}
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB3"
+        },
+        "output": {
+            "file_name": "01_HQFilter_efficiencyVSpT_st3"
+        }
+    }, 
+
+    "HQFilter_efficiencyVSpT_st4": {
+        "base" : "base_pt",
+        "inputs": {
+            "all qualities": { "plot_name": "HQFilter_ClusterEfficiencyVSpT_st4_minqual0"},
+            "quality >= 3": {"plot_name": "HQFilter_ClusterEfficiencyVSpT_st4_minqual3"},
+            "quality >= 6": {"plot_name": "HQFilter_ClusterEfficiencyVSpT_st4_minqual6"}
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB4"
+        },
+        "output": {
+            "file_name": "01_HQFilter_efficiencyVSpT_st4"
+        }
+    }, 
+
+    "HQFilter_efficiencyVSpos_st1_minqual0": {
+        "base": "base_pos",
+        "inputs": {
+            "all qualities": {"plot_name": "HQFilter_ClusterEfficiencyVSpos_st1_minqual0" }
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB1 - qual > 0"
+        },
+        "output": {
+            "file_name": "02_HQFilter_efficiencyVSpos_st1_minqual0"
+        }
+    }, 
+
+    "HQFilter_efficiencyVSpos_st1_minqual3": {
+        "base": "base_pos",
+        "inputs": {
+            "quality >= 3": {"plot_name": "HQFilter_ClusterEfficiencyVSpos_st1_minqual3" }
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB1 - qual > 3"
+        },
+        "output": {
+            "file_name": "02_HQFilter_efficiencyVSpos_st1_minqual3"
+        }
+    }, 
+
+    "HQFilter_efficiencyVSpos_st1_minqual6": {
+        "base": "base_pos",
+        "inputs": {
+            "quality >= 6": {"plot_name": "HQFilter_ClusterEfficiencyVSpos_st1_minqual6" }
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB1 - qual > 6"
+        },
+        "output": {
+            "file_name": "02_HQFilter_efficiencyVSpos_st1_minqual6"
+        }
+    }, 
+
+    "HQFilter_efficiencyVSpos_st2_minqual0": {
+        "base": "base_pos",
+        "inputs": {
+            "all qualities": {"plot_name": "HQFilter_ClusterEfficiencyVSpos_st2_minqual0" }
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB2 - qual > 0"
+        },
+        "output": {
+            "file_name": "02_HQFilter_efficiencyVSpos_st2_minqual0"
+        }
+    }, 
+
+    "HQFilter_efficiencyVSpos_st2_minqual3": {
+        "base": "base_pos",
+        "inputs": {
+            "quality >= 3": {"plot_name": "HQFilter_ClusterEfficiencyVSpos_st2_minqual3" }
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB2 - qual > 3"
+        },
+        "output": {
+            "file_name": "02_HQFilter_efficiencyVSpos_st2_minqual3"
+        }
+    }, 
+
+    "HQFilter_efficiencyVSpos_st2_minqual6": {
+        "base": "base_pos",
+        "inputs": {
+            "quality >= 6": {"plot_name": "HQFilter_ClusterEfficiencyVSpos_st2_minqual6" }
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB2 - qual > 6"
+        },
+        "output": {
+            "file_name": "02_HQFilter_efficiencyVSpos_st2_minqual6"
+        }
+    }, 
+
+    "HQFilter_efficiencyVSpos_st3_minqual0": {
+        "base": "base_pos",
+        "inputs": {
+            "all qualities": {"plot_name": "HQFilter_ClusterEfficiencyVSpos_st3_minqual0" }
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB3 - qual > 0"
+        },
+        "output": {
+            "file_name": "02_HQFilter_efficiencyVSpos_st3_minqual0"
+        }
+    }, 
+
+    "HQFilter_efficiencyVSpos_st3_minqual3": {
+        "base": "base_pos",
+        "inputs": {
+            "quality >= 3": {"plot_name": "HQFilter_ClusterEfficiencyVSpos_st3_minqual3" }
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB3 - qual > 3"
+        },
+        "output": {
+            "file_name": "02_HQFilter_efficiencyVSpos_st3_minqual3"
+        }
+    }, 
+
+    "HQFilter_efficiencyVSpos_st3_minqual6": {
+        "base": "base_pos",
+        "inputs": {
+            "quality >= 6": {"plot_name": "HQFilter_ClusterEfficiencyVSpos_st3_minqual6" }
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB3 - qual > 6"
+        },
+        "output": {
+            "file_name": "02_HQFilter_efficiencyVSpos_st3_minqual6"
+        }
+    }, 
+
+    "HQFilter_efficiencyVSpos_st4_minqual0": {
+        "base": "base_pos",
+        "inputs": {
+            "all qualities": {"plot_name": "HQFilter_ClusterEfficiencyVSpos_st4_minqual0" }
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB4 - qual > 0"
+        },
+        "output": {
+            "file_name": "02_HQFilter_efficiencyVSpos_st4_minqual0"
+        }
+    }, 
+
+    "HQFilter_efficiencyVSpos_st4_minqual3": {
+        "base": "base_pos",
+        "inputs": {
+            "quality >= 3": {"plot_name": "HQFilter_ClusterEfficiencyVSpos_st4_minqual3" }
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB4 - qual > 3"
+        },
+        "output": {
+            "file_name": "02_HQFilter_efficiencyVSpos_st4_minqual3"
+        }
+    }, 
+
+    "HQFilter_efficiencyVSpos_st4_minqual6": {
+        "base": "base_pos",
+        "inputs": {
+            "quality >= 6": {"plot_name": "HQFilter_ClusterEfficiencyVSpos_st4_minqual6" }
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB4 - qual > 6"
+        },
+        "output": {
+            "file_name": "02_HQFilter_efficiencyVSpos_st4_minqual6"
+        }
+    }, 
+
+    "HQFilter_efficiencyVSphi_st1": {
+        "base" : "base_phi",
+        "inputs": {
+            "all qualities": {"plot_name": "HQFilter_ClusterEfficiencyVSphi_st1_minqual0"},
+            "quality >= 3": {"plot_name": "HQFilter_ClusterEfficiencyVSphi_st1_minqual3"},
+            "quality >= 6": {"plot_name": "HQFilter_ClusterEfficiencyVSphi_st1_minqual6"}
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB1"
+        },
+        "output": {
+            "file_name": "03_HQFilter_efficiencyVSphi_st1"
+        }
+    }, 
+
+    "HQFilter_efficiencyVSphi_st2": {
+        "base" : "base_phi",
+        "inputs": {
+            "all qualities": {"plot_name": "HQFilter_ClusterEfficiencyVSphi_st2_minqual0"},
+            "quality >= 3": {"plot_name": "HQFilter_ClusterEfficiencyVSphi_st2_minqual3"},
+            "quality >= 6": {"plot_name": "HQFilter_ClusterEfficiencyVSphi_st2_minqual6"}
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB2"
+        },
+        "output": {
+            "file_name": "03_HQFilter_efficiencyVSphi_st2"
+        }
+    }, 
+
+    "HQFilter_efficiencyVSphi_st3": {
+        "base" : "base_phi",
+        "inputs": {
+            "all qualities": {"plot_name": "HQFilter_ClusterEfficiencyVSphi_st3_minqual0"},
+            "quality >= 3": {"plot_name": "HQFilter_ClusterEfficiencyVSphi_st3_minqual3"},
+            "quality >= 6": {"plot_name": "HQFilter_ClusterEfficiencyVSphi_st3_minqual6"}
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB3"
+        },
+        "output": {
+            "file_name": "03_HQFilter_efficiencyVSphi_st3"
+        }
+    }, 
+
+    "HQFilter_efficiencyVSphi_st4": {
+        "base" : "base_phi",
+        "inputs": {
+            "all qualities": {"plot_name": "HQFilter_ClusterEfficiencyVSphi_st4_minqual0"},
+            "quality >= 3": {"plot_name": "HQFilter_ClusterEfficiencyVSphi_st4_minqual3"},
+            "quality >= 6": {"plot_name": "HQFilter_ClusterEfficiencyVSphi_st4_minqual6"}
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB4"
+        },
+        "output": {
+            "file_name": "03_HQFilter_efficiencyVSphi_st4"
+        }
+    }, 
+
+    "HQFilter_efficiencyVSeta_st1": {
+        "base" : "base_eta",
+        "inputs": {
+            "all qualities": { "plot_name": "HQFilter_ClusterEfficiencyVSeta_st1_minqual0" },
+            "quality >= 3": { "plot_name": "HQFilter_ClusterEfficiencyVSeta_st1_minqual3" },
+            "quality >= 6": { "plot_name": "HQFilter_ClusterEfficiencyVSeta_st1_minqual6"}
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB1"
+        },
+        "output": {
+            "file_name": "04_HQFilter_efficiencyVSeta_st1"
+        }
+    },
+
+    "HQFilter_efficiencyVSeta_st2": {
+        "base" : "base_eta",
+        "inputs": {
+            "all qualities": { "plot_name": "HQFilter_ClusterEfficiencyVSeta_st2_minqual0" },
+            "quality >= 3": { "plot_name": "HQFilter_ClusterEfficiencyVSeta_st2_minqual3" },
+            "quality >= 6": { "plot_name": "HQFilter_ClusterEfficiencyVSeta_st2_minqual6"}
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB2"
+        },
+        "output": {
+            "file_name": "04_HQFilter_efficiencyVSeta_st2"
+        }
+    },
+
+    "HQFilter_efficiencyVSeta_st3": {
+        "base" : "base_eta",
+        "inputs": {
+            "all qualities": { "plot_name": "HQFilter_ClusterEfficiencyVSeta_st3_minqual0" },
+            "quality >= 3": { "plot_name": "HQFilter_ClusterEfficiencyVSeta_st3_minqual3" },
+            "quality >= 6": { "plot_name": "HQFilter_ClusterEfficiencyVSeta_st3_minqual6"}
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB3"
+        },
+        "output": {
+            "file_name": "04_HQFilter_efficiencyVSeta_st3"
+        }
+    },
+
+    "HQFilter_efficiencyVSeta_st4": {
+        "base" : "base_eta",
+        "inputs": {
+            "all qualities": { "plot_name": "HQFilter_ClusterEfficiencyVSeta_st4_minqual0" },
+            "quality >= 3": { "plot_name": "HQFilter_ClusterEfficiencyVSeta_st4_minqual3" },
+            "quality >= 6": { "plot_name": "HQFilter_ClusterEfficiencyVSeta_st4_minqual6"}
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB4"
+        },
+        "output": {
+            "file_name": "04_HQFilter_efficiencyVSeta_st4"
+        }
+    },
+
+    "HQFilter_efficiencyVSsegxLoc_st1": {
+        "base" : "base_xLoc",
+        "inputs": {
+            "all qualities": { "plot_name": "HQFilter_ClusterEfficiencyVSsegxLoc_st1_minqual0"},
+            "quality >= 3": {"plot_name": "HQFilter_ClusterEfficiencyVSsegxLoc_st1_minqual3" },
+            "quality >= 6": {"plot_name": "HQFilter_ClusterEfficiencyVSsegxLoc_st1_minqual6"}
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB1"
+        },
+        "output": {
+            "file_name": "05_HQFilter_efficiencyVSsegxLoc_st1"
+        }
+    }, 
+
+    "HQFilter_efficiencyVSsegxLoc_st2": {
+        "base" : "base_xLoc",
+        "inputs": {
+            "all qualities": { "plot_name": "HQFilter_ClusterEfficiencyVSsegxLoc_st2_minqual0"},
+            "quality >= 3": {"plot_name": "HQFilter_ClusterEfficiencyVSsegxLoc_st2_minqual3" },
+            "quality >= 6": {"plot_name": "HQFilter_ClusterEfficiencyVSsegxLoc_st2_minqual6"}
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB2"
+        },
+        "output": {
+            "file_name": "05_HQFilter_efficiencyVSsegxLoc_st2"
+        }
+    }, 
+
+    "HQFilter_efficiencyVSsegxLoc_st3": {
+        "base" : "base_xLoc",
+        "inputs": {
+            "all qualities": { "plot_name": "HQFilter_ClusterEfficiencyVSsegxLoc_st3_minqual0"},
+            "quality >= 3": {"plot_name": "HQFilter_ClusterEfficiencyVSsegxLoc_st3_minqual3" },
+            "quality >= 6": {"plot_name": "HQFilter_ClusterEfficiencyVSsegxLoc_st3_minqual6"}
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB3"
+        },
+        "output": {
+            "file_name": "05_HQFilter_efficiencyVSsegxLoc_st3"
+        }
+    }, 
+
+    "HQFilter_efficiencyVSsegxLoc_st4": {
+        "base" : "base_xLoc",
+        "inputs": {
+            "all qualities": { "plot_name": "HQFilter_ClusterEfficiencyVSsegxLoc_st4_minqual0"},
+            "quality >= 3": {"plot_name": "HQFilter_ClusterEfficiencyVSsegxLoc_st4_minqual3" },
+            "quality >= 6": {"plot_name": "HQFilter_ClusterEfficiencyVSsegxLoc_st4_minqual6"}
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB4"
+        },
+        "output": {
+            "file_name": "05_HQFilter_efficiencyVSsegxLoc_st4"
+        }
+    }, 
+
+    "HQFilter_efficiencyVSsegDirLoc_st1": {
+        "base" : "base_dirLoc",
+        "inputs": {
+            "all qualities": { "plot_name": "HQFilter_ClusterEfficiencyVSsegDirLoc_st1_minqual0" },
+            "quality >= 3": {"plot_name": "HQFilter_ClusterEfficiencyVSsegDirLoc_st1_minqual3"},
+            "quality >= 6": {"plot_name": "HQFilter_ClusterEfficiencyVSsegDirLoc_st1_minqual6"}
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB1"
+        },
+        "output": {
+            "file_name": "06_HQFilter_efficiencyVSsegDirLoc_st1"
+        }
+    },
+
+    "HQFilter_efficiencyVSsegDirLoc_st2": {
+        "base" : "base_dirLoc",
+        "inputs": {
+            "all qualities": { "plot_name": "HQFilter_ClusterEfficiencyVSsegDirLoc_st2_minqual0" },
+            "quality >= 3": {"plot_name": "HQFilter_ClusterEfficiencyVSsegDirLoc_st2_minqual3"},
+            "quality >= 6": {"plot_name": "HQFilter_ClusterEfficiencyVSsegDirLoc_st2_minqual6"}
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB2"
+        },
+        "output": {
+            "file_name": "06_HQFilter_efficiencyVSsegDirLoc_st2"
+        }
+    }, 
+
+    "HQFilter_efficiencyVSsegDirLoc_st3": {
+        "base" : "base_dirLoc",
+        "inputs": {
+            "all qualities": { "plot_name": "HQFilter_ClusterEfficiencyVSsegDirLoc_st3_minqual0" },
+            "quality >= 3": {"plot_name": "HQFilter_ClusterEfficiencyVSsegDirLoc_st3_minqual3"},
+            "quality >= 6": {"plot_name": "HQFilter_ClusterEfficiencyVSsegDirLoc_st3_minqual6"}
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB3"
+        },
+        "output": {
+            "file_name": "06_HQFilter_efficiencyVSsegDirLoc_st3"
+        }
+    },
+
+    "HQFilter_efficiencyVSsegDirLoc_st4": {
+        "base" : "base_dirLoc",
+        "inputs": {
+            "all qualities": { "plot_name": "HQFilter_ClusterEfficiencyVSsegDirLoc_st4_minqual0" },
+            "quality >= 3": {"plot_name": "HQFilter_ClusterEfficiencyVSsegDirLoc_st4_minqual3"},
+            "quality >= 6": {"plot_name": "HQFilter_ClusterEfficiencyVSsegDirLoc_st4_minqual6"}
+        },
+        "plot": {
+            "legend_title": "Efficiency  -  MB4"
+        },
+        "output": {
+            "file_name": "06_HQFilter_efficiencyVSsegDirLoc_st4"
+        }
+    }, 
+
+
+
+
+
+
+    "FilterComparison_efficiencyVSpT_st1_minqual0": {
+        "base" :"base_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ClusterEfficiencyVSpT_st1_minqual0"},
+            "LQFilter" : { "plot_name" : "LQFilter_ClusterEfficiencyVSpT_st1_minqual0"},
+            "HQFilter" : { "plot_name" : "HQFilter_ClusterEfficiencyVSpT_st1_minqual0"}
+        },
+        "plot" : {
+            "legend_title": "Efficiency  -  MB1 - qual > 0"
+        }, 
+        "output" : {
+            "directory": "plots/FilterComparison/",
+            "file_name" : "07_EfficiencyVSpT_st1_minqual0"
+        }
+    }, 
+
+    "FilterComparison_efficiencyVSpT_st2_minqual0": {
+        "base" :"base_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ClusterEfficiencyVSpT_st2_minqual0"},
+            "LQFilter" : { "plot_name" : "LQFilter_ClusterEfficiencyVSpT_st2_minqual0"},
+            "HQFilter" : { "plot_name" : "HQFilter_ClusterEfficiencyVSpT_st2_minqual0"}
+        },
+        "plot" : {
+            "legend_title": "Efficiency  -  MB2 - qual > 0"
+        }, 
+        "output" : {
+            "directory": "plots/FilterComparison/",
+            "file_name" : "07_EfficiencyVSpT_st2_minqual0"
+        }
+    }, 
+
+    "FilterComparison_efficiencyVSpT_st3_minqual0": {
+        "base" :"base_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ClusterEfficiencyVSpT_st3_minqual0"},
+            "LQFilter" : { "plot_name" : "LQFilter_ClusterEfficiencyVSpT_st3_minqual0"},
+            "HQFilter" : { "plot_name" : "HQFilter_ClusterEfficiencyVSpT_st3_minqual0"}
+        },
+        "plot" : {
+            "legend_title": "Efficiency  -  MB3 - qual > 0"
+        }, 
+        "output" : {
+            "directory": "plots/FilterComparison/",
+            "file_name" : "07_EfficiencyVSpT_st3_minqual0"
+        }
+    },
+
+    "FilterComparison_efficiencyVSpT_st4_minqual0": {
+        "base" :"base_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ClusterEfficiencyVSpT_st4_minqual0"},
+            "LQFilter" : { "plot_name" : "LQFilter_ClusterEfficiencyVSpT_st4_minqual0"},
+            "HQFilter" : { "plot_name" : "HQFilter_ClusterEfficiencyVSpT_st4_minqual0"}
+        },
+        "plot" : {
+            "legend_title": "Efficiency  -  MB4 - qual > 0"
+        }, 
+        "output" : {
+            "directory": "plots/FilterComparison/",
+            "file_name" : "07_EfficiencyVSpT_st4_minqual0"
+        }
+    }, 
+
+    "FilterComparison_efficiencyVSpT_st1_minqual3": {
+        "base" :"base_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ClusterEfficiencyVSpT_st1_minqual3"},
+            "LQFilter" : { "plot_name" : "LQFilter_ClusterEfficiencyVSpT_st1_minqual3"},
+            "HQFilter" : { "plot_name" : "HQFilter_ClusterEfficiencyVSpT_st1_minqual3"}
+        },
+        "plot" : {
+            "legend_title": "Efficiency  -  MB1 - qual > 3"
+        }, 
+        "output" : {
+            "directory": "plots/FilterComparison/",
+            "file_name" : "07_EfficiencyVSpT_st1_minqual3"
+        }
+    }, 
+
+    "FilterComparison_efficiencyVSpT_st2_minqual3": {
+        "base" :"base_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ClusterEfficiencyVSpT_st2_minqual3"},
+            "LQFilter" : { "plot_name" : "LQFilter_ClusterEfficiencyVSpT_st2_minqual3"},
+            "HQFilter" : { "plot_name" : "HQFilter_ClusterEfficiencyVSpT_st2_minqual3"}
+        },
+        "plot" : {
+            "legend_title": "Efficiency  -  MB2 - qual > 3" 
+        }, 
+        "output" : {
+            "directory": "plots/FilterComparison/",
+            "file_name" : "07_EfficiencyVSpT_st2_minqual3"
+        }
+    }, 
+
+    "FilterComparison_efficiencyVSpT_st3_minqual3": {
+        "base" :"base_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ClusterEfficiencyVSpT_st3_minqual3"},
+            "LQFilter" : { "plot_name" : "LQFilter_ClusterEfficiencyVSpT_st3_minqual3"},
+            "HQFilter" : { "plot_name" : "HQFilter_ClusterEfficiencyVSpT_st3_minqual3"}
+        },
+        "plot" : {
+            "legend_title": "Efficiency  -  MB3 - qual > 3"
+        }, 
+        "output" : {
+            "directory": "plots/FilterComparison/",
+            "file_name" : "07_EfficiencyVSpT_st3_minqual3"
+        }
+    }, 
+
+    "FilterComparison_efficiencyVSpT_st4_minqual3": {
+        "base" :"base_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ClusterEfficiencyVSpT_st4_minqual3"},
+            "LQFilter" : { "plot_name" : "LQFilter_ClusterEfficiencyVSpT_st4_minqual3"},
+            "HQFilter" : { "plot_name" : "HQFilter_ClusterEfficiencyVSpT_st4_minqual3"}
+        },
+        "plot" : {
+            "legend_title": "Efficiency  -  MB4 - qual > 3"
+        }, 
+        "output" : {
+            "directory": "plots/FilterComparison/",
+            "file_name" : "07_EfficiencyVSpT_st4_minqual3"
+        }
+    }, 
+
+    "FilterComparison_efficiencyVSpT_st1_minqual6": {
+        "base" :"base_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ClusterEfficiencyVSpT_st1_minqual6"},
+            "LQFilter" : { "plot_name" : "LQFilter_ClusterEfficiencyVSpT_st1_minqual6"},
+            "HQFilter" : { "plot_name" : "HQFilter_ClusterEfficiencyVSpT_st1_minqual6"}
+        },
+        "plot" : {
+            "legend_title": "Efficiency  -  MB1 - qual > 6"
+        }, 
+        "output" : {
+            "directory": "plots/FilterComparison/",
+            "file_name" : "07_EfficiencyVSpT_st1_minqual6"
+        }
+    }, 
+
+    "FilterComparison_efficiencyVSpT_st2_minqual6": {
+        "base" :"base_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ClusterEfficiencyVSpT_st2_minqual6"},
+            "LQFilter" : { "plot_name" : "LQFilter_ClusterEfficiencyVSpT_st2_minqual6"},
+            "HQFilter" : { "plot_name" : "HQFilter_ClusterEfficiencyVSpT_st2_minqual6"}
+        },
+        "plot" : {
+            "legend_title": "Efficiency  -  MB2 - qual > 6"
+        }, 
+        "output" : {
+            "directory": "plots/FilterComparison/",
+            "file_name" : "07_EfficiencyVSpT_st2_minqual6"
+        }
+    }, 
+
+    "FilterComparison_efficiencyVSpT_st3_minqual6": {
+        "base" :"base_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ClusterEfficiencyVSpT_st3_minqual6"},
+            "LQFilter" : { "plot_name" : "LQFilter_ClusterEfficiencyVSpT_st3_minqual6"},
+            "HQFilter" : { "plot_name" : "HQFilter_ClusterEfficiencyVSpT_st3_minqual6"}
+        },
+        "plot" : {
+            "legend_title": "Efficiency  -  MB3 - qual > 6"
+        }, 
+        "output" : {
+            "directory": "plots/FilterComparison/",
+            "file_name" : "07_EfficiencyVSpT_st3_minqual6"
+        }
+    }, 
+
+    "FilterComparison_efficiencyVSpT_st4_minqual6": {
+        "base" :"base_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ClusterEfficiencyVSpT_st4_minqual6"},
+            "LQFilter" : { "plot_name" : "LQFilter_ClusterEfficiencyVSpT_st4_minqual6"},
+            "HQFilter" : { "plot_name" : "HQFilter_ClusterEfficiencyVSpT_st4_minqual6"}
+        },
+        "plot" : {
+            "legend_title": "Efficiency  -  MB4 - qual > 6"
+        }, 
+        "output" : {
+            "directory": "plots/FilterComparison/",
+            "file_name" : "07_EfficiencyVSpT_st4_minqual6"
+        }
+    }, 
+
+
+
+
+
+    "GhostFractionVSpT_st1_minqual0": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_GhostFractionVSpT_st1_minqual0"},
+            "LQFilter" : { "plot_name" : "LQFilter_GhostFractionVSpT_st1_minqual0"},
+            "HQFilter" : { "plot_name" : "HQFilter_GhostFractionVSpT_st1_minqual0"}
+        },
+        "plot" : {
+            "legend_title": "MB1 - qual > 0"
+        }, 
+        "output" : {
+            "file_name" : "08_GhostFractionVSpT_st1_minqual0"
+        }
+    }, 
+
+    "GhostFractionVSpT_st2_minqual0": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_GhostFractionVSpT_st2_minqual0"},
+            "LQFilter" : { "plot_name" : "LQFilter_GhostFractionVSpT_st2_minqual0"},
+            "HQFilter" : { "plot_name" : "HQFilter_GhostFractionVSpT_st2_minqual0"}
+        },
+        "plot" : {
+            "legend_title": "MB2 - qual > 0"
+        }, 
+        "output" : {
+             
+            "file_name" : "08_GhostFractionVSpT_st2_minqual0"
+        }
+    }, 
+
+    "GhostFractionVSpT_st3_minqual0": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_GhostFractionVSpT_st3_minqual0"},
+            "LQFilter" : { "plot_name" : "LQFilter_GhostFractionVSpT_st3_minqual0"},
+            "HQFilter" : { "plot_name" : "HQFilter_GhostFractionVSpT_st3_minqual0"}
+        },
+        "plot" : {
+            "legend_title": "MB3 - qual > 0"
+        }, 
+        "output" : {
+             
+            "file_name" : "08_GhostFractionVSpT_st3_minqual0"
+        }
+    }, 
+
+    "GhostFractionVSpT_st4_minqual0": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_GhostFractionVSpT_st4_minqual0"},
+            "LQFilter" : { "plot_name" : "LQFilter_GhostFractionVSpT_st4_minqual0"},
+            "HQFilter" : { "plot_name" : "HQFilter_GhostFractionVSpT_st4_minqual0"}
+        },
+        "plot" : {
+            "legend_title": "MB4 - qual > 0"
+        }, 
+        "output" : {
+             
+            "file_name" : "08_GhostFractionVSpT_st4_minqual0"
+        }
+    },
+    
+    "GhostFractionVSpT_st1_minqual3": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_GhostFractionVSpT_st1_minqual3"},
+            "LQFilter" : { "plot_name" : "LQFilter_GhostFractionVSpT_st1_minqual3"},
+            "HQFilter" : { "plot_name" : "HQFilter_GhostFractionVSpT_st1_minqual3"}
+        },
+        "plot" : {
+            "legend_title": "MB1 - qual > 3"
+        }, 
+        "output" : {
+             
+            "file_name" : "08_GhostFractionVSpT_st1_minqual3"
+        }
+    }, 
+    
+    "GhostFractionVSpT_st2_minqual3": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_GhostFractionVSpT_st2_minqual3"},
+            "LQFilter" : { "plot_name" : "LQFilter_GhostFractionVSpT_st2_minqual3"},
+            "HQFilter" : { "plot_name" : "HQFilter_GhostFractionVSpT_st2_minqual3"}
+        },
+        "plot" : {
+            "legend_title": "MB2 - qual > 3"
+        }, 
+        "output" : {
+             
+            "file_name" : "08_GhostFractionVSpT_st2_minqual3"
+        }
+    }, 
+
+    "GhostFractionVSpT_st3_minqual3": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_GhostFractionVSpT_st3_minqual3"},
+            "LQFilter" : { "plot_name" : "LQFilter_GhostFractionVSpT_st3_minqual3"},
+            "HQFilter" : { "plot_name" : "HQFilter_GhostFractionVSpT_st3_minqual3"}
+        },
+        "plot" : {
+            "legend_title": "MB3 - qual > 3"
+        }, 
+        "output" : {
+             
+            "file_name" : "08_GhostFractionVSpT_st3_minqual3"
+        }
+    }, 
+
+    "GhostFractionVSpT_st4_minqual3": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_GhostFractionVSpT_st4_minqual3"},
+            "LQFilter" : { "plot_name" : "LQFilter_GhostFractionVSpT_st4_minqual3"},
+            "HQFilter" : { "plot_name" : "HQFilter_GhostFractionVSpT_st4_minqual3"}
+        },
+        "plot" : {
+            "legend_title": "MB4 - qual > 3"
+        }, 
+        "output" : {
+             
+            "file_name" : "08_GhostFractionVSpT_st4_minqual3"
+        }
+    }, 
+
+    "GhostFractionVSpT_st1_minqual6": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_GhostFractionVSpT_st1_minqual6"},
+            "LQFilter" : { "plot_name" : "LQFilter_GhostFractionVSpT_st1_minqual6"},
+            "HQFilter" : { "plot_name" : "HQFilter_GhostFractionVSpT_st1_minqual6"}
+        },
+        "plot" : {
+            "legend_title": "MB1 - qual > 6"
+        }, 
+        "output" : {
+             
+            "file_name" : "08_GhostFractionVSpT_st1_minqual6"
+        }
+    }, 
+
+    "GhostFractionVSpT_st2_minqual6": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_GhostFractionVSpT_st2_minqual6"},
+            "LQFilter" : { "plot_name" : "LQFilter_GhostFractionVSpT_st2_minqual6"},
+            "HQFilter" : { "plot_name" : "HQFilter_GhostFractionVSpT_st2_minqual6"}
+        },
+        "plot" : {
+            "legend_title": "MB2 - qual > 6"
+        }, 
+        "output" : {
+             
+            "file_name" : "08_GhostFractionVSpT_st2_minqual6"
+        }
+    }, 
+
+    "GhostFractionVSpT_st3_minqual6": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_GhostFractionVSpT_st3_minqual6"},
+            "LQFilter" : { "plot_name" : "LQFilter_GhostFractionVSpT_st3_minqual6"},
+            "HQFilter" : { "plot_name" : "HQFilter_GhostFractionVSpT_st3_minqual6"}
+        },
+        "plot" : {
+            "legend_title": "MB3 - qual > 6"
+        }, 
+        "output" : {
+             
+            "file_name" : "08_GhostFractionVSpT_st3_minqual6"
+        }
+    }, 
+
+    "GhostFractionVSpT_st4_minqual6": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_GhostFractionVSpT_st4_minqual6"},
+            "LQFilter" : { "plot_name" : "LQFilter_GhostFractionVSpT_st4_minqual6"},
+            "HQFilter" : { "plot_name" : "HQFilter_GhostFractionVSpT_st4_minqual6"}
+        },
+        "plot" : {
+            "legend_title": "MB4 - qual > 6"
+        }, 
+        "output" : {
+             
+            "file_name" : "08_GhostFractionVSpT_st4_minqual6"
+        }
+    }, 
+
+
+    
+    "ITGhostFractionVSpT_st1_minqual0": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ITGhostFractionVSpT_st1_minqual0"},
+            "LQFilter" : { "plot_name" : "LQFilter_ITGhostFractionVSpT_st1_minqual0"},
+            "HQFilter" : { "plot_name" : "HQFilter_ITGhostFractionVSpT_st1_minqual0"}
+        },
+        "plot" : {
+            "legend_title": "MB1 - qual > 0"
+        }, 
+        "output" : {
+             
+            "file_name" : "09_ITGhostFractionVSpT_st1_minqual0"
+        }
+    }, 
+
+    "ITGhostFractionVSpT_st2_minqual0": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ITGhostFractionVSpT_st2_minqual0"},
+            "LQFilter" : { "plot_name" : "LQFilter_ITGhostFractionVSpT_st2_minqual0"},
+            "HQFilter" : { "plot_name" : "HQFilter_ITGhostFractionVSpT_st2_minqual0"}
+        },
+        "plot" : {
+            "legend_title": "MB2 - qual > 0"
+        }, 
+        "output" : {
+             
+            "file_name" : "09_ITGhostFractionVSpT_st2_minqual0"
+        }
+    }, 
+
+    "ITGhostFractionVSpT_st3_minqual0": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ITGhostFractionVSpT_st3_minqual0"},
+            "LQFilter" : { "plot_name" : "LQFilter_ITGhostFractionVSpT_st3_minqual0"},
+            "HQFilter" : { "plot_name" : "HQFilter_ITGhostFractionVSpT_st3_minqual0"}
+        },
+        "plot" : {
+            "legend_title": "MB3 - qual > 0"
+        }, 
+        "output" : {
+             
+            "file_name" : "09_ITGhostFractionVSpT_st3_minqual0"
+        }
+    }, 
+
+    "ITGhostFractionVSpT_st4_minqual0": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ITGhostFractionVSpT_st4_minqual0"},
+            "LQFilter" : { "plot_name" : "LQFilter_ITGhostFractionVSpT_st4_minqual0"},
+            "HQFilter" : { "plot_name" : "HQFilter_ITGhostFractionVSpT_st4_minqual0"}
+        },
+        "plot" : {
+            "legend_title": "MB4 - qual > 0"
+        }, 
+        "output" : {
+             
+            "file_name" : "09_ITGhostFractionVSpT_st4_minqual0"
+        }
+    },
+    
+    "ITGhostFractionVSpT_st1_minqual3": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ITGhostFractionVSpT_st1_minqual3"},
+            "LQFilter" : { "plot_name" : "LQFilter_ITGhostFractionVSpT_st1_minqual3"},
+            "HQFilter" : { "plot_name" : "HQFilter_ITGhostFractionVSpT_st1_minqual3"}
+        },
+        "plot" : {
+            "legend_title": "MB1 - qual > 3"
+        }, 
+        "output" : {
+             
+            "file_name" : "09_ITGhostFractionVSpT_st1_minqual3"
+        }
+    }, 
+    
+    "ITGhostFractionVSpT_st2_minqual3": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ITGhostFractionVSpT_st2_minqual3"},
+            "LQFilter" : { "plot_name" : "LQFilter_ITGhostFractionVSpT_st2_minqual3"},
+            "HQFilter" : { "plot_name" : "HQFilter_ITGhostFractionVSpT_st2_minqual3"}
+        },
+        "plot" : {
+            "legend_title": "MB2 - qual > 3"
+        }, 
+        "output" : {
+             
+            "file_name" : "09_ITGhostFractionVSpT_st2_minqual3"
+        }
+    }, 
+
+    "ITGhostFractionVSpT_st3_minqual3": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ITGhostFractionVSpT_st3_minqual3"},
+            "LQFilter" : { "plot_name" : "LQFilter_ITGhostFractionVSpT_st3_minqual3"},
+            "HQFilter" : { "plot_name" : "HQFilter_ITGhostFractionVSpT_st3_minqual3"}
+        },
+        "plot" : {
+            "legend_title": "MB3 - qual > 3"
+        }, 
+        "output" : {
+             
+            "file_name" : "09_ITGhostFractionVSpT_st3_minqual3"
+        }
+    }, 
+
+    "ITGhostFractionVSpT_st4_minqual3": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ITGhostFractionVSpT_st4_minqual3"},
+            "LQFilter" : { "plot_name" : "LQFilter_ITGhostFractionVSpT_st4_minqual3"},
+            "HQFilter" : { "plot_name" : "HQFilter_ITGhostFractionVSpT_st4_minqual3"}
+        },
+        "plot" : {
+            "legend_title": "MB4 - qual > 3"
+        }, 
+        "output" : {
+             
+            "file_name" : "09_ITGhostFractionVSpT_st4_minqual3"
+        }
+    }, 
+
+    "ITGhostFractionVSpT_st1_minqual6": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ITGhostFractionVSpT_st1_minqual6"},
+            "LQFilter" : { "plot_name" : "LQFilter_ITGhostFractionVSpT_st1_minqual6"},
+            "HQFilter" : { "plot_name" : "HQFilter_ITGhostFractionVSpT_st1_minqual6"}
+        },
+        "plot" : {
+            "legend_title": "MB1 - qual > 6"
+        }, 
+        "output" : {
+             
+            "file_name" : "09_ITGhostFractionVSpT_st1_minqual6"
+        }
+    }, 
+
+    "ITGhostFractionVSpT_st2_minqual6": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ITGhostFractionVSpT_st2_minqual6"},
+            "LQFilter" : { "plot_name" : "LQFilter_ITGhostFractionVSpT_st2_minqual6"},
+            "HQFilter" : { "plot_name" : "HQFilter_ITGhostFractionVSpT_st2_minqual6"}
+        },
+        "plot" : {
+            "legend_title": "MB2 - qual > 6"
+        }, 
+        "output" : {
+             
+            "file_name" : "09_ITGhostFractionVSpT_st2_minqual6"
+        }
+    }, 
+
+    "ITGhostFractionVSpT_st3_minqual6": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ITGhostFractionVSpT_st3_minqual6"},
+            "LQFilter" : { "plot_name" : "LQFilter_ITGhostFractionVSpT_st3_minqual6"},
+            "HQFilter" : { "plot_name" : "HQFilter_ITGhostFractionVSpT_st3_minqual6"}
+        },
+        "plot" : {
+            "legend_title": "MB3 - qual > 6"
+        }, 
+        "output" : {
+             
+            "file_name" : "09_ITGhostFractionVSpT_st3_minqual6"
+        }
+    }, 
+
+    "ITGhostFractionVSpT_st4_minqual6": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ITGhostFractionVSpT_st4_minqual6"},
+            "LQFilter" : { "plot_name" : "LQFilter_ITGhostFractionVSpT_st4_minqual6"},
+            "HQFilter" : { "plot_name" : "HQFilter_ITGhostFractionVSpT_st4_minqual6"}
+        },
+        "plot" : {
+            "legend_title": "MB4 - qual > 6"
+        }, 
+        "output" : {
+             
+            "file_name" : "09_ITGhostFractionVSpT_st4_minqual6"
+        }
+    }, 
+
+
+
+    "OOTGhostFractionVSpT_st1_minqual0": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_OOTGhostFractionVSpT_st1_minqual0"},
+            "LQFilter" : { "plot_name" : "LQFilter_OOTGhostFractionVSpT_st1_minqual0"},
+            "HQFilter" : { "plot_name" : "HQFilter_OOTGhostFractionVSpT_st1_minqual0"}
+        },
+        "plot" : {
+            "legend_title": "MB1 - qual > 0"
+        }, 
+        "output" : {
+             
+            "file_name" : "10_OOTGhostFractionVSpT_st1_minqual0"
+        }
+    }, 
+
+    "OOTGhostFractionVSpT_st2_minqual0": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_OOTGhostFractionVSpT_st2_minqual0"},
+            "LQFilter" : { "plot_name" : "LQFilter_OOTGhostFractionVSpT_st2_minqual0"},
+            "HQFilter" : { "plot_name" : "HQFilter_OOTGhostFractionVSpT_st2_minqual0"}
+        },
+        "plot" : {
+            "legend_title": "MB2 - qual > 0"
+        }, 
+        "output" : {
+             
+            "file_name" : "10_OOTGhostFractionVSpT_st2_minqual0"
+        }
+    }, 
+
+    "OOTGhostFractionVSpT_st3_minqual0": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_OOTGhostFractionVSpT_st3_minqual0"},
+            "LQFilter" : { "plot_name" : "LQFilter_OOTGhostFractionVSpT_st3_minqual0"},
+            "HQFilter" : { "plot_name" : "HQFilter_OOTGhostFractionVSpT_st3_minqual0"}
+        },
+        "plot" : {
+            "legend_title": "MB3 - qual > 0"
+        }, 
+        "output" : {
+             
+            "file_name" : "10_OOTGhostFractionVSpT_st3_minqual0"
+        }
+    }, 
+
+    "OOTGhostFractionVSpT_st4_minqual0": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_OOTGhostFractionVSpT_st4_minqual0"},
+            "LQFilter" : { "plot_name" : "LQFilter_OOTGhostFractionVSpT_st4_minqual0"},
+            "HQFilter" : { "plot_name" : "HQFilter_OOTGhostFractionVSpT_st4_minqual0"}
+        },
+        "plot" : {
+            "legend_title": "MB4 - qual > 0"
+        }, 
+        "output" : {
+             
+            "file_name" : "10_OOTGhostFractionVSpT_st4_minqual0"
+        }
+    },
+    
+    "OOTGhostFractionVSpT_st1_minqual3": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_OOTGhostFractionVSpT_st1_minqual3"},
+            "LQFilter" : { "plot_name" : "LQFilter_OOTGhostFractionVSpT_st1_minqual3"},
+            "HQFilter" : { "plot_name" : "HQFilter_OOTGhostFractionVSpT_st1_minqual3"}
+        },
+        "plot" : {
+            "legend_title": "MB1 - qual > 3"
+        }, 
+        "output" : {
+             
+            "file_name" : "10_OOTGhostFractionVSpT_st1_minqual3"
+        }
+    }, 
+    
+    "OOTGhostFractionVSpT_st2_minqual3": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_OOTGhostFractionVSpT_st2_minqual3"},
+            "LQFilter" : { "plot_name" : "LQFilter_OOTGhostFractionVSpT_st2_minqual3"},
+            "HQFilter" : { "plot_name" : "HQFilter_OOTGhostFractionVSpT_st2_minqual3"}
+        },
+        "plot" : {
+            "legend_title": "MB2 - qual > 3"
+        }, 
+        "output" : {
+             
+            "file_name" : "10_OOTGhostFractionVSpT_st2_minqual3"
+        }
+    }, 
+
+    "OOTGhostFractionVSpT_st3_minqual3": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_OOTGhostFractionVSpT_st3_minqual3"},
+            "LQFilter" : { "plot_name" : "LQFilter_OOTGhostFractionVSpT_st3_minqual3"},
+            "HQFilter" : { "plot_name" : "HQFilter_OOTGhostFractionVSpT_st3_minqual3"}
+        },
+        "plot" : {
+            "legend_title": "MB3 - qual > 3"
+        }, 
+        "output" : {
+             
+            "file_name" : "10_OOTGhostFractionVSpT_st3_minqual3"
+        }
+    }, 
+
+    "OOTGhostFractionVSpT_st4_minqual3": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_OOTGhostFractionVSpT_st4_minqual3"},
+            "LQFilter" : { "plot_name" : "LQFilter_OOTGhostFractionVSpT_st4_minqual3"},
+            "HQFilter" : { "plot_name" : "HQFilter_OOTGhostFractionVSpT_st4_minqual3"}
+        },
+        "plot" : {
+            "legend_title": "MB4 - qual > 3"
+        }, 
+        "output" : {
+             
+            "file_name" : "10_OOTGhostFractionVSpT_st4_minqual3"
+        }
+    }, 
+
+    "OOTGhostFractionVSpT_st1_minqual6": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_OOTGhostFractionVSpT_st1_minqual6"},
+            "LQFilter" : { "plot_name" : "LQFilter_OOTGhostFractionVSpT_st1_minqual6"},
+            "HQFilter" : { "plot_name" : "HQFilter_OOTGhostFractionVSpT_st1_minqual6"}
+        },
+        "plot" : {
+            "legend_title": "MB1 - qual > 6"
+        }, 
+        "output" : {
+             
+            "file_name" : "10_OOTGhostFractionVSpT_st1_minqual6"
+        }
+    }, 
+
+    "OOTGhostFractionVSpT_st2_minqual6": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_OOTGhostFractionVSpT_st2_minqual6"},
+            "LQFilter" : { "plot_name" : "LQFilter_OOTGhostFractionVSpT_st2_minqual6"},
+            "HQFilter" : { "plot_name" : "HQFilter_OOTGhostFractionVSpT_st2_minqual6"}
+        },
+        "plot" : {
+            "legend_title": "MB2 - qual > 6"
+        }, 
+        "output" : {
+             
+            "file_name" : "10_OOTGhostFractionVSpT_st2_minqual6"
+        }
+    }, 
+
+    "OOTGhostFractionVSpT_st3_minqual6": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_OOTGhostFractionVSpT_st3_minqual6"},
+            "LQFilter" : { "plot_name" : "LQFilter_OOTGhostFractionVSpT_st3_minqual6"},
+            "HQFilter" : { "plot_name" : "HQFilter_OOTGhostFractionVSpT_st3_minqual6"}
+        },
+        "plot" : {
+            "legend_title": "MB3 - qual > 6"
+        }, 
+        "output" : {
+             
+            "file_name" : "10_OOTGhostFractionVSpT_st3_minqual6"
+        }
+    }, 
+
+    "OOTGhostFractionVSpT_st4_minqual6": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_OOTGhostFractionVSpT_st4_minqual6"},
+            "LQFilter" : { "plot_name" : "LQFilter_OOTGhostFractionVSpT_st4_minqual6"},
+            "HQFilter" : { "plot_name" : "HQFilter_OOTGhostFractionVSpT_st4_minqual6"}
+        },
+        "plot" : {
+            "legend_title": "MB4 - qual > 6"
+        }, 
+        "output" : {
+             
+            "file_name" : "10_OOTGhostFractionVSpT_st4_minqual6"
+        }
+    }, 
+
+
+
+
+    
+
+    "GhostDistributionVSpT_st1_minqual0": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_GhostDistributionVSpT_st1_minqual0"},
+            "LQFilter" : { "plot_name" : "LQFilter_GhostDistributionVSpT_st1_minqual0"},
+            "HQFilter" : { "plot_name" : "HQFilter_GhostDistributionVSpT_st1_minqual0"}
+        },
+        "plot" : {
+            "y": [ 0.0, 5, "# Ghost" ],
+            "legend_title": "MB1 - qual > 0"
+        }, 
+        "output" : {
+            "directory": "plots/Ghosts/",
+            "file_name" : "13_GhostDistributionVSpT_st1_minqual0"
+        }
+    }, 
+
+    "GhostDistributionVSpT_st2_minqual0": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_GhostDistributionVSpT_st2_minqual0"},
+            "LQFilter" : { "plot_name" : "LQFilter_GhostDistributionVSpT_st2_minqual0"},
+            "HQFilter" : { "plot_name" : "HQFilter_GhostDistributionVSpT_st2_minqual0"}
+        },
+        "plot" : {
+            "y": [ 0.0, 5, "# Ghost" ],
+            "legend_title": "MB2 - qual > 0"
+        }, 
+        "output" : {
+            "directory": "plots/Ghosts/",
+            "file_name" : "13_GhostDistributionVSpT_st2_minqual0"
+        }
+    }, 
+
+    "GhostDistributionVSpT_st3_minqual0": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_GhostDistributionVSpT_st3_minqual0"},
+            "LQFilter" : { "plot_name" : "LQFilter_GhostDistributionVSpT_st3_minqual0"},
+            "HQFilter" : { "plot_name" : "HQFilter_GhostDistributionVSpT_st3_minqual0"}
+        },
+        "plot" : {
+            "y": [ 0.0, 5, "# Ghost" ],
+            "legend _title": "MB3 - qual > 0"
+        }, 
+        "output" : {
+            "directory": "plots/Ghosts/",
+            "file_name" : "13_GhostDistributionVSpT_st3_minqual0"
+        }
+    }, 
+
+    "GhostDistributionVSpT_st4_minqual0": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_GhostDistributionVSpT_st4_minqual0"},
+            "LQFilter" : { "plot_name" : "LQFilter_GhostDistributionVSpT_st4_minqual0"},
+            "HQFilter" : { "plot_name" : "HQFilter_GhostDistributionVSpT_st4_minqual0"}
+        },
+        "plot" : {
+            "y": [ 0.0, 5, "# Ghost" ],
+            "legend_title": "MB4 - qual > 0"
+        }, 
+        "output" : {
+            "directory": "plots/Ghosts/",
+            "file_name" : "13_GhostDistributionVSpT_st4_minqual0"
+        }
+    },
+    
+    "GhostDistributionVSpT_st1_minqual3": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_GhostDistributionVSpT_st1_minqual3"},
+            "LQFilter" : { "plot_name" : "LQFilter_GhostDistributionVSpT_st1_minqual3"},
+            "HQFilter" : { "plot_name" : "HQFilter_GhostDistributionVSpT_st1_minqual3"}
+        },
+        "plot" : {
+            "y": [ 0.0, 5, "# Ghost" ],
+            "legend_title": "MB1 - qual > 3"
+        }, 
+        "output" : {
+            "directory": "plots/Ghosts/",
+            "file_name" : "13_GhostDistributionVSpT_st1_minqual3"
+        }
+    }, 
+    
+    "GhostDistributionVSpT_st2_minqual3": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_GhostDistributionVSpT_st2_minqual3"},
+            "LQFilter" : { "plot_name" : "LQFilter_GhostDistributionVSpT_st2_minqual3"},
+            "HQFilter" : { "plot_name" : "HQFilter_GhostDistributionVSpT_st2_minqual3"}
+        },
+        "plot" : {
+            "y": [ 0.0, 5, "# Ghost" ],
+            "legend_title": "MB2 - qual > 3"
+        }, 
+        "output" : {
+            "directory": "plots/Ghosts/",
+            "file_name" : "13_GhostDistributionVSpT_st2_minqual3"
+        }
+    }, 
+
+    "GhostDistributionVSpT_st3_minqual3": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_GhostDistributionVSpT_st3_minqual3"},
+            "LQFilter" : { "plot_name" : "LQFilter_GhostDistributionVSpT_st3_minqual3"},
+            "HQFilter" : { "plot_name" : "HQFilter_GhostDistributionVSpT_st3_minqual3"}
+        },
+        "plot" : {
+            "y": [ 0.0, 5, "# Ghost" ],
+            "legend_title": "MB3 - qual > 3"
+        }, 
+        "output" : {
+            "directory": "plots/Ghosts/",
+            "file_name" : "13_GhostDistributionVSpT_st3_minqual3"
+        }
+    }, 
+
+    "GhostDistributionVSpT_st4_minqual3": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_GhostDistributionVSpT_st4_minqual3"},
+            "LQFilter" : { "plot_name" : "LQFilter_GhostDistributionVSpT_st4_minqual3"},
+            "HQFilter" : { "plot_name" : "HQFilter_GhostDistributionVSpT_st4_minqual3"}
+        },
+        "plot" : {
+            "y": [ 0.0, 5, "# Ghost" ],
+            "legend_title": "MB4 - qual > 3"
+        }, 
+        "output" : {
+            "directory": "plots/Ghosts/",
+            "file_name" : "13_GhostDistributionVSpT_st4_minqual3"
+        }
+    }, 
+
+    "GhostDistributionVSpT_st1_minqual6": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_GhostDistributionVSpT_st1_minqual6"},
+            "LQFilter" : { "plot_name" : "LQFilter_GhostDistributionVSpT_st1_minqual6"},
+            "HQFilter" : { "plot_name" : "HQFilter_GhostDistributionVSpT_st1_minqual6"}
+        },
+        "plot" : {
+            "y": [ 0.0, 5, "# Ghost" ],
+            "legend_title": "MB1 - qual > 6"
+        }, 
+        "output" : {
+            "directory": "plots/Ghosts/",
+            "file_name" : "13_GhostDistributionVSpT_st1_minqual6"
+        }
+    }, 
+
+    "GhostDistributionVSpT_st2_minqual6": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_GhostDistributionVSpT_st2_minqual6"},
+            "LQFilter" : { "plot_name" : "LQFilter_GhostDistributionVSpT_st2_minqual6"},
+            "HQFilter" : { "plot_name" : "HQFilter_GhostDistributionVSpT_st2_minqual6"}
+        },
+        "plot" : {
+            "y": [ 0.0, 5, "# Ghost" ],
+            "legend_title": "MB2 - qual > 6"
+        }, 
+        "output" : {
+            "directory": "plots/Ghosts/",
+            "file_name" : "13_GhostDistributionVSpT_st2_minqual6"
+        }
+    }, 
+
+    "GhostDistributionVSpT_st3_minqual6": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_GhostDistributionVSpT_st3_minqual6"},
+            "LQFilter" : { "plot_name" : "LQFilter_GhostDistributionVSpT_st3_minqual6"},
+            "HQFilter" : { "plot_name" : "HQFilter_GhostDistributionVSpT_st3_minqual6"}
+        },
+        "plot" : {
+            "y": [ 0.0, 5, "# Ghost" ],
+            "legend_title": "MB3 - qual > 6"
+        }, 
+        "output" : {
+            "directory": "plots/Ghosts/",
+            "file_name" : "13_GhostDistributionVSpT_st3_minqual6"
+        }
+    }, 
+
+    "GhostDistributionVSpT_st4_minqual6": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_GhostDistributionVSpT_st4_minqual6"},
+            "LQFilter" : { "plot_name" : "LQFilter_GhostDistributionVSpT_st4_minqual6"},
+            "HQFilter" : { "plot_name" : "HQFilter_GhostDistributionVSpT_st4_minqual6"}
+        },
+        "plot" : {
+            "y": [ 0.0, 5, "# Ghost" ],
+            "legend_title": "MB4 - qual > 6"
+        }, 
+        "output" : {
+            "directory": "plots/Ghosts/",
+            "file_name" : "13_GhostDistributionVSpT_st4_minqual6"
+        }
+    },
+
+
+
+
+
+
+
+    "IT_GhostDistributionVSpT_st1_minqual0": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ITGhostDistributionVSpT_st1_minqual0"},
+            "LQFilter" : { "plot_name" : "LQFilter_ITGhostDistributionVSpT_st1_minqual0"},
+            "HQFilter" : { "plot_name" : "HQFilter_ITGhostDistributionVSpT_st1_minqual0"}
+        },
+        "plot" : {
+            "y": [ 0.0, 5, "# Ghost" ],
+            "legend_title": "MB1 - qual > 0"
+        }, 
+        "output" : {
+            "directory": "plots/Ghosts/",
+            "file_name" : "13_ITGhostDistributionVSpT_st1_minqual0"
+        }
+    }, 
+
+    "IT_GhostDistributionVSpT_st2_minqual0": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ITGhostDistributionVSpT_st2_minqual0"},
+            "LQFilter" : { "plot_name" : "LQFilter_ITGhostDistributionVSpT_st2_minqual0"},
+            "HQFilter" : { "plot_name" : "HQFilter_ITGhostDistributionVSpT_st2_minqual0"}
+        },
+        "plot" : {
+            "y": [ 0.0, 5, "# Ghost" ],
+            "legend_title": "MB2 - qual > 0"
+        }, 
+        "output" : {
+            "directory": "plots/Ghosts/",
+            "file_name" : "13_ITGhostDistributionVSpT_st2_minqual0"
+        }
+    }, 
+
+    "IT_GhostDistributionVSpT_st3_minqual0": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ITGhostDistributionVSpT_st3_minqual0"},
+            "LQFilter" : { "plot_name" : "LQFilter_ITGhostDistributionVSpT_st3_minqual0"},
+            "HQFilter" : { "plot_name" : "HQFilter_ITGhostDistributionVSpT_st3_minqual0"}
+        },
+        "plot" : {
+            "y": [ 0.0, 5, "# Ghost" ],
+            "legend _title": "MB3 - qual > 0"
+        }, 
+        "output" : {
+            "directory": "plots/Ghosts/",
+            "file_name" : "13_ITGhostDistributionVSpT_st3_minqual0"
+        }
+    }, 
+
+    "IT_GhostDistributionVSpT_st4_minqual0": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ITGhostDistributionVSpT_st4_minqual0"},
+            "LQFilter" : { "plot_name" : "LQFilter_ITGhostDistributionVSpT_st4_minqual0"},
+            "HQFilter" : { "plot_name" : "HQFilter_ITGhostDistributionVSpT_st4_minqual0"}
+        },
+        "plot" : {
+            "y": [ 0.0, 5, "# Ghost" ],
+            "legend_title": "MB4 - qual > 0"
+        }, 
+        "output" : {
+            "directory": "plots/Ghosts/",
+            "file_name" : "13_ITGhostDistributionVSpT_st4_minqual0"
+        }
+    },
+    
+    "IT_GhostDistributionVSpT_st1_minqual3": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ITGhostDistributionVSpT_st1_minqual3"},
+            "LQFilter" : { "plot_name" : "LQFilter_ITGhostDistributionVSpT_st1_minqual3"},
+            "HQFilter" : { "plot_name" : "HQFilter_ITGhostDistributionVSpT_st1_minqual3"}
+        },
+        "plot" : {
+            "y": [ 0.0, 5, "# Ghost" ],
+            "legend_title": "MB1 - qual > 3"
+        }, 
+        "output" : {
+            "directory": "plots/Ghosts/",
+            "file_name" : "13_ITGhostDistributionVSpT_st1_minqual3"
+        }
+    }, 
+    
+    "IT_GhostDistributionVSpT_st2_minqual3": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ITGhostDistributionVSpT_st2_minqual3"},
+            "LQFilter" : { "plot_name" : "LQFilter_ITGhostDistributionVSpT_st2_minqual3"},
+            "HQFilter" : { "plot_name" : "HQFilter_ITGhostDistributionVSpT_st2_minqual3"}
+        },
+        "plot" : {
+            "y": [ 0.0, 5, "# Ghost" ],
+            "legend_title": "MB2 - qual > 3"
+        }, 
+        "output" : {
+            "directory": "plots/Ghosts/",
+            "file_name" : "13_ITGhostDistributionVSpT_st2_minqual3"
+        }
+    }, 
+
+    "IT_GhostDistributionVSpT_st3_minqual3": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ITGhostDistributionVSpT_st3_minqual3"},
+            "LQFilter" : { "plot_name" : "LQFilter_ITGhostDistributionVSpT_st3_minqual3"},
+            "HQFilter" : { "plot_name" : "HQFilter_ITGhostDistributionVSpT_st3_minqual3"}
+        },
+        "plot" : {
+            "y": [ 0.0, 5, "# Ghost" ],
+            "legend_title": "MB3 - qual > 3"
+        }, 
+        "output" : {
+            "directory": "plots/Ghosts/",
+            "file_name" : "13_ITGhostDistributionVSpT_st3_minqual3"
+        }
+    }, 
+
+    "IT_GhostDistributionVSpT_st4_minqual3": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ITGhostDistributionVSpT_st4_minqual3"},
+            "LQFilter" : { "plot_name" : "LQFilter_ITGhostDistributionVSpT_st4_minqual3"},
+            "HQFilter" : { "plot_name" : "HQFilter_ITGhostDistributionVSpT_st4_minqual3"}
+        },
+        "plot" : {
+            "y": [ 0.0, 5, "# Ghost" ],
+            "legend_title": "MB4 - qual > 3"
+        }, 
+        "output" : {
+            "directory": "plots/Ghosts/",
+            "file_name" : "13_ITGhostDistributionVSpT_st4_minqual3"
+        }
+    }, 
+
+    "IT_GhostDistributionVSpT_st1_minqual6": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ITGhostDistributionVSpT_st1_minqual6"},
+            "LQFilter" : { "plot_name" : "LQFilter_ITGhostDistributionVSpT_st1_minqual6"},
+            "HQFilter" : { "plot_name" : "HQFilter_ITGhostDistributionVSpT_st1_minqual6"}
+        },
+        "plot" : {
+            "y": [ 0.0, 5, "# Ghost" ],
+            "legend_title": "MB1 - qual > 6"
+        }, 
+        "output" : {
+            "directory": "plots/Ghosts/",
+            "file_name" : "13_ITGhostDistributionVSpT_st1_minqual6"
+        }
+    }, 
+
+    "IT_GhostDistributionVSpT_st2_minqual6": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ITGhostDistributionVSpT_st2_minqual6"},
+            "LQFilter" : { "plot_name" : "LQFilter_ITGhostDistributionVSpT_st2_minqual6"},
+            "HQFilter" : { "plot_name" : "HQFilter_ITGhostDistributionVSpT_st2_minqual6"}
+        },
+        "plot" : {
+            "y": [ 0.0, 5, "# Ghost" ],
+            "legend_title": "MB2 - qual > 6"
+        }, 
+        "output" : {
+            "directory": "plots/Ghosts/",
+            "file_name" : "13_ITGhostDistributionVSpT_st2_minqual6"
+        }
+    }, 
+
+    "IT_GhostDistributionVSpT_st3_minqual6": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ITGhostDistributionVSpT_st3_minqual6"},
+            "LQFilter" : { "plot_name" : "LQFilter_ITGhostDistributionVSpT_st3_minqual6"},
+            "HQFilter" : { "plot_name" : "HQFilter_ITGhostDistributionVSpT_st3_minqual6"}
+        },
+        "plot" : {
+            "y": [ 0.0, 5, "# Ghost" ],
+            "legend_title": "MB3 - qual > 6"
+        }, 
+        "output" : {
+            "directory": "plots/Ghosts/",
+            "file_name" : "13_ITGhostDistributionVSpT_st3_minqual6"
+        }
+    }, 
+
+    "IT_GhostDistributionVSpT_st4_minqual6": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ITGhostDistributionVSpT_st4_minqual6"},
+            "LQFilter" : { "plot_name" : "LQFilter_ITGhostDistributionVSpT_st4_minqual6"},
+            "HQFilter" : { "plot_name" : "HQFilter_ITGhostDistributionVSpT_st4_minqual6"}
+        },
+        "plot" : {
+            "y": [ 0.0, 5, "# Ghost" ],
+            "legend_title": "MB4 - qual > 6"
+        }, 
+        "output" : {
+            "directory": "plots/Ghosts/",
+            "file_name" : "13_ITGhostDistributionVSpT_st4_minqual6"
+        }
+    },
+
+
+
+
+
+
+
+    "OOT_GhostDistributionVSpT_st1_minqual0": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_OOTGhostDistributionVSpT_st1_minqual0"},
+            "LQFilter" : { "plot_name" : "LQFilter_OOTGhostDistributionVSpT_st1_minqual0"},
+            "HQFilter" : { "plot_name" : "HQFilter_OOTGhostDistributionVSpT_st1_minqual0"}
+        },
+        "plot" : {
+            "y": [ 0.0, 5, "# Ghost" ],
+            "legend_title": "MB1 - qual > 0"
+        }, 
+        "output" : {
+            "directory": "plots/Ghosts/",
+            "file_name" : "13_OOT GhostDistributionVSpT_st1_minqual0"
+        }
+    }, 
+
+    "OOT_GhostDistributionVSpT_st2_minqual0": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_OOTGhostDistributionVSpT_st2_minqual0"},
+            "LQFilter" : { "plot_name" : "LQFilter_OOTGhostDistributionVSpT_st2_minqual0"},
+            "HQFilter" : { "plot_name" : "HQFilter_OOTGhostDistributionVSpT_st2_minqual0"}
+        },
+        "plot" : {
+            "y": [ 0.0, 5, "# Ghost" ],
+            "legend_title": "MB2 - qual > 0"
+        }, 
+        "output" : {
+            "directory": "plots/Ghosts/",
+            "file_name" : "13_OOT GhostDistributionVSpT_st2_minqual0"
+        }
+    }, 
+
+    "OOT_GhostDistributionVSpT_st3_minqual0": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_OOTGhostDistributionVSpT_st3_minqual0"},
+            "LQFilter" : { "plot_name" : "LQFilter_OOTGhostDistributionVSpT_st3_minqual0"},
+            "HQFilter" : { "plot_name" : "HQFilter_OOTGhostDistributionVSpT_st3_minqual0"}
+        },
+        "plot" : {
+            "y": [ 0.0, 5, "# Ghost" ],
+            "legend _title": "MB3 - qual > 0"
+        }, 
+        "output" : {
+            "directory": "plots/Ghosts/",
+            "file_name" : "13_OOT GhostDistributionVSpT_st3_minqual0"
+        }
+    }, 
+
+    "OOT_GhostDistributionVSpT_st4_minqual0": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_OOTGhostDistributionVSpT_st4_minqual0"},
+            "LQFilter" : { "plot_name" : "LQFilter_OOTGhostDistributionVSpT_st4_minqual0"},
+            "HQFilter" : { "plot_name" : "HQFilter_OOTGhostDistributionVSpT_st4_minqual0"}
+        },
+        "plot" : {
+            "y": [ 0.0, 5, "# Ghost" ],
+            "legend_title": "MB4 - qual > 0"
+        }, 
+        "output" : {
+            "directory": "plots/Ghosts/",
+            "file_name" : "13_OOT GhostDistributionVSpT_st4_minqual0"
+        }
+    },
+    
+    "OOT_GhostDistributionVSpT_st1_minqual3": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_OOTGhostDistributionVSpT_st1_minqual3"},
+            "LQFilter" : { "plot_name" : "LQFilter_OOTGhostDistributionVSpT_st1_minqual3"},
+            "HQFilter" : { "plot_name" : "HQFilter_OOTGhostDistributionVSpT_st1_minqual3"}
+        },
+        "plot" : {
+            "y": [ 0.0, 5, "# Ghost" ],
+            "legend_title": "MB1 - qual > 3"
+        }, 
+        "output" : {
+            "directory": "plots/Ghosts/",
+            "file_name" : "13_OOT GhostDistributionVSpT_st1_minqual3"
+        }
+    }, 
+    
+    "OOT_GhostDistributionVSpT_st2_minqual3": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_OOTGhostDistributionVSpT_st2_minqual3"},
+            "LQFilter" : { "plot_name" : "LQFilter_OOTGhostDistributionVSpT_st2_minqual3"},
+            "HQFilter" : { "plot_name" : "HQFilter_OOTGhostDistributionVSpT_st2_minqual3"}
+        },
+        "plot" : {
+            "y": [ 0.0, 5, "# Ghost" ],
+            "legend_title": "MB2 - qual > 3"
+        }, 
+        "output" : {
+            "directory": "plots/Ghosts/",
+            "file_name" : "13_OOT GhostDistributionVSpT_st2_minqual3"
+        }
+    }, 
+
+    "OOT_GhostDistributionVSpT_st3_minqual3": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_OOTGhostDistributionVSpT_st3_minqual3"},
+            "LQFilter" : { "plot_name" : "LQFilter_OOTGhostDistributionVSpT_st3_minqual3"},
+            "HQFilter" : { "plot_name" : "HQFilter_OOTGhostDistributionVSpT_st3_minqual3"}
+        },
+        "plot" : {
+            "y": [ 0.0, 5, "# Ghost" ],
+            "legend_title": "MB3 - qual > 3"
+        }, 
+        "output" : {
+            "directory": "plots/Ghosts/",
+            "file_name" : "13_OOT GhostDistributionVSpT_st3_minqual3"
+        }
+    }, 
+
+    "OOT_GhostDistributionVSpT_st4_minqual3": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_OOTGhostDistributionVSpT_st4_minqual3"},
+            "LQFilter" : { "plot_name" : "LQFilter_OOTGhostDistributionVSpT_st4_minqual3"},
+            "HQFilter" : { "plot_name" : "HQFilter_OOTGhostDistributionVSpT_st4_minqual3"}
+        },
+        "plot" : {
+            "y": [ 0.0, 5, "# Ghost" ],
+            "legend_title": "MB4 - qual > 3"
+        }, 
+        "output" : {
+            "directory": "plots/Ghosts/",
+            "file_name" : "13_OOT GhostDistributionVSpT_st4_minqual3"
+        }
+    }, 
+
+    "OOT_GhostDistributionVSpT_st1_minqual6": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_OOTGhostDistributionVSpT_st1_minqual6"},
+            "LQFilter" : { "plot_name" : "LQFilter_OOTGhostDistributionVSpT_st1_minqual6"},
+            "HQFilter" : { "plot_name" : "HQFilter_OOTGhostDistributionVSpT_st1_minqual6"}
+        },
+        "plot" : {
+            "y": [ 0.0, 5, "# Ghost" ],
+            "legend_title": "MB1 - qual > 6"
+        }, 
+        "output" : {
+            "directory": "plots/Ghosts/",
+            "file_name" : "13_OOT GhostDistributionVSpT_st1_minqual6"
+        }
+    }, 
+
+    "OOT_GhostDistributionVSpT_st2_minqual6": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_OOTGhostDistributionVSpT_st2_minqual6"},
+            "LQFilter" : { "plot_name" : "LQFilter_OOTGhostDistributionVSpT_st2_minqual6"},
+            "HQFilter" : { "plot_name" : "HQFilter_OOTGhostDistributionVSpT_st2_minqual6"}
+        },
+        "plot" : {
+            "y": [ 0.0, 5, "# Ghost" ],
+            "legend_title": "MB2 - qual > 6"
+        }, 
+        "output" : {
+            "directory": "plots/Ghosts/",
+            "file_name" : "13_OOT GhostDistributionVSpT_st2_minqual6"
+        }
+    }, 
+
+    "OOT_GhostDistributionVSpT_st3_minqual6": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_OOTGhostDistributionVSpT_st3_minqual6"},
+            "LQFilter" : { "plot_name" : "LQFilter_OOTGhostDistributionVSpT_st3_minqual6"},
+            "HQFilter" : { "plot_name" : "HQFilter_OOTGhostDistributionVSpT_st3_minqual6"}
+        },
+        "plot" : {
+            "y": [ 0.0, 5, "# Ghost" ],
+            "legend_title": "MB3 - qual > 6"
+        }, 
+        "output" : {
+            "directory": "plots/Ghosts/",
+            "file_name" : "13_OOT GhostDistributionVSpT_st3_minqual6"
+        }
+    }, 
+
+    "OOT_GhostDistributionVSpT_st4_minqual6": {
+        "base" :"ghost_pt", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_OOTGhostDistributionVSpT_st4_minqual6"},
+            "LQFilter" : { "plot_name" : "LQFilter_OOTGhostDistributionVSpT_st4_minqual6"},
+            "HQFilter" : { "plot_name" : "HQFilter_OOTGhostDistributionVSpT_st4_minqual6"}
+        },
+        "plot" : {
+            "y": [ 0.0, 5, "# Ghost" ],
+            "legend_title": "MB4 - qual > 6"
+        }, 
+        "output" : {
+            "directory": "plots/Ghosts/",
+            "file_name" : "13_OOT GhostDistributionVSpT_st4_minqual6"
+        }
+    }, 
+
+
+    "NGhost": {
+        "base" :"base", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_N_Ghosts"},
+            "LQFilter" : { "plot_name" : "LQFilter_N_Ghosts"},
+            "HQFilter" : { "plot_name" : "HQFilter_N_Ghosts"}
+        },
+        "plot" : {
+            "x": [ 0.0, 10.0, "# Ghost per cluster" ],
+            "y": [ 0.0, 300000.0, "Entries" ],
+            "option": "logY"
+        }, 
+        "output" : {
+            "directory": "plots/Ghosts/",
+            "file_name" : "13_N_Ghosts"
+        }
+    }, 
+
+    "ITGhosts": {
+        "base" :"base", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ITGhosts"},
+            "LQFilter" : { "plot_name" : "LQFilter_ITGhosts"},
+            "HQFilter" : { "plot_name" : "HQFilter_ITGhosts"}
+        },
+        "plot" : {
+            "x": [ 0.0, 10.0, "# Ghost per cluster" ],
+            "y": [ 0.0, 300000.0, "Entries" ],
+            "option": "logY"
+        }, 
+        "output" : {
+            "directory": "plots/Ghosts/",
+            "file_name" : "13_ITGhosts"
+        }
+    }, 
+
+    "OOTGhosts": {
+        "base" :"base", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_OOTGhosts"},
+            "LQFilter" : { "plot_name" : "LQFilter_OOTGhosts"},
+            "HQFilter" : { "plot_name" : "HQFilter_OOTGhosts"}
+        },
+        "plot" : {
+            "x": [ 0.0, 10.0, "# Ghost per cluster" ],
+            "y": [ 0.0, 300000.0, "Entries" ], 
+            "option": "logY"
+        }, 
+        "output" : {
+            "directory": "plots/Ghosts/",
+            "file_name" : "13_OOTGhosts"
+        }
+    },
+
+
+
+
+
+
+    "ITBackground_st1_minqual0": {
+        "base" :"base_xLoc", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ITBackground_st1_minqual0"},
+            "LQFilter" : { "plot_name" : "LQFilter_ITBackground_st1_minqual0"},
+            "HQFilter" : { "plot_name" : "HQFilter_ITBackground_st1_minqual0"}
+        },
+        "plot" : {
+            "y": [ 0.0, 3000, "# TPs" ],
+            "legend_title": "MB1 - qual > 0"
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_ITBackground_st1_minqual0"
+        }
+    }, 
+
+    "ITBackground_st1_minqual3": {
+        "base" :"base_xLoc", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ITBackground_st1_minqual3"},
+            "LQFilter" : { "plot_name" : "LQFilter_ITBackground_st1_minqual3"},
+            "HQFilter" : { "plot_name" : "HQFilter_ITBackground_st1_minqual3"}
+        },
+        "plot" : {
+            "y": [ 0.0, 3000, "# TPs" ],
+            "legend_title": "MB1 - qual > 3"
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_ITBackground_st1_minqual3"
+        }
+    }, 
+
+    "ITBackground_st1_minqual6": {
+        "base" :"base_xLoc", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ITBackground_st1_minqual6"},
+            "LQFilter" : { "plot_name" : "LQFilter_ITBackground_st1_minqual6"},
+            "HQFilter" : { "plot_name" : "HQFilter_ITBackground_st1_minqual6"}
+        },
+        "plot" : {
+            "y": [ 0.0, 3000, "# TPs" ],
+            "legend_title": "MB1 - qual > 6"
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_ITBackground_st1_minqual6"
+        }
+    }, 
+
+    "ITBackground_st2_minqual0": {
+        "base" :"base_xLoc", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ITBackground_st2_minqual0"},
+            "LQFilter" : { "plot_name" : "LQFilter_ITBackground_st2_minqual0"},
+            "HQFilter" : { "plot_name" : "HQFilter_ITBackground_st2_minqual0"}
+        },
+        "plot" : {
+            "y": [ 0.0, 1000, "# TPs" ],
+            "legend_title": "MB2 - qual > 0"
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_ITBackground_st2_minqual0"
+        }
+    }, 
+
+    "ITBackground_st2_minqual3": {
+        "base" :"base_xLoc", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ITBackground_st2_minqual3"},
+            "LQFilter" : { "plot_name" : "LQFilter_ITBackground_st2_minqual3"},
+            "HQFilter" : { "plot_name" : "HQFilter_ITBackground_st2_minqual3"}
+        },
+        "plot" : {
+            "y": [ 0.0, 3000, "# TPs" ],
+            "legend_title": "MB1 - qual > 3"
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_ITBackground_st2_minqual3"
+        }
+    }, 
+
+    "ITBackground_st2_minqual6": {
+        "base" :"base_xLoc", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ITBackground_st2_minqual6"},
+            "LQFilter" : { "plot_name" : "LQFilter_ITBackground_st2_minqual6"},
+            "HQFilter" : { "plot_name" : "HQFilter_ITBackground_st2_minqual6"}
+        },
+        "plot" : {
+            "y": [ 0.0, 3000, "# TPs" ],
+            "legend_title": "MB2 - qual > 6"
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_ITBackground_st2_minqual6"
+        }
+    }, 
+
+    "ITBackground_st3_minqual0": {
+        "base" :"base_xLoc", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ITBackground_st3_minqual0"},
+            "LQFilter" : { "plot_name" : "LQFilter_ITBackground_st3_minqual0"},
+            "HQFilter" : { "plot_name" : "HQFilter_ITBackground_st3_minqual0"}
+        },
+        "plot" : {
+            "y": [ 0.0, 500, "# TPs" ],
+            "legend_title": "MB3 - qual > 0"
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_ITBackground_st3_minqual0"
+        }
+    }, 
+    
+    "ITBackground_st3_minqual3": {
+        "base" :"base_xLoc", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ITBackground_st3_minqual3"},
+            "LQFilter" : { "plot_name" : "LQFilter_ITBackground_st3_minqual3"},
+            "HQFilter" : { "plot_name" : "HQFilter_ITBackground_st3_minqual3"}
+        },
+        "plot" : {
+            "y": [ 0.0, 500, "# TPs" ],
+            "legend_title": "MB3 - qual > 3"
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_ITBackground_st3_minqual3"
+        }
+    }, 
+
+    "ITBackground_st3_minqual6": {
+        "base" :"base_xLoc", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ITBackground_st3_minqual6"},
+            "LQFilter" : { "plot_name" : "LQFilter_ITBackground_st3_minqual6"},
+            "HQFilter" : { "plot_name" : "HQFilter_ITBackground_st3_minqual6"}
+        },
+        "plot" : {
+            "y": [ 0.0, 500, "# TPs" ],
+            "legend_title": "MB3 - qual > 6"
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_ITBackground_st3_minqual6"
+        }
+    }, 
+
+    "ITBackground_st4_minqual0": {
+        "base" :"base_xLoc", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ITBackground_st4_minqual0"},
+            "LQFilter" : { "plot_name" : "LQFilter_ITBackground_st4_minqual0"},
+            "HQFilter" : { "plot_name" : "HQFilter_ITBackground_st4_minqual0"}
+        },
+        "plot" : {
+            "y": [ 0.0, 500, "# TPs" ],
+            "legend_title": "MB4 - qual > 0"
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_ITBackground_st4_minqual0"
+        }
+    }, 
+
+    "ITBackground_st4_minqual3": {
+        "base" :"base_xLoc", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ITBackground_st4_minqual3"},
+            "LQFilter" : { "plot_name" : "LQFilter_ITBackground_st4_minqual3"},
+            "HQFilter" : { "plot_name" : "HQFilter_ITBackground_st4_minqual3"}
+        },
+        "plot" : {
+            "y": [ 0.0, 500, "# TPs" ],
+            "legend_title": "MB4 - qual > 3"
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_ITBackground_st4_minqual3"
+        }
+    }, 
+
+    "ITBackground_st4_minqual6": {
+        "base" :"base_xLoc", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ITBackground_st4_minqual6"},
+            "LQFilter" : { "plot_name" : "LQFilter_ITBackground_st4_minqual6"},
+            "HQFilter" : { "plot_name" : "HQFilter_ITBackground_st4_minqual6"}
+        },
+        "plot" : {
+            "y": [ 0.0, 500, "# TPs" ],
+            "legend_title": "MB4 - qual > 6"
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_ITBackground_st4_minqual6"
+        }
+    }, 
+
+
+    "OOTBackground_st1_minqual0": {
+        "base" :"base_xLoc", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_OOTBackground_st1_minqual0"},
+            "LQFilter" : { "plot_name" : "LQFilter_OOTBackground_st1_minqual0"},
+            "HQFilter" : { "plot_name" : "HQFilter_OOTBackground_st1_minqual0"}
+        },
+        "plot" : {
+            "y": [ 0.0, 2000, "# TPs" ],
+            "legend_title": "MB1 - qual > 0"
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_OOTBackground_st1_minqual0"
+        }
+    }, 
+
+    "OOTBackground_st1_minqual3": {
+        "base" :"base_xLoc", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_OOTBackground_st1_minqual3"},
+            "LQFilter" : { "plot_name" : "LQFilter_OOTBackground_st1_minqual3"},
+            "HQFilter" : { "plot_name" : "HQFilter_OOTBackground_st1_minqual3"}
+        },
+        "plot" : {
+            "y": [ 0.0, 300, "# TPs" ],
+            "legend_title": "MB1 - qual > 3"
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_OOTBackground_st1_minqual3"
+        }
+    }, 
+
+    "OOTBackground_st1_minqual6": {
+        "base" :"base_xLoc", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_OOTBackground_st1_minqual6"},
+            "LQFilter" : { "plot_name" : "LQFilter_OOTBackground_st1_minqual6"},
+            "HQFilter" : { "plot_name" : "HQFilter_OOTBackground_st1_minqual6"}
+        },
+        "plot" : {
+            "y": [ 0.0, 200, "# TPs" ],
+            "legend_title": "MB1 - qual > 6"
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_OOTBackground_st1_minqual6"
+        }
+    }, 
+
+    "OOTBackground_st2_minqual0": {
+        "base" :"base_xLoc", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_OOTBackground_st2_minqual0"},
+            "LQFilter" : { "plot_name" : "LQFilter_OOTBackground_st2_minqual0"},
+            "HQFilter" : { "plot_name" : "HQFilter_OOTBackground_st2_minqual0"}
+        },
+        "plot" : {
+            "y": [ 0.0, 500, "# TPs" ],
+            "legend_title": "MB2 - qual > 0"
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_OOTBackground_st2_minqual0"
+        }
+    }, 
+
+    "OOTBackground_st2_minqual3": {
+        "base" :"base_xLoc", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_OOTBackground_st2_minqual3"},
+            "LQFilter" : { "plot_name" : "LQFilter_OOTBackground_st2_minqual3"},
+            "HQFilter" : { "plot_name" : "HQFilter_OOTBackground_st2_minqual3"}
+        },
+        "plot" : {
+            "y": [ 0.0, 200, "# TPs" ],
+            "legend_title": "MB2 - qual > 3"
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_OOTBackground_st2_minqual3"
+        }
+    }, 
+
+    "OOTBackground_st2_minqual6": {
+        "base" :"base_xLoc", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_OOTBackground_st2_minqual6"},
+            "LQFilter" : { "plot_name" : "LQFilter_OOTBackground_st2_minqual6"},
+            "HQFilter" : { "plot_name" : "HQFilter_OOTBackground_st2_minqual6"}
+        },
+        "plot" : {
+            "y": [ 0.0, 150, "# TPs" ],
+            "legend_title": "MB2 - qual > 6"
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_OOTBackground_st2_minqual6"
+        }
+    }, 
+
+    "OOTBackground_st3_minqual0": {
+        "base" :"base_xLoc", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_OOTBackground_st3_minqual0"},
+            "LQFilter" : { "plot_name" : "LQFilter_OOTBackground_st3_minqual0"},
+            "HQFilter" : { "plot_name" : "HQFilter_OOTBackground_st3_minqual0"}
+        },
+        "plot" : {
+            "y": [ 0.0, 250, "# TPs" ],
+            "legend_title": "MB3 - qual > 0"
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_OOTBackground_st3_minqual0"
+        }
+    }, 
+
+    "OOTBackground_st3_minqual3": {
+        "base" :"base_xLoc", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_OOTBackground_st3_minqual3"},
+            "LQFilter" : { "plot_name" : "LQFilter_OOTBackground_st3_minqual3"},
+            "HQFilter" : { "plot_name" : "HQFilter_OOTBackground_st3_minqual3"}
+        },
+        "plot" : {
+            "y": [ 0.0, 150, "# TPs" ],
+            "legend_title": "MB3 - qual > 3"
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_OOTBackground_st3_minqual3"
+        }
+    }, 
+
+    "OOTBackground_st3_minqual6": {
+        "base" :"base_xLoc", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_OOTBackground_st3_minqual6"},
+            "LQFilter" : { "plot_name" : "LQFilter_OOTBackground_st3_minqual6"},
+            "HQFilter" : { "plot_name" : "HQFilter_OOTBackground_st3_minqual6"}
+        },
+        "plot" : {
+            "y": [ 0.0, 50, "# TPs" ],
+            "legend_title": "MB3 - qual > 6"
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_OOTBackground_st3_minqual6"
+        }
+    }, 
+
+    "OOTBackground_st4_minqual0": {
+        "base" :"base_xLoc", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_OOTBackground_st4_minqual0"},
+            "LQFilter" : { "plot_name" : "LQFilter_OOTBackground_st4_minqual0"},
+            "HQFilter" : { "plot_name" : "HQFilter_OOTBackground_st4_minqual0"}
+        },
+        "plot" : {
+            "y": [ 0.0, 200, "# TPs" ],
+            "legend_title": "MB4 - qual > 0"
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_OOTBackground_st4_minqual0"
+        }
+    }, 
+
+    "OOTBackground_st4_minqual3": {
+        "base" :"base_xLoc", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_OOTBackground_st4_minqual3"},
+            "LQFilter" : { "plot_name" : "LQFilter_OOTBackground_st4_minqual3"},
+            "HQFilter" : { "plot_name" : "HQFilter_OOTBackground_st4_minqual3"}
+        },
+        "plot" : {
+            "y": [ 0.0, 100, "# TPs" ],
+            "legend_title": "MB4 - qual > 3"
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_OOTBackground_st4_minqual3"
+        }
+    }, 
+
+    "OOTBackground_st4_minqual6": {
+        "base" :"base_xLoc", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_OOTBackground_st4_minqual6"},
+            "LQFilter" : { "plot_name" : "LQFilter_OOTBackground_st4_minqual6"},
+            "HQFilter" : { "plot_name" : "HQFilter_OOTBackground_st4_minqual6"}
+        },
+        "plot" : {
+            "y": [ 0.0, 50, "# TPs" ],
+            "legend_title": "MB4 - qual > 6"
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_OOTBackground_st4_minqual6"
+        }
+    }, 
+
+
+
+    "ITBackgroundDistribution": {
+        "base" :"bkg_dist", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ITBackgroundDistribution"},
+            "LQFilter" : { "plot_name" : "LQFilter_ITBackgroundDistribution"},
+            "HQFilter" : { "plot_name" : "HQFilter_ITBackgroundDistribution"}
+        },
+        "plot" : {
+            "y": [ 0.0, 1.5, "# TPs" ]
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_ITBackgroundDistribution"
+        }
+    },
+
+    "OOTBackgroundDistribution": {
+        "base" :"bkg_dist", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_OOTBackgroundDistribution"},
+            "LQFilter" : { "plot_name" : "LQFilter_OOTBackgroundDistribution"},
+            "HQFilter" : { "plot_name" : "HQFilter_OOTBackgroundDistribution"}
+        },
+        "plot" : {
+            "y": [ 0.0, 4.5, "# TPs" ]
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_OOTBackgroundDistribution"
+        }
+    }, 
+
+    "ITOnlyBackgroundDistribution": {
+        "base" :"bkg_dist", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_ITOnlyBackgroundDistribution"},
+            "LQFilter" : { "plot_name" : "LQFilter_ITOnlyBackgroundDistribution"},
+            "HQFilter" : { "plot_name" : "HQFilter_ITOnlyBackgroundDistribution"}
+        },
+        "plot" : {
+            "y": [ 0.0, 3.5, "# TPs" ]
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_ITOnlyBackgroundDistribution"
+        }
+    }, 
+
+    "OOTWithITBackgroundDistribution": {
+        "base" :"bkg_dist", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_OOTWithITBackgroundDistribution"},
+            "LQFilter" : { "plot_name" : "LQFilter_OOTWithITBackgroundDistribution"},
+            "HQFilter" : { "plot_name" : "HQFilter_OOTWithITBackgroundDistribution"}
+        },
+        "plot" : {
+            "y": [ 0.0, 1.0, "# TPs" ]
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_OOTWithITBackgroundDistribution"
+        }
+    }, 
+
+    "OOTOnlyBackgroundDistribution": {
+        "base" :"bkg_dist", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_OOTOnlyBackgroundDistribution"},
+            "LQFilter" : { "plot_name" : "LQFilter_OOTOnlyBackgroundDistribution"},
+            "HQFilter" : { "plot_name" : "HQFilter_OOTOnlyBackgroundDistribution"}
+        },
+        "plot" : {
+            "y": [ 0.0, 4.5, "# TPs" ]
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_OOTOnlyBackgroundDistribution"
+        }
+    }, 
+
+    "NoBestTPBackgroundDistribution": {
+        "base" :"bkg_dist", 
+        "inputs":{
+            "PreFilter": { "plot_name" : "PreFilter_NoBestTPBackgroundDistribution"},
+            "LQFilter" : { "plot_name" : "LQFilter_NoBestTPBackgroundDistribution"},
+            "HQFilter" : { "plot_name" : "HQFilter_NoBestTPBackgroundDistribution"}
+        },
+        "plot" : {
+            "y": [ 0.0, 4.5, "# TPs" ]
+        }, 
+        "output" : {
+            "directory": "plots/Background/",
+            "file_name" : "14_NoBestTPBackgroundDistribution"
+        }
+    }
+
+
+}
