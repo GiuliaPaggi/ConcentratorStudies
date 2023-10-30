@@ -11,7 +11,7 @@ class TriggerPrimitive {
   int wheel{-5};
   int sector{-1};
   int station{-1};
-  int quality{-1};
+  int quality{-5};
 
   int BX{-1000};
   int t0{-100000};  // in ns
@@ -50,8 +50,7 @@ class TriggerPrimitive {
   void checkBX();
 
   // Filter functions
-  bool MatchFromLQ(TriggerPrimitive &TP, double PhiCut, double TimeCut);
-  bool MatchFromHQ(TriggerPrimitive &TP, double PhiCut, double TimeCut);
+  bool Match(TriggerPrimitive &TP, double PhiCut, double TimeCut, const std::vector<int> & quals);
 };
 
 inline bool operator==(TriggerPrimitive const &ltp, TriggerPrimitive const &rtp) { return ltp.index == rtp.index; }
