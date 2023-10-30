@@ -38,6 +38,11 @@ Cluster::Cluster(std::vector<TriggerPrimitive> &tps, std::vector<Segment> &segs,
   else return tp1.BX < tp2.BX; 
   };
 
+  auto isEarliert0 = [](TriggerPrimitive const &tp1, TriggerPrimitive const &tp2) { 
+  if (tp1.t0 == tp2.t0) return tp1.quality > tp2.quality;    
+  else return tp1.t0 < tp2.t0; 
+  };
+
   auto compareSegs = [](Segment &s1, Segment &s2) { return s1.nPhiHits < s2.nPhiHits; };
 
   auto toggleCluster = [](auto &collection, const auto &target) {
@@ -99,6 +104,14 @@ Cluster::Cluster(std::vector<TriggerPrimitive> &tps, std::vector<Segment> &segs,
     auto earliestOOt{std::min_element(_ootGhosts.begin(), _ootGhosts.end(), isEarlier)};
     if (earliestOOt != _ootGhosts.end() && earliestOOt->BX < _bestTP.BX ) _earliestTP = *earliestOOt;
     else _earliestTP = _bestTP;
+
+    // using t0
+    auto earliestOOt_t0{std::min_element(_ootGhosts.begin(), _ootGhosts.end(), isEarliert0)};
+    if (earliestOOt_t0 != _ootGhosts.end() && earliestOOt_t0->BX < _bestTP.BX ) _earliestTP_t0 = *earliestOOt_t0;
+    else _earliestTP_t0 = _bestTP;
+
+    //if (!(_earliestTP == _earliestTP_t0)) std::cout << "non sono uguali" << std::endl;
+    
   }
 
   // ########## Segments cluster #############
@@ -199,6 +212,7 @@ int Cluster::bestTPQuality() const { return _bestTP.quality; };
 const TriggerPrimitive &Cluster::bestTP() const { return _bestTP; };
 
 double Cluster::earliestTPBX() const { return _earliestTP.BX; };
+double Cluster::earliestTPt0() const { return _earliestTP_t0.t0; };
 
 int Cluster::itCountIf(std::function<bool(TriggerPrimitive const &)> f) const {
   return std::count_if(_itGhosts.begin(), _itGhosts.end(), f);
@@ -210,7 +224,7 @@ int Cluster::ootCountIf(std::function<bool(TriggerPrimitive const &)> f) const {
 
 bool Cluster::matchMu(int muWh, int muStat, int muSec, double muXedge, double muYedge, double muX, int muIndex,
                       int iMu, double xCut) {
-  if (!muMatched && muWh == wheel && muStat == station && muSec == sector && muXedge < -5 && muYedge < -5) {
+  if (!muMatched && muWh == wheel && muStat == station && muSec == sector){ // && muXedge < -5 && muYedge < -5) {
     // if the extrapolated segment is within xCut from _bestTP
     if (foundSeg && std::abs(_bestSeg.xLoc - muX) < xCut) {
       muMatchedIndex[0] = iMu;
@@ -223,9 +237,6 @@ bool Cluster::matchMu(int muWh, int muStat, int muSec, double muXedge, double mu
       muMatched = true;
       return true;
     }
-    /*else {
-      std::cout << "Trying to match " << *this  << " with muon in wh " << muWh << " station " << muStat << " sector " << muSec << " in xLoc " << muX << std::endl;
-    }*/
   }
   return false;
 }

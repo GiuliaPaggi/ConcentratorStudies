@@ -32,6 +32,7 @@ class Cluster {
   std::vector<TriggerPrimitive> _ootGhosts;
   std::vector<TriggerPrimitive> _itGhosts;
   TriggerPrimitive _earliestTP{};
+  TriggerPrimitive _earliestTP_t0{};
 
   std::vector<Digi> _digiCluster;
   std::vector<Digi> _matchedDigis;
@@ -70,6 +71,7 @@ class Cluster {
 
   //earliest TP in cluster
   double earliestTPBX() const;
+  double earliestTPt0() const;
 
   /// Size and vector of segment cluster
   int segClusterSize() const;
