@@ -224,7 +224,7 @@ int Cluster::ootCountIf(std::function<bool(TriggerPrimitive const &)> f) const {
 
 bool Cluster::matchMu(int muWh, int muStat, int muSec, double muXedge, double muYedge, double muX, int muIndex,
                       int iMu, double xCut) {
-  if (!muMatched && muWh == wheel && muStat == station && muSec == sector && muXedge < -5 && muYedge < -5) {
+  if (!muMatched && muWh == wheel && muStat == station && muSec == sector){ // && muXedge < -5 && muYedge < -5) {
     // if the extrapolated segment is within xCut from _bestTP
     if (foundSeg && std::abs(_bestSeg.xLoc - muX) < xCut) {
       muMatchedIndex[0] = iMu;

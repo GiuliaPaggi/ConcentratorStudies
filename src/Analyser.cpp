@@ -40,7 +40,7 @@ const double MAX_ETA{1.4};
 const double MIN_PT{1.5};
 const double MAX_GEN_DR{0.25};
 const double MASS{105.7};
-const double X_CUT{10.0};  // cm
+const double X_CUT{20.0};  // cm
 }  // namespace MU
 
 namespace EFF {
@@ -521,7 +521,7 @@ void Analyser::Loop() {
     // ########## LOOP ON EVENTS #############
     if (entry % 100 == 0) std::cout << "Processing event: " << entry << '\r' << std::flush;
 
-    if (gen_pdgId->size() < 1 || gen_pt->at(0) < 5.0) continue;
+    if (gen_pdgId->size() < 1 || gen_pt->at(0) < 10.0) continue;
 
     // ########## CREATE TPs std::vector #############
     std::vector<TriggerPrimitive> tps;
