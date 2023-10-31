@@ -230,11 +230,15 @@ bool Cluster::matchMu(int muWh, int muStat, int muSec, double muXedge, double mu
       muMatchedIndex[0] = iMu;
       muMatchedIndex[1] = muIndex;
       muMatched = true;
+      xEdge = muXedge;
+      yEdge = muYedge;
       return true;
     } else if (!foundSeg && foundTP && std::abs(_bestTP.xLoc - muX) < xCut) {
       muMatchedIndex[0] = iMu;
       muMatchedIndex[1] = muIndex;
       muMatched = true;
+      xEdge = muXedge;
+      yEdge = muYedge;
       return true;
     }
   }

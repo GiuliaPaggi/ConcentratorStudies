@@ -19,6 +19,8 @@ class Cluster {
 
   bool muMatched{false};
   std::array<int, 2> muMatchedIndex;  // 0 index of mu, 1 index of nmatch
+  double xEdge{999.};
+  double yEdge{999.};
 
   bool foundTP{false};  // CB what do we need out of this?
   bool foundSeg{false};

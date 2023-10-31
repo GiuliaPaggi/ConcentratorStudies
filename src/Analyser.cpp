@@ -46,6 +46,8 @@ const double X_CUT{20.0};  // cm
 namespace EFF {
 const double MAX_ETA{0.8};
 const double MIN_PT{5.0};
+const double XEDGE_CUT{5.0};
+const double YEDGE_CUT{5.0};
 }  // namespace EFF
 
 const std::array<int, 3> QUAL_PLOT{0, 3, 6};
@@ -113,7 +115,6 @@ void Analyser::FillBackground(const std::string &typeStr, int st, int qualCut, d
   const int ITtps{cluster.itSize() + (cluster.foundTP ? 1 : 0)};
   const int OOTtps{cluster.ootSize()};
 
-
   if (cluster.bestTPQuality() >= qualCut) {
     m_plots[Form("%s_ITBackground_st%d_minqual%d", type, st, qualCut)]->Fill(valueToFill, ITtps);
     m_plots[Form("%s_OOTBackground_st%d_minqual%d", type, st, qualCut)]->Fill(valueToFill, OOTtps);
@@ -131,6 +132,7 @@ void Analyser::DefinePlot() {
   m_plots["ClusterPerEvent"] = new TH1I("ClusterPerEvent", "ClusterPerEvent; # clusters; Entries", 30, 0, 30);
   m_plots["GoodMuClusterPerEvent"] =
       new TH1I("GoodMuClusterPerEvent", "GoodMuClusterPerEvent; # clusters; Entries", 30, 0, 30);
+
   // Muon matching control plots
   m_plots["DeltaR"] = new TH1D("DeltaR", "DeltaR; #DeltaR(reco,gen); Entries", 100, -0.0, 10.0);
   m_plots["NGoodMu"] = new TH1D("NGoodMu", "NGoodMu; # of \"good\" muons; Entries", 11, -.5, 10.5);
@@ -138,6 +140,7 @@ void Analyser::DefinePlot() {
   m_plots["PtGoodMu"] = new TH1D("PtGoodMu", "PtGoodMu; pT (GeV); Entries", 200, .5, 100.5);
   m_plots["PhiGoodMu"] = new TH1D("PhiGoodMu", "PhiGoodMu; phi(rad); Entries", 50, -TMath::Pi(), TMath::Pi());
   m_plots["EtaGoodMu"] = new TH1D("EtaGoodMu", "EtaGoodMu; eta; Entries", 50, -1, 1);
+
   //prefiring
   m_plots["FirstTpBX"] = new TH1I("FirstTpBX", "FirstTpBX", 10, CORRECT_BX-5, CORRECT_BX+5);
   m_plots["FirstTpt0"] = new TH1I("FirstTpt0", "FirstTpt0", 100, (CORRECT_BX-5)*25-.5, (CORRECT_BX+5)*25-.5);
@@ -146,6 +149,7 @@ void Analyser::DefinePlot() {
   m_2Dplots["Pos_unmatchedGenMu"] = new TH2D("Pos_unmatchedGenMu", "Pos_unmatchedGenMu; eta; phi (rad)", 50, -1, 1, 50, -TMath::Pi(),
                  TMath::Pi());
   m_plots["Pt_unmatchedGenMu"] = new TH1D("Pt_unmatchedGenMu", "Pt_unmatchedGenMu; pT (GeV); Entries", 200, .5, 100.5);
+  
 
   // ############# Plots per station #############
   for (const auto st : GEOM.STATIONS) {
@@ -197,15 +201,9 @@ void Analyser::DefinePlot() {
     m_plots[Form("%s_Res_SegMatched", type)] =
         new TH1D(Form("%s_Res_SegMatched", type),
                  Form("%s_Res_SegMatched; cluster.bestTP().xLoc - seg.xLoc; Entries", type), 110, -10.5, 10.5);
+
     //background
-    m_plots[Form("%s_BackgroundDistribution", type)] =
-        new TProfile(Form("%s_BackgroundDistribution", type), Form("%s_BackgroundDistribution", type), 20, 0, 21);
-    m_plots[Form("%s_ITBackgroundDistribution", type)] =
-        new TProfile(Form("%s_ITBackgroundDistribution", type), Form("%s_ITBackgroundDistribution", type), 20, 0, 21);
-    m_plots[Form("%s_OOTBackgroundDistribution", type)] =
-        new TProfile(Form("%s_OOTBackgroundDistribution", type), Form("%s_OOTBackgroundDistribution", type), 20, 0, 21);
-    m_plots[Form("%s_NoBestTPBackgroundDistribution", type)] = new TProfile(
-        Form("%s_NoBestTPBackgroundDistribution", type), Form("%s_NoBestTPBackgroundDistribution", type), 20, 0, 21);
+
     m_plots[Form("%s_Q_Bkg", type)] = new TH1I(Form("%s_Q_Bkg", type), Form("%s_Q_Bkg", type), 10, 0, 10);
     m_plots[Form("%s_N_bkg", type)] = new TH1I(Form("%s_N_bkg", type), Form("%s_N_bkg", type), 20, 0, 20);
     m_2Dplots[Form("%s_Q_OoTGhosts", type)] =
@@ -231,12 +229,6 @@ void Analyser::DefinePlot() {
       m_plots[Form("%s_xLoc_OoTGhost_st%d", type, st)] =
           new TH1D(Form("%s_xLoc_OoTGhost_st%d", type, st), Form("%s_xLoc_OoTGhost_st%d; xLoc; Entries", type, st), 100,
                    -220, 220);
-
-      m_plots[Form("%s_BackgroundResidual_st%d", type, st)] =
-          new TH1D(Form("%s_BackgroundResidual_st%d", type, st),
-                   Form("%s_BackgroundResidual_st%d; bkg.xLoc - signal.xLoc; Entries", type, st), 100, -220, 220);
-      m_plots[Form("%s_q8position_st%d", type, st)] = new TH1D(
-          Form("%s_q8position_st%d", type, st), Form("%s_q8position_st%d; xLoc; Entries", type, st), 100, -220, 220);
 
       m_2Dplots[Form("%s_N_Cluster_st%d", type, st)] = new TH2I(
           Form("%s_N_Cluster_st%d", type, st), Form("%s_N_Cluster_st%d", type, st), 14, -0.5, 13.5, 7, -3.5, 3.5);
@@ -351,7 +343,7 @@ void Analyser::ClusterAnalysis(const std::vector<Cluster> &clusters, const std::
 
     m_2Dplots[Form("%s_TPs_LocalDirectionvsPosition_st%d", type, st)]->Fill(bestTP.xLoc, bestTP.psi);
     m_plots[Form("%s_ClusterSize", type)]->Fill(cluster.tpClusterSize());
-
+    
     // ############# Study TP timing #############
     m_plots["FirstTpBX"]->Fill(cluster.earliestTPBX()); 
     m_plots["FirstTpt0"]->Fill(cluster.earliestTPt0());
@@ -397,7 +389,8 @@ void Analyser::ClusterAnalysis(const std::vector<Cluster> &clusters, const std::
 
     if (cluster.muMatched) ++m_counters[Form("%s_matchedCluster_st%d", type, st)];
 
-    if (cluster.muMatched && bestSeg.nPhiHits >= 4) {
+    // ########## Study efficiency #############
+    if (cluster.muMatched && bestSeg.nPhiHits >= 4 && cluster.xEdge < EFF::XEDGE_CUT && cluster.yEdge < EFF::YEDGE_CUT) {
       int muon = cluster.MuIndex();
       double muEta = mu_eta->at(muon);
       double muPt = mu_pt->at(muon);
@@ -422,7 +415,7 @@ void Analyser::ClusterAnalysis(const std::vector<Cluster> &clusters, const std::
       if (cluster.foundTP && s.wheel == wh && s.sector == sec && s.station == st) {
         m_plots[Form("%s_Res_SegMatched", type)]->Fill(bestTP.xLoc - s.xLoc);
       }
-
+        
     // ########## Study digi clusters #############
     m_effs[Form("%s_Eff_DigiMatch_st%d", type, st)]->Fill(cluster.foundDigi, sec, wh);
 
@@ -431,21 +424,7 @@ void Analyser::ClusterAnalysis(const std::vector<Cluster> &clusters, const std::
         m_plots[Form("%s_Digi_residual_st%d_wh%d", type, st, wh)]->Fill(bestSeg.xLoc - digi.xLoc);
       }
     }
-
     m_plots[Form("%s_N_DigiPerCluster", type)]->Fill(cluster.nDigi());
-    m_plots["DigiSL"]->Fill(cluster.digiSL());
-
-
-    if (cluster.bestTPQuality()==8) m_plots[Form("%s_q8position_st%d", type, st)]->Fill(xLoc);
-    m_plots[Form("%s_N_bkg", type)] ->Fill(cluster.tpClusterSize());
-
-    for (auto const &otherCluster : clusters) {
-      if (otherCluster.wheel != wh || otherCluster.station != st || otherCluster.sector != sec ||
-          otherCluster.muMatched == false)
-        continue;
-
-      m_plots[Form("%s_BackgroundResidual_st%d", type, st)]->Fill(xLoc - otherCluster.bestTP().xLoc);
-    }
   }
 }
 
@@ -466,14 +445,10 @@ void Analyser::BackgroundAnalysis(const std::vector<Cluster> &clusters, const st
     }
 
     ++m_counters[Form("%s_nBackgroundClusters2", type)];
+    ++m_counters[Form("%s_bkgCluster_st%d", type, st)];
 
     m_plots[Form("%s_Q_Bkg", type)]->Fill(cluster.bestTPQuality());
-    /*for (auto const &itTp : cluster.itGhosts()){
-      m_plots[Form("%s_Q_Bkg", type)]->Fill(itTp.quality);
-    }
-    for (auto const &ootTp : cluster.ootGhosts()){
-      m_plots[Form("%s_Q_Bkg", type)]->Fill(ootTp.quality);
-    }*/
+
     if (cluster.bestTPQuality()==8) m_plots[Form("%s_q8position_st%d", type, st)]->Fill(xLoc);
     m_plots[Form("%s_N_bkg", type)] ->Fill(cluster.tpClusterSize());
 
@@ -660,7 +635,7 @@ void Analyser::Loop() {
       // std::cout << "event with no good muons but "<< nClusters << " clusters with " << nTPS<< std::endl;
       m_counters["noGoodMuTPS"] += nTPS;
     }
-
+    
     // ########## ATTEMPT cluster - muon extrapolation matching #############
     for (auto iMu : goodMuons) {
       double muPhi = mu_phi->at(iMu);
@@ -724,10 +699,6 @@ void Analyser::Loop() {
         m_2Dprofiles[Form("NMatchGoodMu_st%d", st)]->Fill(muEta, muPhi, stationMatch[st - 1], 1);
       }
     }
-
-    // std::cout << "####################################################################" << std::endl;
-    // for (const auto &cl : clusters) {std::cout << cl << std::endl;}
-    // std::cout << "####################################################################" << std::endl;
 
     // ########## RUN SOME ANALYSIS #############
     // ########## CLUSTER ANALYSIS #############
