@@ -22,6 +22,7 @@
 // CB separate with comments what is about ghost cleaning,
 //    clustering and analysis ...
 
+const double MIN_PT{10.0};
 const double PHI_CUT{0.02};
 const int HIGH_QUAL_CUT{5};
 const double T0_CUT{12.5};
@@ -525,8 +526,11 @@ void Analyser::Loop() {
     // ########## LOOP ON EVENTS #############
     if (entry % 100 == 0) std::cout << "Processing event: " << entry << '\r' << std::flush;
 
-    if (gen_pdgId->size() < 1 || gen_pt->at(0) < 10.0) continue;
-
+    if (gen_pdgId->size() < 1 ) continue;
+    bool lowPt{false};
+    for (UInt_t igen = 0; igen < gen_nGenParts; ++igen) if (gen_pt->at(igen) < MIN_PT) lowPt = true;
+    if (lowPt) continue;
+    
     // ########## CREATE TPs std::vector #############
     std::vector<TriggerPrimitive> tps;
 
