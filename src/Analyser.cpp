@@ -22,7 +22,7 @@
 // CB separate with comments what is about ghost cleaning,
 //    clustering and analysis ...
 
-const double MIN_PT{10.0};
+const double MIN_PT{10.0};  //Double muons taglio a 10
 const double PHI_CUT{0.02};
 const int HIGH_QUAL_CUT{5};
 const double T0_CUT{12.5};
@@ -215,8 +215,6 @@ void Analyser::DefinePlot() {
                  10, 0, 10);
 
     m_counters[Form("%s_nBackgroundClusters", type)] = 0;
-    m_counters[Form("%s_nBackgroundClusters2", type)] = 0;
-
 
     // ############# Plots per station #############
     for (const auto st : GEOM.STATIONS) {
@@ -445,7 +443,7 @@ void Analyser::BackgroundAnalysis(const std::vector<Cluster> &clusters, const st
       FillBackground(type, st, qual, xLoc, cluster);
     }
 
-    ++m_counters[Form("%s_nBackgroundClusters2", type)];
+    ++m_counters[Form("%s_nBackgroundClusters", type)];
     ++m_counters[Form("%s_bkgCluster_st%d", type, st)];
 
     m_plots[Form("%s_Q_Bkg", type)]->Fill(cluster.bestTPQuality());
@@ -513,6 +511,8 @@ void Analyser::Loop() {
 
   double removedHQFilter{0.0};
   double removedLQFilter{0};
+  double emptyEvents{0};
+
 
   if (fChain == 0) return;
 
@@ -526,11 +526,20 @@ void Analyser::Loop() {
     // ########## LOOP ON EVENTS #############
     if (entry % 100 == 0) std::cout << "Processing event: " << entry << '\r' << std::flush;
 
-    if (gen_pdgId->size() < 1 ) continue;
+    //std::cout << "\nEvent has " << gen_pdgId->size() << " gen part" <<std::endl;
+    if (gen_pdgId->size() < 1 ) {
+      ++emptyEvents;
+      continue;
+    }
+
     bool lowPt{false};
-    for (UInt_t igen = 0; igen < gen_nGenParts; ++igen) if (gen_pt->at(igen) < MIN_PT) lowPt = true;
+    //std::cout << "\nOne event has" << std::endl;
+    for (UInt_t igen = 0; igen < gen_nGenParts; ++igen) {
+      //std::cout << "Gen part n: " << igen << " with pT: " << gen_pt->at(igen) << std::endl;
+      if (gen_pt->at(igen) < MIN_PT) lowPt = true;
+    }
     if (lowPt) continue;
-    
+
     // ########## CREATE TPs std::vector #############
     std::vector<TriggerPrimitive> tps;
 
@@ -734,7 +743,7 @@ void Analyser::Loop() {
   for (auto tag : tags) {
     const auto type{tag.c_str()};
     double ghostFraction = m_counters[Form("%s_nClustersGhosts", type)] / m_counters[Form("%s_nClusters", type)];
-    double bkgFraction = m_counters[Form("%s_nBackgroundClusters2", type)] / m_counters[Form("%s_nClusters", type)];
+    double bkgFraction = m_counters[Form("%s_nBackgroundClusters", type)] / m_counters[Form("%s_nClusters", type)];
     std::cout << " \nFor " << tag << std::endl;
 
     std::cout << " Fraction of clusters with ghost (" << m_counters[Form("%s_nClustersGhosts", type)] << ") on total ("
@@ -743,7 +752,7 @@ void Analyser::Loop() {
     std::cout << " HQ out of time clusters: " << m_counters[Form("%s_ooTHQCount", type)] << std::endl;
 
     std::cout << " Fraction of background cluster (" << m_counters[Form("%s_nBackgroundClusters", type)] << " / "
-              << m_counters[Form("%s_nBackgroundClusters2", type)] << ") on total ("
+              << m_counters[Form("%s_nBackgroundClusters", type)] << ") on total ("
               << m_counters[Form("%s_nClusters", type)] << ") = " << bkgFraction << std::endl;
     
     std::cout << " Fraction of cluster with prefiring TPs (" << m_plots[Form("FirstTpBX")]->GetBinContent(5) << ") with respect to the right BX ("  << m_plots[Form("FirstTpBX")]->GetBinContent(6) << ") = " 
@@ -761,7 +770,8 @@ void Analyser::Loop() {
             << " less clusters " << std::endl;
 
   std::cout << "TPs in bkg because of no muon in event: " << m_counters["noGoodMuTPS"] << std::endl;
-
+  
+  std::cout << "Fraction of empty events: " << emptyEvents/n_entries << std::endl;
   outputFile.Write();
   outputFile.Close();
 }
