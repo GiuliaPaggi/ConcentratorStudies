@@ -54,10 +54,7 @@ class Cluster {
   int ootSize() const;
   int tpClusterSize() const;
 
-  /// ??
-  bool isolated() const { return bestTPQuality() < 0 && !hasGhosts(); };  // CB what is this?
   bool hasGhosts() const { return itSize() || ootSize(); };
-
   /// Provide list of in-time and out-of-time ghosts in cluster
   const std::vector<TriggerPrimitive>& itGhosts() const;
   const std::vector<TriggerPrimitive>& ootGhosts() const;
