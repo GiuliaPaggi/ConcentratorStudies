@@ -1,19 +1,37 @@
 {
-    "Prefiring": {
+    "PrefiringBX": {
         "base" : "base",
         "inputs": {
             "PreFiring": { "plot_name": "FirstTpBX"}
         },
         "plot": {
-            "x": [ 15.0, 25.0, "" ],
-            "y": [ 0.0, 650000.0, "" ],
+            "x": [ 15.0, 25.0, "BX" ],
+            "y": [ 0.0, 650000.0, "Entries" ],
             "legend_title": "Earliest TP BX",
             "legend_range": [ 0.69, 0.67, 0.85, 0.80 ]
             
         },
         "output": {
             "directory": "plots/Timing/",
-            "file_name": "Prefiring"
+            "file_name": "Prefiring_BX"
+        }
+    }, 
+
+    "Prefiringt0": {
+        "base" : "base",
+        "inputs": {
+            "PreFiring": { "plot_name": "FirstTpt0"}
+        },
+        "plot": {
+            "x": [ 450.0, 550.0, "t_{0} (ns)" ],
+            "y": [ 0.0, 200000.0, "Entries" ],
+            "legend_title": "Earliest TP t0",
+            "legend_range": [ 0.69, 0.67, 0.85, 0.80 ]
+            
+        },
+        "output": {
+            "directory": "plots/Timing/",
+            "file_name": "Prefiring_t0"
         }
     }, 
 
@@ -2817,7 +2835,7 @@
         }, 
         "output" : {
             "directory": "plots/Ghosts/",
-            "file_name" : "13_N_Ghosts"
+            "file_name" : "14_N_Ghosts"
         }
     }, 
 
@@ -2835,7 +2853,7 @@
         }, 
         "output" : {
             "directory": "plots/Ghosts/",
-            "file_name" : "13_ITGhosts"
+            "file_name" : "14_ITGhosts"
         }
     }, 
 
@@ -2853,7 +2871,7 @@
         }, 
         "output" : {
             "directory": "plots/Ghosts/",
-            "file_name" : "13_OOTGhosts"
+            "file_name" : "14_OOTGhosts"
         }
     },
 
@@ -2870,12 +2888,12 @@
             "HQFilter" : { "plot_name" : "HQFilter_ITBackground_st1_minqual0"}
         },
         "plot" : {
-            "y": [ 0.0, 3000, "# TPs" ],
+            "y": [ 0.0, 100, "# TPs" ],
             "legend_title": "MB1 - qual > 0"
         }, 
         "output" : {
             "directory": "plots/Background/",
-            "file_name" : "14_ITBackground_st1_minqual0"
+            "file_name" : "15_ITBackground_st1_minqual0"
         }
     }, 
 
@@ -2887,12 +2905,12 @@
             "HQFilter" : { "plot_name" : "HQFilter_ITBackground_st1_minqual3"}
         },
         "plot" : {
-            "y": [ 0.0, 3000, "# TPs" ],
+            "y": [ 0.0, 100, "# TPs" ],
             "legend_title": "MB1 - qual > 3"
         }, 
         "output" : {
             "directory": "plots/Background/",
-            "file_name" : "14_ITBackground_st1_minqual3"
+            "file_name" : "15_ITBackground_st1_minqual3"
         }
     }, 
 
@@ -2904,12 +2922,12 @@
             "HQFilter" : { "plot_name" : "HQFilter_ITBackground_st1_minqual6"}
         },
         "plot" : {
-            "y": [ 0.0, 3000, "# TPs" ],
+            "y": [ 0.0, 100, "# TPs" ],
             "legend_title": "MB1 - qual > 6"
         }, 
         "output" : {
             "directory": "plots/Background/",
-            "file_name" : "14_ITBackground_st1_minqual6"
+            "file_name" : "15_ITBackground_st1_minqual6"
         }
     }, 
 
@@ -2921,12 +2939,12 @@
             "HQFilter" : { "plot_name" : "HQFilter_ITBackground_st2_minqual0"}
         },
         "plot" : {
-            "y": [ 0.0, 1000, "# TPs" ],
+            "y": [ 0.0, 100, "# TPs" ],
             "legend_title": "MB2 - qual > 0"
         }, 
         "output" : {
             "directory": "plots/Background/",
-            "file_name" : "14_ITBackground_st2_minqual0"
+            "file_name" : "15_ITBackground_st2_minqual0"
         }
     }, 
 
@@ -2938,12 +2956,12 @@
             "HQFilter" : { "plot_name" : "HQFilter_ITBackground_st2_minqual3"}
         },
         "plot" : {
-            "y": [ 0.0, 3000, "# TPs" ],
+            "y": [ 0.0, 100, "# TPs" ],
             "legend_title": "MB1 - qual > 3"
         }, 
         "output" : {
             "directory": "plots/Background/",
-            "file_name" : "14_ITBackground_st2_minqual3"
+            "file_name" : "15_ITBackground_st2_minqual3"
         }
     }, 
 
@@ -2955,12 +2973,12 @@
             "HQFilter" : { "plot_name" : "HQFilter_ITBackground_st2_minqual6"}
         },
         "plot" : {
-            "y": [ 0.0, 3000, "# TPs" ],
+            "y": [ 0.0, 100, "# TPs" ],
             "legend_title": "MB2 - qual > 6"
         }, 
         "output" : {
             "directory": "plots/Background/",
-            "file_name" : "14_ITBackground_st2_minqual6"
+            "file_name" : "15_ITBackground_st2_minqual6"
         }
     }, 
 
@@ -2972,12 +2990,12 @@
             "HQFilter" : { "plot_name" : "HQFilter_ITBackground_st3_minqual0"}
         },
         "plot" : {
-            "y": [ 0.0, 500, "# TPs" ],
+            "y": [ 0.0, 100, "# TPs" ],
             "legend_title": "MB3 - qual > 0"
         }, 
         "output" : {
             "directory": "plots/Background/",
-            "file_name" : "14_ITBackground_st3_minqual0"
+            "file_name" : "15_ITBackground_st3_minqual0"
         }
     }, 
     
@@ -2989,12 +3007,12 @@
             "HQFilter" : { "plot_name" : "HQFilter_ITBackground_st3_minqual3"}
         },
         "plot" : {
-            "y": [ 0.0, 500, "# TPs" ],
+            "y": [ 0.0, 100, "# TPs" ],
             "legend_title": "MB3 - qual > 3"
         }, 
         "output" : {
             "directory": "plots/Background/",
-            "file_name" : "14_ITBackground_st3_minqual3"
+            "file_name" : "15_ITBackground_st3_minqual3"
         }
     }, 
 
@@ -3006,12 +3024,12 @@
             "HQFilter" : { "plot_name" : "HQFilter_ITBackground_st3_minqual6"}
         },
         "plot" : {
-            "y": [ 0.0, 500, "# TPs" ],
+            "y": [ 0.0, 100, "# TPs" ],
             "legend_title": "MB3 - qual > 6"
         }, 
         "output" : {
             "directory": "plots/Background/",
-            "file_name" : "14_ITBackground_st3_minqual6"
+            "file_name" : "15_ITBackground_st3_minqual6"
         }
     }, 
 
@@ -3023,12 +3041,12 @@
             "HQFilter" : { "plot_name" : "HQFilter_ITBackground_st4_minqual0"}
         },
         "plot" : {
-            "y": [ 0.0, 500, "# TPs" ],
+            "y": [ 0.0, 100, "# TPs" ],
             "legend_title": "MB4 - qual > 0"
         }, 
         "output" : {
             "directory": "plots/Background/",
-            "file_name" : "14_ITBackground_st4_minqual0"
+            "file_name" : "15_ITBackground_st4_minqual0"
         }
     }, 
 
@@ -3040,12 +3058,12 @@
             "HQFilter" : { "plot_name" : "HQFilter_ITBackground_st4_minqual3"}
         },
         "plot" : {
-            "y": [ 0.0, 500, "# TPs" ],
+            "y": [ 0.0, 100, "# TPs" ],
             "legend_title": "MB4 - qual > 3"
         }, 
         "output" : {
             "directory": "plots/Background/",
-            "file_name" : "14_ITBackground_st4_minqual3"
+            "file_name" : "15_ITBackground_st4_minqual3"
         }
     }, 
 
@@ -3057,12 +3075,12 @@
             "HQFilter" : { "plot_name" : "HQFilter_ITBackground_st4_minqual6"}
         },
         "plot" : {
-            "y": [ 0.0, 500, "# TPs" ],
+            "y": [ 0.0, 100, "# TPs" ],
             "legend_title": "MB4 - qual > 6"
         }, 
         "output" : {
             "directory": "plots/Background/",
-            "file_name" : "14_ITBackground_st4_minqual6"
+            "file_name" : "15_ITBackground_st4_minqual6"
         }
     }, 
 
@@ -3075,12 +3093,12 @@
             "HQFilter" : { "plot_name" : "HQFilter_OOTBackground_st1_minqual0"}
         },
         "plot" : {
-            "y": [ 0.0, 2000, "# TPs" ],
+            "y": [ 0.0, 100, "# TPs" ],
             "legend_title": "MB1 - qual > 0"
         }, 
         "output" : {
             "directory": "plots/Background/",
-            "file_name" : "14_OOTBackground_st1_minqual0"
+            "file_name" : "15_OOTBackground_st1_minqual0"
         }
     }, 
 
@@ -3092,12 +3110,12 @@
             "HQFilter" : { "plot_name" : "HQFilter_OOTBackground_st1_minqual3"}
         },
         "plot" : {
-            "y": [ 0.0, 300, "# TPs" ],
+            "y": [ 0.0, 100, "# TPs" ],
             "legend_title": "MB1 - qual > 3"
         }, 
         "output" : {
             "directory": "plots/Background/",
-            "file_name" : "14_OOTBackground_st1_minqual3"
+            "file_name" : "15_OOTBackground_st1_minqual3"
         }
     }, 
 
@@ -3109,12 +3127,12 @@
             "HQFilter" : { "plot_name" : "HQFilter_OOTBackground_st1_minqual6"}
         },
         "plot" : {
-            "y": [ 0.0, 200, "# TPs" ],
+            "y": [ 0.0, 100, "# TPs" ],
             "legend_title": "MB1 - qual > 6"
         }, 
         "output" : {
             "directory": "plots/Background/",
-            "file_name" : "14_OOTBackground_st1_minqual6"
+            "file_name" : "15_OOTBackground_st1_minqual6"
         }
     }, 
 
@@ -3126,12 +3144,12 @@
             "HQFilter" : { "plot_name" : "HQFilter_OOTBackground_st2_minqual0"}
         },
         "plot" : {
-            "y": [ 0.0, 500, "# TPs" ],
+            "y": [ 0.0, 100, "# TPs" ],
             "legend_title": "MB2 - qual > 0"
         }, 
         "output" : {
             "directory": "plots/Background/",
-            "file_name" : "14_OOTBackground_st2_minqual0"
+            "file_name" : "15_OOTBackground_st2_minqual0"
         }
     }, 
 
@@ -3143,12 +3161,12 @@
             "HQFilter" : { "plot_name" : "HQFilter_OOTBackground_st2_minqual3"}
         },
         "plot" : {
-            "y": [ 0.0, 200, "# TPs" ],
+            "y": [ 0.0, 100, "# TPs" ],
             "legend_title": "MB2 - qual > 3"
         }, 
         "output" : {
             "directory": "plots/Background/",
-            "file_name" : "14_OOTBackground_st2_minqual3"
+            "file_name" : "15_OOTBackground_st2_minqual3"
         }
     }, 
 
@@ -3160,12 +3178,12 @@
             "HQFilter" : { "plot_name" : "HQFilter_OOTBackground_st2_minqual6"}
         },
         "plot" : {
-            "y": [ 0.0, 150, "# TPs" ],
+            "y": [ 0.0, 100, "# TPs" ],
             "legend_title": "MB2 - qual > 6"
         }, 
         "output" : {
             "directory": "plots/Background/",
-            "file_name" : "14_OOTBackground_st2_minqual6"
+            "file_name" : "15_OOTBackground_st2_minqual6"
         }
     }, 
 
@@ -3177,12 +3195,12 @@
             "HQFilter" : { "plot_name" : "HQFilter_OOTBackground_st3_minqual0"}
         },
         "plot" : {
-            "y": [ 0.0, 250, "# TPs" ],
+            "y": [ 0.0, 100, "# TPs" ],
             "legend_title": "MB3 - qual > 0"
         }, 
         "output" : {
             "directory": "plots/Background/",
-            "file_name" : "14_OOTBackground_st3_minqual0"
+            "file_name" : "15_OOTBackground_st3_minqual0"
         }
     }, 
 
@@ -3194,12 +3212,12 @@
             "HQFilter" : { "plot_name" : "HQFilter_OOTBackground_st3_minqual3"}
         },
         "plot" : {
-            "y": [ 0.0, 150, "# TPs" ],
+            "y": [ 0.0, 100, "# TPs" ],
             "legend_title": "MB3 - qual > 3"
         }, 
         "output" : {
             "directory": "plots/Background/",
-            "file_name" : "14_OOTBackground_st3_minqual3"
+            "file_name" : "15_OOTBackground_st3_minqual3"
         }
     }, 
 
@@ -3211,12 +3229,12 @@
             "HQFilter" : { "plot_name" : "HQFilter_OOTBackground_st3_minqual6"}
         },
         "plot" : {
-            "y": [ 0.0, 50, "# TPs" ],
+            "y": [ 0.0, 100, "# TPs" ],
             "legend_title": "MB3 - qual > 6"
         }, 
         "output" : {
             "directory": "plots/Background/",
-            "file_name" : "14_OOTBackground_st3_minqual6"
+            "file_name" : "15_OOTBackground_st3_minqual6"
         }
     }, 
 
@@ -3228,12 +3246,12 @@
             "HQFilter" : { "plot_name" : "HQFilter_OOTBackground_st4_minqual0"}
         },
         "plot" : {
-            "y": [ 0.0, 200, "# TPs" ],
+            "y": [ 0.0, 100, "# TPs" ],
             "legend_title": "MB4 - qual > 0"
         }, 
         "output" : {
             "directory": "plots/Background/",
-            "file_name" : "14_OOTBackground_st4_minqual0"
+            "file_name" : "15_OOTBackground_st4_minqual0"
         }
     }, 
 
@@ -3250,7 +3268,7 @@
         }, 
         "output" : {
             "directory": "plots/Background/",
-            "file_name" : "14_OOTBackground_st4_minqual3"
+            "file_name" : "15_OOTBackground_st4_minqual3"
         }
     }, 
 
@@ -3262,112 +3280,13 @@
             "HQFilter" : { "plot_name" : "HQFilter_OOTBackground_st4_minqual6"}
         },
         "plot" : {
-            "y": [ 0.0, 50, "# TPs" ],
+            "y": [ 0.0, 100, "# TPs" ],
             "legend_title": "MB4 - qual > 6"
         }, 
         "output" : {
             "directory": "plots/Background/",
-            "file_name" : "14_OOTBackground_st4_minqual6"
-        }
-    }, 
-
-
-
-    "ITBackgroundDistribution": {
-        "base" :"bkg_dist", 
-        "inputs":{
-            "PreFilter": { "plot_name" : "PreFilter_ITBackgroundDistribution"},
-            "LQFilter" : { "plot_name" : "LQFilter_ITBackgroundDistribution"},
-            "HQFilter" : { "plot_name" : "HQFilter_ITBackgroundDistribution"}
-        },
-        "plot" : {
-            "y": [ 0.0, 1.5, "# TPs" ]
-        }, 
-        "output" : {
-            "directory": "plots/Background/",
-            "file_name" : "14_ITBackgroundDistribution"
-        }
-    },
-
-    "OOTBackgroundDistribution": {
-        "base" :"bkg_dist", 
-        "inputs":{
-            "PreFilter": { "plot_name" : "PreFilter_OOTBackgroundDistribution"},
-            "LQFilter" : { "plot_name" : "LQFilter_OOTBackgroundDistribution"},
-            "HQFilter" : { "plot_name" : "HQFilter_OOTBackgroundDistribution"}
-        },
-        "plot" : {
-            "y": [ 0.0, 4.5, "# TPs" ]
-        }, 
-        "output" : {
-            "directory": "plots/Background/",
-            "file_name" : "14_OOTBackgroundDistribution"
-        }
-    }, 
-
-    "ITOnlyBackgroundDistribution": {
-        "base" :"bkg_dist", 
-        "inputs":{
-            "PreFilter": { "plot_name" : "PreFilter_ITOnlyBackgroundDistribution"},
-            "LQFilter" : { "plot_name" : "LQFilter_ITOnlyBackgroundDistribution"},
-            "HQFilter" : { "plot_name" : "HQFilter_ITOnlyBackgroundDistribution"}
-        },
-        "plot" : {
-            "y": [ 0.0, 3.5, "# TPs" ]
-        }, 
-        "output" : {
-            "directory": "plots/Background/",
-            "file_name" : "14_ITOnlyBackgroundDistribution"
-        }
-    }, 
-
-    "OOTWithITBackgroundDistribution": {
-        "base" :"bkg_dist", 
-        "inputs":{
-            "PreFilter": { "plot_name" : "PreFilter_OOTWithITBackgroundDistribution"},
-            "LQFilter" : { "plot_name" : "LQFilter_OOTWithITBackgroundDistribution"},
-            "HQFilter" : { "plot_name" : "HQFilter_OOTWithITBackgroundDistribution"}
-        },
-        "plot" : {
-            "y": [ 0.0, 1.0, "# TPs" ]
-        }, 
-        "output" : {
-            "directory": "plots/Background/",
-            "file_name" : "14_OOTWithITBackgroundDistribution"
-        }
-    }, 
-
-    "OOTOnlyBackgroundDistribution": {
-        "base" :"bkg_dist", 
-        "inputs":{
-            "PreFilter": { "plot_name" : "PreFilter_OOTOnlyBackgroundDistribution"},
-            "LQFilter" : { "plot_name" : "LQFilter_OOTOnlyBackgroundDistribution"},
-            "HQFilter" : { "plot_name" : "HQFilter_OOTOnlyBackgroundDistribution"}
-        },
-        "plot" : {
-            "y": [ 0.0, 4.5, "# TPs" ]
-        }, 
-        "output" : {
-            "directory": "plots/Background/",
-            "file_name" : "14_OOTOnlyBackgroundDistribution"
-        }
-    }, 
-
-    "NoBestTPBackgroundDistribution": {
-        "base" :"bkg_dist", 
-        "inputs":{
-            "PreFilter": { "plot_name" : "PreFilter_NoBestTPBackgroundDistribution"},
-            "LQFilter" : { "plot_name" : "LQFilter_NoBestTPBackgroundDistribution"},
-            "HQFilter" : { "plot_name" : "HQFilter_NoBestTPBackgroundDistribution"}
-        },
-        "plot" : {
-            "y": [ 0.0, 4.5, "# TPs" ]
-        }, 
-        "output" : {
-            "directory": "plots/Background/",
-            "file_name" : "14_NoBestTPBackgroundDistribution"
+            "file_name" : "15_OOTBackground_st4_minqual6"
         }
     }
-
 
 }

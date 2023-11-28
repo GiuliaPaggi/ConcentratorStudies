@@ -55,7 +55,7 @@
     },
     "base_n_hits": {
         "plot": {
-            "x": [ 0.0, 8.5, "No. segment hits in phi view" ],
+            "x": [ 0.0, 8.5, "No. segment hits in #phi view" ],
             "y": [ 0.0, 1.5, "Efficiency" ],
             "option": "",
             "legend_title": "",
@@ -127,8 +127,8 @@
     },
     "base_pos": {
         "plot": {
-            "x": [1.0, 13.0,"sector"],
-            "y": [-2.0, 3.0,"wheel"],
+            "x": [1.0, 12,"Sector"],
+            "y": [-2.0, 2.0,"wheel"],
             "z": [ 0.0, 1.0,"Efficiency"],
             "option": "gridcolztext",
             "legend_title": "",
