@@ -39,14 +39,14 @@ double T_MAX{BX_MAX * 25};
 namespace MU {
 const double MAX_ETA{1.4};
 const double MIN_PT{1.5};
-const double MAX_GEN_DR{0.25};
+const double MAX_GEN_DR{0.05};
 const double MASS{105.7};
 const double X_CUT{20.0};  // cm
 }  // namespace MU
 
 namespace EFF {
 const double MAX_ETA{0.8};
-const double MIN_PT{5.0};
+const double MIN_PT{20.0};
 const double XEDGE_CUT{5.0};
 const double YEDGE_CUT{5.0};
 }  // namespace EFF
